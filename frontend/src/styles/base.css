@@ -1,0 +1,175 @@
+button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 55px;
+  border-radius: 16px;
+  font-size: 17px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.22s ease, background 0.28s ease, color 0.28s ease;
+  position: relative;
+  overflow: hidden;
+  will-change: transform, box-shadow, background;
+  transform: scale(1);
+  transform-origin: center center;
+  background-position: center;
+  background-size: 220% 220%;
+}
+
+button:hover {
+  transform: translateY(-1px) scale(1.02);
+}
+
+button:active {
+  transform: translateY(0) scale(0.98);
+}
+
+button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.24), transparent 40%);
+  opacity: 0;
+  transition: opacity 0.32s ease;
+}
+
+button:hover::before {
+  opacity: 1;
+}
+
+.register-btn,
+.demo-btn,
+.demo-back-btn,
+.add-product-btn,
+.remove-product-btn {
+  animation: slideUpFade 0.7s ease both;
+}
+
+.register-btn {
+  margin-top: 8px;
+  height: 50px;
+  min-width: 180px;
+  padding: 0 22px;
+  border: none;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #10b981, #059669 60%);
+  color: white;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 18px 38px rgba(16, 185, 129, 0.24);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+}
+
+.register-btn:hover {
+  transform: translateY(-2px);
+  background: #ffffff;
+  color: #059669;
+  border: 1px solid rgba(16, 185, 129, 0.18);
+  box-shadow: 0 18px 35px rgba(16, 185, 129, 0.22);
+}
+
+.demo-btn {
+  background: linear-gradient(180deg, #ffffff 0%, #f0fdf4 100%);
+  color: #0f172a;
+  border: 2px solid rgba(16, 185, 129, 0.28);
+  box-shadow: 0 12px 28px rgba(16, 185, 129, 0.14);
+}
+
+.demo-btn:hover {
+  background: linear-gradient(180deg, #ecfdf5 0%, #d9f9e4 100%);
+  box-shadow: 0 20px 40px rgba(16, 185, 129, 0.22);
+}
+
+button::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.4s ease, opacity 0.4s ease;
+}
+
+button:active::after {
+  transform: translate(-50%, -50%) scale(12);
+  opacity: 0.12;
+  transition: transform 0.4s ease, opacity 0.4s ease;
+}
+
+@keyframes slideUpFade {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes blobMove {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  25% {
+    transform: translate(20px, -20px) scale(1.05);
+  }
+  50% {
+    transform: translate(-18px, 18px) scale(0.95);
+  }
+  75% {
+    transform: translate(22px, 12px) scale(1.02);
+  }
+}
+
+@keyframes blink {
+  0%, 50% {
+    opacity: 1;
+  }
+  51%, 100% {
+    opacity: 0;
+  }
+}
+
+p,
+.action-container,
+.login-section {
+  position: relative;
+  z-index: 1;
+}
+
+p {
+  margin-top: 20px;
+  max-width: 1000px;
+  font-size: 20px;
+  line-height: 1.6;
+  color: #475569;
+  white-space: nowrap;
+}
+
+.action-container {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-top: 35px;
+  width: 320px;
+}

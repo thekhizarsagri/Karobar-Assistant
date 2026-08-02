@@ -9,3 +9,32 @@ Karobar Assistant aims to help businesses make smarter decisions using data anal
 ## Status
 
 🚧 Under Development
+
+## Backend
+
+Install dependencies:
+
+```bash
+pip install -r backend/requirements.txt
+```
+
+Run the API:
+
+```bash
+uvicorn backend.main:app --reload
+```
+
+## Frontend
+
+Install dependencies:
+
+```bash
+cd frontend
+npm install
+```
+
+Run the app:
+
+```bash
+npm run dev
+```
