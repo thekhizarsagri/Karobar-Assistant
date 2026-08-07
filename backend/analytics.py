@@ -36,14 +36,11 @@ def calculate_profitability(profile: BusinessProfile) -> Dict[str, float]:
 
 def get_dashboard_summary(profile: BusinessProfile) -> Dict[str, object]:
     metrics = calculate_profitability(profile)
-    target = profile.monthly_target or 0
 
     return {
         "business_name": profile.business_name,
         "owner_name": profile.owner_name,
-        "monthly_target": round(target, 2),
-        "target_gap": round(target - metrics["net_profit"], 2),
-        "status": "Ahead of target" if metrics["net_profit"] >= target else "Needs attention",
+        "status": "Healthy" if metrics["net_profit"] >= 0 else "Needs attention",
         "metrics": metrics,
     }
 
@@ -117,12 +114,12 @@ def generate_ai_insights(profile: BusinessProfile, sales_entries: Optional[List[
             )
             recommendations.append(f"Reorder {product.name} before it runs out.")
 
-    if metrics["net_profit"] < (profile.monthly_target or 0):
+    if metrics["net_profit"] < 0:
         alerts.append(
             {
                 "type": "profit",
-                "title": "Profit is below target",
-                "message": "Profit is below the target. Review expenses and focus on fast-moving products.",
+                "title": "Net profit is negative",
+                "message": "Expenses exceed revenue. Review expenses and focus on fast-moving products.",
             }
         )
         recommendations.append("Trim unnecessary expenses and concentrate on the products with the strongest demand.")

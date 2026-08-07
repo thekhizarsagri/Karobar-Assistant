@@ -20,6 +20,7 @@ const defaultProduct = {
   category: "Packaging Materials",
   sellingPrice: "180",
   costPrice: "120",
+  stockAvailable: "1200",
 };
 const fixedExpenseItems = [
   { key: "rent", label: "Rent", amount: "18000" },
@@ -37,7 +38,6 @@ function DemoPage({ onBack, onFinish }) {
     ownerName: "Alex",
     phoneNumber: "+91 9876543210",
     location: "Mumbai, India",
-    monthlyTarget: "500000",
     description: "We manufacture reusable glass bottles for local retailers and distributors.",
   });
   const [products, setProducts] = useState([defaultProduct]);
@@ -47,7 +47,6 @@ function DemoPage({ onBack, onFinish }) {
       return acc;
     }, {})
   );
- 
 
   const handleBusinessChange = (event) => {
     const { name, value } = event.target;
@@ -98,13 +97,13 @@ function DemoPage({ onBack, onFinish }) {
       ownerName: businessInfo.ownerName,
       phoneNumber: businessInfo.phoneNumber,
       location: businessInfo.location,
-      monthlyTarget: Number(businessInfo.monthlyTarget || 0),
       description: businessInfo.description,
       products: products.map((product) => ({
         name: product.name,
         category: product.category,
         sellingPrice: Number(product.sellingPrice || 0),
         costPrice: Number(product.costPrice || 0),
+        stockAvailable: Number(product.stockAvailable || 0),
       })),
       expenses: fixedExpenseItems.map((item) => ({
         key: item.key,
@@ -132,8 +131,6 @@ function DemoPage({ onBack, onFinish }) {
       onFinish?.({
         business_name: businessInfo.businessName,
         owner_name: businessInfo.ownerName,
-        monthly_target: Number(businessInfo.monthlyTarget || 0),
-        target_gap: Number(businessInfo.monthlyTarget || 0),
         status: "Demo mode",
         products: payload.products,
         metrics: {
@@ -217,15 +214,7 @@ function DemoPage({ onBack, onFinish }) {
                 onChange={handleBusinessChange}
               />
             </label>
-            <label className="form-field">
-              <span>Monthly Sales Target</span>
-              <input
-                type="number"
-                name="monthlyTarget"
-                value={businessInfo.monthlyTarget}
-                onChange={handleBusinessChange}
-              />
-            </label>
+
             <label className="form-field full-width">
               <span>Business Description</span>
               <textarea
@@ -289,7 +278,17 @@ function DemoPage({ onBack, onFinish }) {
                   </label>
                 </div>
 
-                
+                <div className="product-row">
+                  <label className="form-field small">
+                    <span>Available Stock</span>
+                    <input
+                      type="number"
+                      min="0"
+                      value={product.stockAvailable}
+                      onChange={(event) => handleProductChange(index, "stockAvailable", event.target.value)}
+                    />
+                  </label>
+                </div>
 
                 <div className="product-actions">
                   <button

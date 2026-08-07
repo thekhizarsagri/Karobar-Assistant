@@ -12,7 +12,6 @@ class AIFeaturesTests(unittest.TestCase):
             owner_name="Owner",
             phone_number="123",
             location="Karachi",
-            monthly_target=1000,
             description="Test",
             products=[
                 Product(name="Coke", category="Drinks", selling_price=60, cost_price=40, stock_quantity=3, reorder_point=5),

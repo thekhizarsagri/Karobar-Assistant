@@ -35,7 +35,6 @@ class BusinessProfile:
     owner_name: str
     phone_number: str
     location: str
-    monthly_target: float
     description: str
     products: List[Product] = field(default_factory=list)
     expenses: List[Expense] = field(default_factory=list)

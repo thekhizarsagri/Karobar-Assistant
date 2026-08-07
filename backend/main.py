@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
-from .service import build_dashboard_payload, get_chatbot_response, get_latest_ai_insights, record_sale
+from .service import add_stock, build_dashboard_payload, get_chatbot_response, get_latest_ai_insights, record_sale
 
 app = FastAPI(title="Karobar Assistant API")
 
@@ -22,7 +22,6 @@ class DemoSetupRequest(BaseModel):
     ownerName: str
     phoneNumber: str
     location: str
-    monthlyTarget: float
     description: str
     products: list[dict]
     expenses: list[dict]
@@ -33,6 +32,14 @@ class SaleEntryRequest(BaseModel):
     quantity: int = 1
     period: str = "day"
     entryDate: str | None = None
+
+
+class StockEntryRequest(BaseModel):
+    productName: str
+    quantity: int = 1
+    mode: str = "oneTime"
+    dayOfMonth: int | None = None
+    timeStr: str | None = None
 
 
 class ChatbotRequest(BaseModel):
@@ -52,7 +59,15 @@ def dashboard(request: DemoSetupRequest) -> Dict[str, Any]:
 
 @app.post("/sales")
 def sales(request: SaleEntryRequest) -> Dict[str, Any]:
-    return record_sale(request.model_dump())
+    result = record_sale(request.model_dump())
+    return result
+
+
+@app.post("/stock")
+def stock_endpoint(request: StockEntryRequest) -> Dict[str, Any]:
+    result = add_stock(request.productName, request.quantity)
+    result["mode"] = request.mode
+    return result
 
 
 @app.get("/ai-insights")

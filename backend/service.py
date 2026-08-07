@@ -19,6 +19,22 @@ def _sales_entries_for_ai() -> List[Dict[str, Any]]:
     ]
 
 
+def _products_snapshot() -> List[Dict[str, Any]]:
+    """Return the current product list with live stock values for the frontend."""
+    if latest_profile is None:
+        return []
+    return [
+        {
+            "name": product.name,
+            "category": product.category,
+            "sellingPrice": product.selling_price,
+            "costPrice": product.cost_price,
+            "stockAvailable": product.stock_quantity,
+        }
+        for product in latest_profile.products
+    ]
+
+
 def build_profile_from_form(form_data: Dict[str, Any]) -> BusinessProfile:
     products = [
         Product(
@@ -26,7 +42,8 @@ def build_profile_from_form(form_data: Dict[str, Any]) -> BusinessProfile:
             category=product.get("category", "Other"),
             selling_price=float(product.get("sellingPrice", 0) or 0),
             cost_price=float(product.get("costPrice", 0) or 0),
-            stock_quantity=int(product.get("stockQuantity", 0) or 0),
+            # Frontend sends "stockAvailable" from the setup form
+            stock_quantity=int(product.get("stockAvailable", 0) or 0),
             reorder_point=int(product.get("reorderPoint", 0) or 0),
         )
         for product in form_data.get("products", [])
@@ -50,12 +67,37 @@ def build_profile_from_form(form_data: Dict[str, Any]) -> BusinessProfile:
         owner_name=form_data.get("ownerName", ""),
         phone_number=form_data.get("phoneNumber", ""),
         location=form_data.get("location", ""),
-        monthly_target=float(form_data.get("monthlyTarget", 0) or 0),
         description=form_data.get("description", ""),
         products=products,
         expenses=expenses,
     )
     return latest_profile
+
+
+def update_stock_quantity(product_name: str, delta: int) -> int:
+    """
+    Add `delta` units to the named product's stock.
+    Negative delta = stock decrease (e.g. after a sale).
+    Stock is clamped to >= 0.
+    Returns the new stock level, or -1 if product not found.
+    """
+    if latest_profile is None:
+        return -1
+    for product in latest_profile.products:
+        if product.name == product_name:
+            product.stock_quantity = max(0, product.stock_quantity + delta)
+            return product.stock_quantity
+    return -1
+
+
+def get_stock_for_product(product_name: str) -> int:
+    """Return current stock for a product, or -1 if not found."""
+    if latest_profile is None:
+        return -1
+    for product in latest_profile.products:
+        if product.name == product_name:
+            return product.stock_quantity
+    return -1
 
 
 def get_sales_summary() -> Dict[str, Any]:
@@ -96,25 +138,67 @@ def get_sales_summary() -> Dict[str, Any]:
 
 
 def record_sale(sale_data: Dict[str, Any]) -> Dict[str, Any]:
+    product_name = sale_data.get("productName", "")
+    quantity = int(sale_data.get("quantity", 1) or 1)
+
+    # Check available stock before recording
+    current_stock = get_stock_for_product(product_name)
+
+    if current_stock == 0:
+        return {
+            "error": "out_of_stock",
+            "message": f"No stock available for {product_name}. Please add stock first.",
+            "products": _products_snapshot(),
+        }
+
+    # Reject if requested quantity exceeds available stock — do NOT clamp or record
+    if quantity > current_stock:
+        return {
+            "error": "insufficient_stock",
+            "message": f"Not enough stock for {product_name}. You tried to sell {quantity} but only {current_stock} unit{'s are' if current_stock != 1 else ' is'} available.",
+            "available": current_stock,
+            "requested": quantity,
+            "products": _products_snapshot(),
+        }
+
     entry = SaleEntry(
-        product_name=sale_data.get("productName", ""),
-        quantity=int(sale_data.get("quantity", 1) or 1),
+        product_name=product_name,
+        quantity=quantity,
         period=sale_data.get("period", "day"),
         entry_date=sale_data.get("entryDate", ""),
     )
     sales_log.append(entry)
+
+    # Decrement stock after the sale
+    update_stock_quantity(product_name, -quantity)
+
     summary = get_sales_summary()
     ai_insights = get_latest_ai_insights()
-    return {"message": "Sales recorded", "sales_summary": summary, "ai_insights": ai_insights}
+    return {
+        "message": "Sales recorded",
+        "sales_summary": summary,
+        "ai_insights": ai_insights,
+        # Return updated products so frontend can sync stock display
+        "products": _products_snapshot(),
+    }
+
+
+def add_stock(product_name: str, quantity: int) -> Dict[str, Any]:
+    """Add stock for a product and return updated snapshot."""
+    new_level = update_stock_quantity(product_name, quantity)
+    return {
+        "message": f"Stock updated for {product_name}",
+        "productName": product_name,
+        "newStock": new_level,
+        "products": _products_snapshot(),
+    }
 
 
 def build_dashboard_payload(form_data: Dict[str, Any]) -> Dict[str, Any]:
     profile = build_profile_from_form(form_data)
     summary = get_dashboard_summary(profile)
-    summary["products"] = [
-        {"name": product.name, "category": product.category}
-        for product in profile.products
-    ]
+    # Include full product data (with stockAvailable) for the frontend
+    summary["products"] = _products_snapshot()
     summary["sales_summary"] = get_sales_summary()
     summary["ai_insights"] = get_latest_ai_insights()
     return summary
