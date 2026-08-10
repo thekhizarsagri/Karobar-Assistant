@@ -1,0 +1,55 @@
+.sales-panel {
+  display: grid;
+  gap: 18px;
+  margin-top: 8px;
+}
+
+.sales-card {
+  padding: 20px;
+  border-radius: 20px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+}
+
+.sales-card h3 {
+  margin: 0 0 8px;
+  color: #0f172a;
+}
+
+.sales-card p {
+  margin: 0 0 16px;
+  color: #475569;
+}
+
+.sales-periods {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.frequency-pill {
+  border: 1px solid #cbd5e1;
+  border-radius: 999px;
+  background: white;
+  color: #0f172a;
+  padding: 10px 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.24s ease, background 0.24s ease, border-color 0.24s ease;
+}
+
+.frequency-pill.active {
+  background: #2563eb;
+  color: white;
+  border-color: transparent;
+}
+
+.frequency-pill:hover {
+  transform: translateY(-1px);
+}
+
+.sales-form {
+  display: grid;
+  gap: 14px;
+}

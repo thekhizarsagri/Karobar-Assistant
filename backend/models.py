@@ -26,6 +26,7 @@ class SaleEntry:
     quantity: int
     period: str
     entry_date: str
+    entry_type: str = "auto"
 
 
 @dataclass

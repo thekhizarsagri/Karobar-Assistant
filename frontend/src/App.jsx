@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import Welcome from "./components/Welcome";
-import DemoPage from "./components/DemoPage";
+import SetupPage from "./components/SetupPage";
 import DashboardPage from "./components/DashboardPage";
 
 function App() {
@@ -27,7 +27,7 @@ function App() {
       }}
     />
   ) : page === "demo" ? (
-    <DemoPage
+    <SetupPage
       onBack={() => {
         resetSession();
         setPage("welcome");

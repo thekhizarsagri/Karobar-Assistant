@@ -1,6 +1,6 @@
 import unittest
 
-from backend.analytics import generate_ai_insights
+from backend.insights import generate_ai_insights
 from backend.models import BusinessProfile, Product, Expense
 
 

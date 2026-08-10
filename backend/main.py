@@ -3,7 +3,12 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
-from .service import add_stock, build_dashboard_payload, get_chatbot_response, get_latest_ai_insights, record_sale
+from backend.aggregation import get_analytics_data
+from backend.chatbot import get_chatbot_response
+from backend.dashboard import build_dashboard_payload
+from backend.insights import get_latest_ai_insights
+from backend.sales import record_sale
+from backend.stock import add_stock
 
 app = FastAPI(title="Karobar Assistant API")
 
@@ -32,6 +37,7 @@ class SaleEntryRequest(BaseModel):
     quantity: int = 1
     period: str = "day"
     entryDate: str | None = None
+    entryType: str = "auto"
 
 
 class StockEntryRequest(BaseModel):
@@ -53,14 +59,12 @@ def root() -> Dict[str, str]:
 
 @app.post("/dashboard")
 def dashboard(request: DemoSetupRequest) -> Dict[str, Any]:
-    payload = request.model_dump()
-    return build_dashboard_payload(payload)
+    return build_dashboard_payload(request.model_dump())
 
 
 @app.post("/sales")
 def sales(request: SaleEntryRequest) -> Dict[str, Any]:
-    result = record_sale(request.model_dump())
-    return result
+    return record_sale(request.model_dump())
 
 
 @app.post("/stock")
@@ -73,6 +77,11 @@ def stock_endpoint(request: StockEntryRequest) -> Dict[str, Any]:
 @app.get("/ai-insights")
 def ai_insights() -> Dict[str, Any]:
     return get_latest_ai_insights()
+
+
+@app.get("/analytics")
+def analytics() -> Dict[str, Any]:
+    return get_analytics_data()
 
 
 @app.post("/chatbot")

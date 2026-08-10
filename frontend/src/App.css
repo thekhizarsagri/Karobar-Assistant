@@ -1,4 +1,11 @@
 @import './styles/base.css';
 @import './styles/welcome.css';
-@import './styles/demo.css';
+@import './styles/setup.css';
+@import './styles/products.css';
+@import './styles/expenses.css';
 @import './styles/dashboard.css';
+@import './styles/sales.css';
+@import './styles/history.css';
+@import './styles/stock.css';
+@import './styles/analytics.css';
+@import './styles/analytics-views.css';

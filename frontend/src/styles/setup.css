@@ -1,0 +1,220 @@
+.demo-page {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+  background:
+    radial-gradient(circle at 15% 20%, rgba(16, 185, 129, 0.32), transparent 30%),
+    radial-gradient(circle at 88% 72%, rgba(59, 130, 246, 0.28), transparent 28%),
+    radial-gradient(circle at 50% 10%, rgba(14, 165, 233, 0.18), transparent 22%),
+    linear-gradient(135deg, #d8f6e5, #dbeafe);
+  font-family: Arial, sans-serif;
+}
+
+.demo-panel {
+  max-width: 980px;
+  width: 100%;
+  padding: 42px;
+  border-radius: 30px;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.demo-setup-panel {
+  padding: 38px;
+}
+
+.demo-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.greeting-block {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.demo-header h1 {
+  margin: 0;
+  font-size: 40px;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+.demo-header p {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+  max-width: 700px;
+  line-height: 1.8;
+  font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+.demo-header p {
+  margin: 12px 0 4px;
+  color: #475569;
+}
+
+.demo-section {
+  margin-top: 38px;
+  padding: 10px 0 0;
+  background: transparent;
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.step-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.section-heading h2 {
+  margin: 0;
+  font-size: 22px;
+  color: #0f172a;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(280px, 1fr));
+  gap: 28px 24px;
+  min-width: 0;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  color: #0f172a;
+  min-width: 0;
+  text-align: left;
+}
+
+.form-field.small {
+  width: 100%;
+  min-width: 0;
+}
+
+.form-field.full-width {
+  grid-column: 1 / -1;
+}
+
+.form-field span {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.form-field input,
+.form-field select,
+.form-field textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #cbd5e1;
+  border-radius: 16px;
+  padding: 14px 16px;
+  font-size: 15px;
+  color: #0f172a;
+  background: #f8fafc;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-field textarea {
+  resize: vertical;
+}
+
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12);
+}
+
+.demo-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: flex-start;
+}
+
+.final-actions {
+  justify-content: flex-end;
+  margin-top: 28px;
+}
+
+.demo-back-btn {
+  margin-top: 8px;
+  height: 50px;
+  min-width: 180px;
+  border: 1px solid rgba(37, 99, 235, 0.25);
+  border-radius: 16px;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8 60%);
+  color: white;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 12px 28px rgba(37, 99, 235, 0.18);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease, color 0.25s ease;
+}
+
+.demo-back-btn:hover {
+  transform: translateY(-2px);
+  background: #ffffff;
+  color: #2563eb;
+  box-shadow: 0 18px 35px rgba(37, 99, 235, 0.22);
+}
+
+@media (max-width: 960px) {
+  .demo-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .form-grid,
+  .product-row,
+  .expense-row {
+    grid-template-columns: 1fr;
+  }
+
+  .form-field.full-width {
+    grid-column: auto;
+  }
+
+  .product-actions {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 680px) {
+  .demo-panel {
+    padding: 24px;
+  }
+
+  .section-heading h2 {
+    font-size: 20px;
+  }
+}
