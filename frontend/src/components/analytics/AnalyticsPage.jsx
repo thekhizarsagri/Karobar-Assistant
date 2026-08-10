@@ -5,6 +5,7 @@ import YearlyView from "./YearlyView";
 import {
   useAvailableYears,
   useOverallTotal,
+  useProductColorMap,
   useSortedYears,
   useYearTotalSales,
 } from "./selectors";
@@ -41,6 +42,7 @@ function AnalyticsPage({ data, onBack }) {
   const yearTotalSales = useYearTotalSales(analytics, selectedYear);
   const sortedYears = useSortedYears(analytics, availableYears);
   const overallTotal = useOverallTotal(sortedYears);
+  const colorMap = useProductColorMap(analytics, data?.products);
 
   return (
     <div className="analytics-page">
@@ -61,10 +63,11 @@ function AnalyticsPage({ data, onBack }) {
           availableYears={availableYears}
           yearTotal={yearTotalSales}
           onYearChange={setSelectedYear}
+          colorMap={colorMap}
         />
       )}
       {activeView === "yearly" && (
-        <YearlyView years={sortedYears} total={overallTotal} onOpenYear={openMonthly} />
+        <YearlyView years={sortedYears} total={overallTotal} onOpenYear={openMonthly} colorMap={colorMap} />
       )}
     </div>
   );

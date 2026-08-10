@@ -27,6 +27,16 @@ class SaleEntry:
     period: str
     entry_date: str
     entry_type: str = "auto"
+    created_at: str = ""
+
+
+@dataclass
+class StockEntry:
+    product_name: str
+    quantity: int
+    source: str = "manual"
+    note: str = ""
+    created_at: str = ""
 
 
 @dataclass

@@ -7,7 +7,7 @@ from backend.aggregation import get_analytics_data
 from backend.chatbot import get_chatbot_response
 from backend.dashboard import build_dashboard_payload
 from backend.insights import get_latest_ai_insights
-from backend.sales import record_sale
+from backend.sales import get_sales_summary, record_sale
 from backend.stock import add_stock
 
 app = FastAPI(title="Karobar Assistant API")
@@ -69,8 +69,8 @@ def sales(request: SaleEntryRequest) -> Dict[str, Any]:
 
 @app.post("/stock")
 def stock_endpoint(request: StockEntryRequest) -> Dict[str, Any]:
-    result = add_stock(request.productName, request.quantity)
-    result["mode"] = request.mode
+    result = add_stock(request.productName, request.quantity, mode=request.mode)
+    result["sales_summary"] = get_sales_summary()
     return result
 
 

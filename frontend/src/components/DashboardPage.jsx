@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import HistoryTab from "./dashboard/HistoryTab";
 import PageHeader from "./dashboard/PageHeader";
+import ProductHistoryDetail from "./dashboard/ProductHistoryDetail";
 import RecordSalesTab from "./dashboard/RecordSalesTab";
 import StatCards from "./dashboard/StatCards";
 import StockTab from "./dashboard/StockTab";
@@ -12,7 +13,6 @@ const TABS = [
   ["sales", "Record sales"],
   ["history", "Product history"],
   ["analytics", "Analytics"],
-  ["stock", "Stock overview"],
 ];
 
 function DashboardPage({ data, onBack }) {
@@ -21,6 +21,8 @@ function DashboardPage({ data, onBack }) {
   const [activeTab, setActiveTab] = useState("sales");
   const [stockAlert, setStockAlert] = useState(null);
   const [stockModalOpen, setStockModalOpen] = useState(false);
+  const [historyDetailProduct, setHistoryDetailProduct] = useState(null);
+  const [analyticsOpen, setAnalyticsOpen] = useState(false);
 
   useEffect(() => {
     setSummary(data);
@@ -55,6 +57,7 @@ function DashboardPage({ data, onBack }) {
   const addStock = async (productName, quantity) => {
     try {
       const result = await postStock(productName, quantity);
+      if (result.sales_summary) setSalesSummary(result.sales_summary);
       if (result.products) updateProducts(result.products);
       return result;
     } catch (error) {
@@ -68,9 +71,13 @@ function DashboardPage({ data, onBack }) {
       case "sales":
         return <RecordSalesTab products={summary?.products || []} notify={notify} submitSale={submitSale} />;
       case "history":
-        return <HistoryTab salesSummary={salesSummary} />;
-      case "analytics":
-        return <AnalyticsPage data={summary} onBack={() => setActiveTab("sales")} />;
+        return (
+          <HistoryTab
+            salesSummary={salesSummary}
+            products={summary?.products || []}
+            onOpenProduct={setHistoryDetailProduct}
+          />
+        );
       default:
         return (
           <StockTab
@@ -83,6 +90,31 @@ function DashboardPage({ data, onBack }) {
         );
     }
   };
+
+  if (analyticsOpen) {
+    return (
+      <div className="demo-page">
+        <div className="demo-panel">
+          <AnalyticsPage data={summary} onBack={() => setAnalyticsOpen(false)} />
+        </div>
+      </div>
+    );
+  }
+
+  if (historyDetailProduct) {
+    return (
+      <div className="demo-page">
+        <div className="demo-panel">
+          <ProductHistoryDetail
+            productName={historyDetailProduct}
+            salesSummary={salesSummary}
+            products={summary?.products || []}
+            onBack={() => setHistoryDetailProduct(null)}
+          />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="demo-page">
@@ -114,7 +146,17 @@ function DashboardPage({ data, onBack }) {
             <h2>Sales workspace</h2>
           </div>
 
-          <WorkspaceTabs tabs={TABS} active={activeTab} onChange={setActiveTab} />
+          <WorkspaceTabs
+            tabs={TABS}
+            active={activeTab}
+            onChange={(tab) => {
+              if (tab === "analytics") {
+                setAnalyticsOpen(true);
+                return;
+              }
+              setActiveTab(tab);
+            }}
+          />
 
           {renderTab()}
         </div>
@@ -125,10 +167,10 @@ function DashboardPage({ data, onBack }) {
 
 function getGreeting() {
   const hour = new Date().getHours();
-  if (hour < 12) return "Good Morning";
-  if (hour < 17) return "Good Afternoon";
-  if (hour < 21) return "Good Evening";
-  return "Good Night";
+  if (hour >= 5 && hour < 12) return "Good Morning";
+  if (hour >= 12 && hour < 18) return "Good Afternoon";
+  if (hour >= 18 && hour < 22) return "Good Evening";
+  return "Hello";
 }
 
 export default DashboardPage;

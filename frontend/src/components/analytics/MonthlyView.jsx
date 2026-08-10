@@ -1,6 +1,6 @@
 import { getProductColor, SHORT_MONTHS } from "./constants";
 
-function MonthlyView({ analytics, selectedYear, availableYears, yearTotal, onYearChange }) {
+function MonthlyView({ analytics, selectedYear, availableYears, yearTotal, onYearChange, colorMap }) {
   return (
     <div className="analytics-panel monthly-view">
       <div className="view-header">
@@ -39,14 +39,11 @@ function MonthlyView({ analytics, selectedYear, availableYears, yearTotal, onYea
                   <span className="year-month-total">{monthTotal} units</span>
                 </div>
                 <div className="year-month-products">
-                  {products.slice(0, 3).map(([pName, qty], i) => (
-                    <span key={pName} className="year-month-product" style={{ background: getProductColor(i) }}>
+                  {products.map(([pName, qty], i) => (
+                    <span key={pName} className="year-month-product" style={{ background: colorMap[pName] || getProductColor(i) }}>
                       {pName}: {qty}
                     </span>
                   ))}
-                  {products.length > 3 && (
-                    <span className="year-month-more">+{products.length - 3} more</span>
-                  )}
                 </div>
               </div>
             );

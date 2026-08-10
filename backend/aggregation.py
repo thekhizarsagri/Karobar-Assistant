@@ -3,7 +3,7 @@ from collections import defaultdict
 from datetime import datetime
 from typing import Any, Dict
 
-from backend.store import sales_log
+from backend.store import product_order, sales_log
 
 # Accepted date granularities, most specific first. entry_date may be a full
 # day "2026-08-10", a month "2026-08", or a plain year "2026".
@@ -40,6 +40,7 @@ def get_analytics_data() -> Dict[str, Any]:
         "daily": _to_plain(daily_sales),
         "monthly": _to_plain(monthly_sales),
         "yearly": _to_plain(yearly_sales),
+        "product_order": product_order(),
     }
 
 

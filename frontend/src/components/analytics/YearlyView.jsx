@@ -1,6 +1,6 @@
 import { getProductColor } from "./constants";
 
-function YearlyView({ years, total, onOpenYear }) {
+function YearlyView({ years, total, onOpenYear, colorMap }) {
   return (
     <div className="analytics-panel yearly-view">
       <div className="view-header">
@@ -36,7 +36,7 @@ function YearlyView({ years, total, onOpenYear }) {
                 {Object.entries(data)
                   .sort((a, b) => b[1] - a[1])
                   .map(([pName, qty], i) => (
-                    <span key={pName} className="year-month-product" style={{ background: getProductColor(i) }}>
+                    <span key={pName} className="year-month-product" style={{ background: colorMap[pName] || getProductColor(i) }}>
                       {pName}: {qty}
                     </span>
                   ))}

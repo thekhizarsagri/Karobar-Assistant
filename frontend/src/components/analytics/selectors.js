@@ -1,4 +1,18 @@
 import { useMemo } from "react";
+import { getProductColor } from "./constants";
+
+export function useProductColorMap(analytics, fallbackProducts = []) {
+  return useMemo(() => {
+    const order =
+      analytics.product_order ||
+      (fallbackProducts || []).map((p) => p.name);
+    const map = {};
+    order.forEach((name, index) => {
+      map[name] = getProductColor(index);
+    });
+    return map;
+  }, [analytics.product_order, fallbackProducts]);
+}
 
 export function useAvailableYears(analytics, selectedYear) {
   return useMemo(() => {

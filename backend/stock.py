@@ -1,7 +1,8 @@
 """Stock management: read, adjust, and add inventory for products."""
 from typing import Any, Dict
 
-from backend.store import get_profile, products_snapshot
+from backend.models import StockEntry
+from backend.store import get_profile, products_snapshot, stock_log
 
 
 def get_profile_products():
@@ -27,12 +28,24 @@ def update_stock_quantity(product_name: str, delta: int) -> int:
     return -1
 
 
-def add_stock(product_name: str, quantity: int) -> Dict[str, Any]:
-    """Add stock for a product and return an updated snapshot."""
+def add_stock(product_name: str, quantity: int, mode: str = "oneTime") -> Dict[str, Any]:
+    """Add stock for a product, log the event, and return an updated snapshot."""
     new_level = update_stock_quantity(product_name, quantity)
+    from datetime import datetime
+
+    stock_log.append(
+        StockEntry(
+            product_name=product_name,
+            quantity=quantity,
+            source=mode,
+            note="Stock added via add-stock feature",
+            created_at=datetime.now().isoformat(timespec="seconds"),
+        )
+    )
     return {
         "message": f"Stock updated for {product_name}",
         "productName": product_name,
         "newStock": new_level,
+        "mode": mode,
         "products": products_snapshot(),
     }

@@ -2,13 +2,15 @@ import unittest
 
 from backend.aggregation import get_analytics_data
 from backend.profile import build_profile_from_form
-from backend.sales import record_sale
-from backend.store import sales_log
+from backend.sales import get_sales_summary, record_sale
+from backend.stock import add_stock
+from backend.store import sales_log, stock_log
 
 
 class SalesHistoryTests(unittest.TestCase):
     def setUp(self):
         sales_log.clear()
+        stock_log.clear()
         form_data = {
             "businessName": "Test Business",
             "businessType": "Retail",
@@ -36,6 +38,22 @@ class SalesHistoryTests(unittest.TestCase):
         coke_history = summary["sales_summary"]["product_history"]["Coke"]
         self.assertEqual(coke_history["total_quantity"], 6)
         self.assertEqual(len(coke_history["entries"]), 3)
+
+    def test_stock_history_records_form_and_add_stock(self):
+        add_stock("Coke", 25, mode="oneTime")
+
+        summary = get_sales_summary()
+        coke_stock = summary["stock_history"]["Coke"]
+        water_stock = summary["stock_history"]["Water"]
+
+        self.assertEqual(coke_stock[0]["quantity"], 100)
+        self.assertEqual(coke_stock[0]["source"], "form")
+        self.assertEqual(coke_stock[1]["quantity"], 25)
+        self.assertEqual(coke_stock[1]["source"], "oneTime")
+        self.assertTrue(coke_stock[1]["created_at"])
+
+        self.assertEqual(water_stock[0]["quantity"], 100)
+        self.assertEqual(water_stock[0]["note"], "Initial stock added in setup form")
 
     def test_analytics_does_not_drop_monthly_quick_sales(self):
         record_sale({"productName": "Coke", "quantity": 30, "period": "month", "entryDate": "2026-08-10", "entryType": "auto"})

@@ -9,6 +9,8 @@
   border: 1px solid #e2e8f0;
   border-radius: 14px;
   padding: 14px;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .year-month-header {
@@ -44,15 +46,9 @@
   color: #fff;
   padding: 4px 8px;
   border-radius: 999px;
-  white-space: nowrap;
-}
-
-.year-month-more {
-  font-size: 0.7rem;
-  color: #94a3b8;
-  padding: 4px 8px;
-  background: #f1f5f9;
-  border-radius: 999px;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .years-grid {
@@ -66,6 +62,8 @@
   border: 1px solid #e2e8f0;
   border-radius: 14px;
   padding: 16px;
+  min-width: 0;
+  overflow: hidden;
   cursor: pointer;
   transition: transform 0.18s, box-shadow 0.18s, border-color 0.18s;
 }
