@@ -4,24 +4,37 @@ import ExpensesForm from "./setup/ExpensesForm";
 import ProductsForm from "./setup/ProductsForm";
 import { defaultProduct, fixedExpenseItems } from "./setup/constants";
 
-const initialBusiness = {
-  businessName: "Bottle Factory",
-  businessType: "Manufacturing",
-  ownerName: "Alex",
-  phoneNumber: "+91 9876543210",
-  location: "Mumbai, India",
-  description: "We manufacture reusable glass bottles for local retailers and distributors.",
-};
-
-function SetupPage({ onBack, onFinish }) {
-  const [businessInfo, setBusinessInfo] = useState(initialBusiness);
-  const [products, setProducts] = useState([defaultProduct]);
-  const [expenses, setExpenses] = useState(
-    fixedExpenseItems.reduce((acc, item) => {
-      acc[item.key] = { enabled: false, amount: item.amount };
+function SetupPage({ initialData, onBack, onFinish }) {
+  const [businessInfo, setBusinessInfo] = useState({
+    businessName: initialData?.business_name ?? "Bottle Factory",
+    businessType: initialData?.business_type ?? "Manufacturing",
+    ownerName: initialData?.owner_name ?? "Alex",
+    phoneNumber: initialData?.phone_number ?? "+91 9876543210",
+    location: initialData?.location ?? "Mumbai, India",
+    description: initialData?.description ?? "We manufacture reusable glass bottles for local retailers and distributors.",
+  });
+  const [products, setProducts] = useState(() => {
+    if (initialData?.products?.length) {
+      return initialData.products.map((product) => ({
+        name: product.name ?? "",
+        category: product.category ?? "",
+        sellingPrice: product.sellingPrice ?? 0,
+        costPrice: product.costPrice ?? 0,
+        stockAvailable: product.stockAvailable ?? 0,
+      }));
+    }
+    return [defaultProduct];
+  });
+  const [expenses, setExpenses] = useState(() => {
+    const initialExpenses = (initialData?.expenses || []).reduce((acc, item) => {
+      acc[item.key] = { enabled: !!item.enabled, amount: item.amount };
       return acc;
-    }, {})
-  );
+    }, {});
+    return fixedExpenseItems.reduce((acc, item) => {
+      acc[item.key] = initialExpenses[item.key] ?? { enabled: false, amount: item.amount };
+      return acc;
+    }, {});
+  });
 
   const setBusiness = (name, value) => setBusinessInfo((prev) => ({ ...prev, [name]: value }));
   const setProduct = (index, field, value) =>

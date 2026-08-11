@@ -7,6 +7,13 @@ from backend.aggregation import get_analytics_data
 from backend.chatbot import get_chatbot_response
 from backend.dashboard import build_dashboard_payload
 from backend.insights import get_latest_ai_insights
+from backend.notifications import (
+    add_notification,
+    clear_notifications,
+    get_notifications,
+    mark_all_read,
+    mark_read,
+)
 from backend.sales import get_sales_summary, record_sale
 from backend.stock import add_stock
 
@@ -52,6 +59,16 @@ class ChatbotRequest(BaseModel):
     message: str
 
 
+class NotificationRequest(BaseModel):
+    type: str = "info"
+    title: str
+    message: str
+
+
+class NotificationReadRequest(BaseModel):
+    id: int | None = None
+
+
 @app.get("/")
 def root() -> Dict[str, str]:
     return {"message": "Karobar Assistant backend is running"}
@@ -77,6 +94,30 @@ def stock_endpoint(request: StockEntryRequest) -> Dict[str, Any]:
 @app.get("/ai-insights")
 def ai_insights() -> Dict[str, Any]:
     return get_latest_ai_insights()
+
+
+@app.get("/notifications")
+def notifications_endpoint() -> Dict[str, Any]:
+    return get_notifications()
+
+
+@app.post("/notifications")
+def create_notification(request: NotificationRequest) -> Dict[str, Any]:
+    add_notification(request.type, request.title, request.message)
+    return get_notifications()
+
+
+@app.post("/notifications/read")
+def mark_notifications_read(request: NotificationReadRequest | None = None) -> Dict[str, Any]:
+    if request is not None and request.id is not None:
+        return mark_read(request.id)
+    return mark_all_read()
+
+
+@app.post("/notifications/clear")
+def clear_notifications_endpoint() -> Dict[str, Any]:
+    clear_notifications()
+    return get_notifications()
 
 
 @app.get("/analytics")

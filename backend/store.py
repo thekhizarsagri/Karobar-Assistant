@@ -2,6 +2,7 @@
 from typing import Any, Dict, List, Optional
 
 from backend.models import BusinessProfile, SaleEntry, StockEntry
+from backend.notifications import clear_notifications
 
 sales_log: List[SaleEntry] = []
 stock_log: List[StockEntry] = []
@@ -13,6 +14,7 @@ def set_profile(profile: BusinessProfile) -> None:
     global _current_profile
     sales_log.clear()
     stock_log.clear()
+    clear_notifications()
     _current_profile = profile
     for product in profile.products:
         stock_log.append(

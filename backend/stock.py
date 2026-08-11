@@ -1,7 +1,9 @@
 """Stock management: read, adjust, and add inventory for products."""
 from typing import Any, Dict
 
+from backend.insights import get_latest_ai_insights
 from backend.models import StockEntry
+from backend.notifications import sync_alerts_from_insights
 from backend.store import get_profile, products_snapshot, stock_log
 
 
@@ -42,6 +44,7 @@ def add_stock(product_name: str, quantity: int, mode: str = "oneTime") -> Dict[s
             created_at=datetime.now().isoformat(timespec="seconds"),
         )
     )
+    sync_alerts_from_insights(get_latest_ai_insights())
     return {
         "message": f"Stock updated for {product_name}",
         "productName": product_name,

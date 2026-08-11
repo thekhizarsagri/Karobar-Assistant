@@ -19,7 +19,7 @@ function StockTab({ products, addStock, notify, isModalOpen, onCloseModal }) {
   const fireRule = useCallback((rule) => {
     const timeString = `${rule.hour}:${rule.minute} ${rule.ampm}`;
     addStock(rule.productName, rule.quantity);
-    notify(`✅ Stock added: ${rule.quantity} units automatically added to ${rule.productName} on day ${rule.dayOfMonth} at ${timeString}.`);
+    notify(`✅ Stock added: ${rule.quantity} units automatically added to ${rule.productName} on day ${rule.dayOfMonth} at ${timeString}.`, "success");
   }, [addStock, notify]);
 
   useEffect(() => {
@@ -50,7 +50,7 @@ function StockTab({ products, addStock, notify, isModalOpen, onCloseModal }) {
 
     if (payload.mode === "oneTime") {
       addStock(payload.productName, quantity);
-      notify(`✅ Added ${quantity} units to ${payload.productName} on ${new Date(payload.date + "T00:00:00").toLocaleDateString()}.`);
+      notify(`✅ Added ${quantity} units to ${payload.productName} on ${new Date(payload.date + "T00:00:00").toLocaleDateString()}.`, "success");
     } else {
       const newRule = {
         id: Date.now(),
@@ -63,7 +63,7 @@ function StockTab({ products, addStock, notify, isModalOpen, onCloseModal }) {
         createdAt: new Date().toISOString(),
       };
       setRules((prev) => [...prev, newRule]);
-      notify(`🗓️ Schedule saved: ${quantity} units will be added to ${payload.productName} on day ${newRule.dayOfMonth} of every month at ${payload.hour}:${payload.minute} ${payload.ampm}.`);
+      notify(`🗓️ Schedule saved: ${quantity} units will be added to ${payload.productName} on day ${newRule.dayOfMonth} of every month at ${payload.hour}:${payload.minute} ${payload.ampm}.`, "info");
     }
   };
 
