@@ -21,13 +21,15 @@ function App() {
   return page === "dashboard" ? (
     <DashboardPage
       data={dashboardData}
-      onBack={() => {
+      onEditForm={() => setPage("demo")}
+      onLogout={() => {
         resetSession();
-        setPage("demo");
+        setPage("welcome");
       }}
     />
   ) : page === "demo" ? (
     <SetupPage
+      initialData={dashboardData}
       onBack={() => {
         resetSession();
         setPage("welcome");

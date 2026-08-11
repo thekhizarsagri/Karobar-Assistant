@@ -26,11 +26,11 @@ function RecordSalesTab({ products, notify, submitSale }) {
     const quantity = Number(form.quantity || 1);
 
     if (available <= 0) {
-      notify(`⚠️ Cannot sell ${form.productName} — no stock available. Please add stock first.`);
+      notify(`⚠️ Cannot sell ${form.productName} — no stock available. Please add stock first.`, "error");
       return;
     }
     if (quantity > available) {
-      notify(`⚠️ Not enough stock for ${form.productName}. You tried to sell ${quantity} but only ${available} unit${available !== 1 ? "s are" : " is"} available.`);
+      notify(`⚠️ Not enough stock for ${form.productName}. You tried to sell ${quantity} but only ${available} unit${available !== 1 ? "s are" : " is"} available.`, "error");
       return;
     }
     submitSale(form.productName, quantity, selectedPeriod, entryValueForPeriod(), "manual");
@@ -39,7 +39,7 @@ function RecordSalesTab({ products, notify, submitSale }) {
   return (
     <div className="sales-panel">
       <div className="sales-card">
-        <h3>Manual entry</h3>
+        <h3>Add sales record</h3>
         <div className="sales-periods">
           {SALES_PERIODS.map((period) => (
             <button
