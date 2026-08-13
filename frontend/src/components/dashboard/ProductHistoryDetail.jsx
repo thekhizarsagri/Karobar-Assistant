@@ -29,10 +29,21 @@ function ProductHistoryDetail({ productName, salesSummary, products, onBack }) {
     });
   };
 
+  const formatDate = (value) => {
+    if (!value) return "";
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return value;
+    return date.toLocaleDateString([], {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  };
+
   const stockLabel = (entry) =>
     entry.source === "form"
       ? `${entry.quantity} stock added in form`
-      : `${entry.quantity} stock added on ${formatDateTime(entry.created_at)}`;
+      : `${entry.quantity} stock added on ${formatDate(entry.created_at)}`;
 
   return (
     <div className="history-detail-page">

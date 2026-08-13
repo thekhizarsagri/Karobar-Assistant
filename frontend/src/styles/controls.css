@@ -1,0 +1,29 @@
+/* Force the light color scheme on native form controls so they never
+   render with the OS/browser dark palette (Windows dark mode). */
+input,
+select,
+textarea {
+  color-scheme: light;
+}
+
+/* Number inputs: keep the up/down spinner arrows always visible
+   and give them a pointer cursor (Chrome hides them by default). */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  opacity: 1;
+  cursor: pointer;
+}
+
+/* Date/month pickers: keep the calendar icon visible and clickable. */
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="month"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+}
+
+/* Give checkboxes/radios a visible brand accent that reads clearly on
+   light inputs instead of relying on the black native dark-mode color. */
+input[type="checkbox"],
+input[type="radio"],
+input[type="range"] {
+  accent-color: #10b981;
+}

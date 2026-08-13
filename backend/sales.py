@@ -5,6 +5,7 @@ from typing import Any, Dict
 from backend.insights import get_latest_ai_insights
 from backend.models import SaleEntry
 from backend.notifications import sync_alerts_from_insights
+from backend.persistence import save_state
 from backend.stock import get_stock_for_product, update_stock_quantity
 from backend.store import product_order, products_snapshot, sales_log, stock_log
 
@@ -77,6 +78,7 @@ def record_sale(sale_data: Dict[str, Any]) -> Dict[str, Any]:
     )
     sales_log.append(entry)
     update_stock_quantity(product_name, -quantity)
+    save_state()
 
     insights = get_latest_ai_insights()
     sync_alerts_from_insights(insights)

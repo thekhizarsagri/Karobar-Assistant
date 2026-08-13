@@ -10,11 +10,11 @@ export async function postSale(productName, quantity, period, entryDate, entryTy
   return res.json();
 }
 
-export async function postStock(productName, quantity) {
+export async function postStock(productName, quantity, date) {
   const res = await fetch("/api/stock", {
     method: "POST",
     headers: jsonHeaders,
-    body: JSON.stringify({ productName, quantity, mode: "oneTime" }),
+    body: JSON.stringify({ productName, quantity, mode: "oneTime", date }),
   });
   if (!res.ok) throw new Error("Unable to update stock");
   return res.json();
@@ -45,5 +45,17 @@ export async function markAllNotificationsRead() {
 export async function clearNotifications() {
   const res = await fetch("/api/notifications/clear", { method: "POST" });
   if (!res.ok) throw new Error("Unable to clear notifications");
+  return res.json();
+}
+
+export async function getAlerts() {
+  const res = await fetch("/api/alerts");
+  if (!res.ok) throw new Error("Unable to load alerts");
+  return res.json();
+}
+
+export async function clearAlerts() {
+  const res = await fetch("/api/alerts/clear", { method: "POST" });
+  if (!res.ok) throw new Error("Unable to clear alerts");
   return res.json();
 }

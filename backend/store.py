@@ -1,8 +1,10 @@
 """In-memory data store for the demo session."""
 from typing import Any, Dict, List, Optional
 
+from backend.alerts import reset_alerts
 from backend.models import BusinessProfile, SaleEntry, StockEntry
 from backend.notifications import clear_notifications
+from backend.persistence import save_state
 
 sales_log: List[SaleEntry] = []
 stock_log: List[StockEntry] = []
@@ -15,6 +17,7 @@ def set_profile(profile: BusinessProfile) -> None:
     sales_log.clear()
     stock_log.clear()
     clear_notifications()
+    reset_alerts()
     _current_profile = profile
     for product in profile.products:
         stock_log.append(
@@ -26,11 +29,23 @@ def set_profile(profile: BusinessProfile) -> None:
                 created_at=_now_iso(),
             )
         )
+    save_state()
 
 
 def get_profile() -> Optional[BusinessProfile]:
     """Return the active business profile, or None before setup."""
     return _current_profile
+
+
+def reset() -> None:
+    """Clear all business data (profile, sales, stock, notifications)."""
+    global _current_profile
+    sales_log.clear()
+    stock_log.clear()
+    clear_notifications()
+    reset_alerts()
+    _current_profile = None
+    save_state()
 
 
 def _now_iso() -> str:

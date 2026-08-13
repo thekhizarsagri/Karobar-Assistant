@@ -19,7 +19,7 @@ const NOTIFY_TITLES = {
   info: "Notification",
 };
 
-function DashboardPage({ data, onEditForm, onLogout }) {
+function DashboardPage({ data, onEditForm, onLogout, onReset }) {
   const [summary, setSummary] = useState(data);
   const [salesSummary, setSalesSummary] = useState(data?.sales_summary || null);
   const [activeNav, setActiveNav] = useState("dashboard");
@@ -62,16 +62,18 @@ function DashboardPage({ data, onEditForm, onLogout }) {
         ai_insights: result.ai_insights,
         products: result.products ?? prev.products,
       }));
+      window.dispatchEvent(new CustomEvent("alerts:updated"));
     } catch (error) {
       console.error(error);
     }
   };
 
-  const addStock = async (productName, quantity) => {
+  const addStock = async (productName, quantity, date) => {
     try {
-      const result = await postStock(productName, quantity);
+      const result = await postStock(productName, quantity, date);
       if (result.sales_summary) setSalesSummary(result.sales_summary);
       if (result.products) updateProducts(result.products);
+      window.dispatchEvent(new CustomEvent("alerts:updated"));
       return result;
     } catch (error) {
       console.error(error);
@@ -100,8 +102,8 @@ function DashboardPage({ data, onEditForm, onLogout }) {
       return;
     }
 
-    addStock(payload.productName, quantity);
-    notify(`✅ Added ${quantity} units to ${payload.productName} on ${new Date(payload.date + "T00:00:00").toLocaleDateString()}.`, "success");
+    addStock(payload.productName, quantity, payload.date || "");
+    notify(`✅ Added ${quantity} units to ${payload.productName} on ${new Date((payload.date || new Date().toISOString().split("T")[0]) + "T00:00:00").toLocaleDateString()}.`, "success");
   };
 
   const to24Hour = (hour12Str, ampm) => {
@@ -191,6 +193,7 @@ function DashboardPage({ data, onEditForm, onLogout }) {
                 greeting={getGreeting()}
                 onEditForm={onEditForm}
                 onLogout={onLogout}
+                onReset={onReset}
               />
 
               <div className="dashboard-row">

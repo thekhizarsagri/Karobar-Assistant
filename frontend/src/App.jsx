@@ -1,49 +1,125 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { BrowserRouter, Navigate, Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import "./App.css";
 import Welcome from "./components/Welcome";
 import SetupPage from "./components/SetupPage";
 import DashboardPage from "./components/DashboardPage";
 
 function App() {
-  const [page, setPage] = useState("welcome");
-  const [dashboardData, setDashboardData] = useState(null);
+  return (
+    <BrowserRouter>
+      <AppRoutes />
+    </BrowserRouter>
+  );
+}
 
-  const resetSession = () => {
-    setDashboardData(null);
-  };
+function DashboardLoading() {
+  return (
+    <div className="demo-page">
+      <div className="demo-panel">
+        <p>Loading your dashboard…</p>
+      </div>
+    </div>
+  );
+}
+
+function AppRoutes() {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [dashboardData, setDashboardData] = useState(null);
+  const [restoring, setRestoring] = useState(() => location.pathname === "/dashboard");
+  const fetchIdRef = useRef(0);
 
   useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
-    document.documentElement.scrollTop = 0;
-    document.body.scrollTop = 0;
-  }, [page]);
+    // Already showing in-session data; nothing to fetch.
+    if (location.pathname !== "/dashboard" || dashboardData) {
+      return undefined;
+    }
+    // Load the current session's data from the backend (in-memory). On a
+    // fresh server start there is none, so we go back to the welcome page.
+    // During a live session the data survives refreshes.
+    const id = (fetchIdRef.current += 1);
+    setRestoring(true);
+    let cancelled = false;
+    fetch("/api/dashboard")
+      .then((res) => res.json())
+      .then((data) => {
+        if (cancelled || fetchIdRef.current !== id) return;
+        if (data && data.business_name) {
+          setDashboardData(data);
+        } else {
+          navigate("/welcome", { replace: true });
+        }
+      })
+      .catch(() => {
+        if (!cancelled && fetchIdRef.current === id) navigate("/welcome", { replace: true });
+      })
+      .finally(() => {
+        if (!cancelled && fetchIdRef.current === id) setRestoring(false);
+      });
+    return () => {
+      cancelled = true;
+      fetchIdRef.current += 1;
+    };
+  }, [location.pathname, dashboardData, navigate]);
 
-  return page === "dashboard" ? (
-    <DashboardPage
-      data={dashboardData}
-      onEditForm={() => setPage("demo")}
-      onLogout={() => {
-        resetSession();
-        setPage("welcome");
-      }}
-    />
-  ) : page === "demo" ? (
-    <SetupPage
-      initialData={dashboardData}
-      onBack={() => {
-        resetSession();
-        setPage("welcome");
-      }}
-      onFinish={(data) => {
-        setDashboardData(data);
-        setPage("dashboard");
-      }}
-    />
-  ) : (
-    <Welcome onDemoClick={() => {
-      resetSession();
-      setPage("demo");
-    }} />
+  const handleFinish = useCallback(
+    (data) => {
+      setDashboardData(data);
+      navigate("/dashboard");
+    },
+    [navigate]
+  );
+
+  const handleReset = useCallback(async () => {
+    try {
+      await fetch("/api/reset", { method: "POST" });
+    } catch {
+      /* ignore */
+    }
+    setDashboardData(null);
+    navigate("/welcome", { replace: true });
+  }, [navigate]);
+
+  const handleLogout = useCallback(() => {
+    setDashboardData(null);
+    navigate("/welcome", { replace: true });
+  }, [navigate]);
+
+  return (
+    <Routes>
+      <Route path="/" element={<Navigate to="/welcome" replace />} />
+      <Route
+        path="/welcome"
+        element={<Welcome onDemoClick={() => navigate("/setup")} />}
+      />
+      <Route
+        path="/setup"
+        element={
+          <SetupPage
+            initialData={dashboardData}
+            onBack={() => navigate("/welcome")}
+            onFinish={handleFinish}
+          />
+        }
+      />
+      <Route
+        path="/dashboard"
+        element={
+          restoring ? (
+            <DashboardLoading />
+          ) : (
+            <DashboardPage
+              data={dashboardData}
+              onEditForm={() => navigate("/setup")}
+              onLogout={handleLogout}
+              onReset={handleReset}
+            />
+          )
+        }
+      />
+      <Route path="*" element={<Navigate to="/welcome" replace />} />
+    </Routes>
   );
 }
 

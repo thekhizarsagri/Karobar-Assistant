@@ -9,3 +9,7 @@ __pycache__/
 # Node
 node_modules/
 dist/
+
+# Local business-data store (persistence)
+.karobar-data/
+*.json.tmp
