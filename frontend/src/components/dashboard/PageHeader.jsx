@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import NotificationBell from "./NotificationBell";
 
 const MENU_ITEMS = [
-  { id: "editProfile", label: "Edit profile" },
   { id: "editForm", label: "Edit form" },
   { id: "reset", label: "Start fresh" },
   { id: "logout", label: "Logout" },

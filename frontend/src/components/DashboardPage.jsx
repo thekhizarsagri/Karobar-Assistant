@@ -29,6 +29,7 @@ function DashboardPage({ data, onEditForm, onLogout, onReset }) {
   const [historyDetailProduct, setHistoryDetailProduct] = useState(null);
   const [rules, setRules] = useState([]);
   const firedRef = useRef({});
+  const rulesRef = useRef([]);
 
   useEffect(() => {
     setSummary(data);
@@ -97,7 +98,11 @@ function DashboardPage({ data, onEditForm, onLogout, onReset }) {
         ampm: payload.ampm,
         createdAt: new Date().toISOString(),
       };
-      setRules((prev) => [...prev, newRule]);
+      setRules((prev) => {
+        const next = [...prev, newRule];
+        rulesRef.current = next;
+        return next;
+      });
       notify(`🗓️ Automatic add saved: ${quantity} units of ${payload.productName} on day ${newRule.dayOfMonth} of every month at ${payload.hour}:${payload.minute} ${payload.ampm}.`, "info");
       return;
     }
@@ -126,24 +131,26 @@ function DashboardPage({ data, onEditForm, onLogout, onReset }) {
     const intervalId = setInterval(() => {
       const now = new Date();
       const fireKeyBase = `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}`;
-      setRules((currentRules) => {
-        currentRules.forEach((rule) => {
-          const matchesDay = now.getDate() === rule.dayOfMonth;
-          const matchesMinute = now.getMinutes() === parseInt(rule.minute, 10);
-          const matchesHour = now.getHours() === to24Hour(rule.hour, rule.ampm);
-          const fireKey = `${fireKeyBase}-${rule.id}`;
-          if (matchesDay && matchesHour && matchesMinute && !firedRef.current[fireKey]) {
-            firedRef.current[fireKey] = true;
-            fireRule(rule);
-          }
-        });
-        return currentRules;
+      rulesRef.current.forEach((rule) => {
+        const matchesDay = now.getDate() === rule.dayOfMonth;
+        const matchesMinute = now.getMinutes() === parseInt(rule.minute, 10);
+        const matchesHour = now.getHours() === to24Hour(rule.hour, rule.ampm);
+        const fireKey = `${fireKeyBase}-${rule.id}`;
+        if (matchesDay && matchesHour && matchesMinute && !firedRef.current[fireKey]) {
+          firedRef.current[fireKey] = true;
+          fireRule(rule);
+        }
       });
     }, 30000);
     return () => clearInterval(intervalId);
   }, []);
 
-  const handleRemoveRule = (ruleId) => setRules((prev) => prev.filter((r) => r.id !== ruleId));
+  const handleRemoveRule = (ruleId) =>
+    setRules((prev) => {
+      const next = prev.filter((r) => r.id !== ruleId);
+      rulesRef.current = next;
+      return next;
+    });
 
   const handleNav = (nav) => {
     setActiveNav(nav);

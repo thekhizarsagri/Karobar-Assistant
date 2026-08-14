@@ -1,9 +1,8 @@
 """Stock management: read, adjust, and add inventory for products."""
+from datetime import datetime
 from typing import Any, Dict
 
-from backend.insights import get_latest_ai_insights
 from backend.models import StockEntry
-from backend.notifications import sync_alerts_from_insights
 from backend.persistence import save_state
 from backend.store import get_profile, products_snapshot, stock_log
 
@@ -34,8 +33,6 @@ def update_stock_quantity(product_name: str, delta: int) -> int:
 def add_stock(product_name: str, quantity: int, mode: str = "oneTime", date: str | None = None) -> Dict[str, Any]:
     """Add stock for a product, log the event, and return an updated snapshot."""
     new_level = update_stock_quantity(product_name, quantity)
-    from datetime import datetime
-
     created_at = (
         f"{date}T00:00:00" if date else datetime.now().isoformat(timespec="seconds")
     )
@@ -49,7 +46,6 @@ def add_stock(product_name: str, quantity: int, mode: str = "oneTime", date: str
         )
     )
     save_state()
-    sync_alerts_from_insights(get_latest_ai_insights())
     return {
         "message": f"Stock updated for {product_name}",
         "productName": product_name,

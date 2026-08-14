@@ -1,5 +1,5 @@
 """Profitability metrics and the dashboard summary."""
-from typing import Any, Dict
+from typing import Dict
 
 from backend.models import BusinessProfile
 

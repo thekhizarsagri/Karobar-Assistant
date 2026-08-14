@@ -53,31 +53,3 @@ def mark_read(notification_id: int) -> Dict[str, Any]:
 def clear_notifications() -> None:
     notifications.clear()
     save_state()
-
-
-def sync_alerts_from_insights(insights: Dict[str, Any]) -> None:
-    """Seed actionable AI alerts as notifications and drop ones that were resolved.
-
-    AI alerts (low stock, profit, info) are intentionally NOT sent to the
-    notification bell — they belong to the Alerts box only. The bell is
-    reserved for user-action notifications (sales, stock, automation).
-    """
-    alerts = insights.get("alerts", [])
-    changed = False
-
-    synced_types = {"stock", "profit", "info"}
-    synced_notifications = [n for n in notifications if n["type"] in synced_types]
-    if synced_notifications:
-        notifications[:] = [n for n in notifications if n["type"] not in synced_types]
-        changed = True
-
-    existing = {(n["type"], n["title"]) for n in notifications}
-    for alert in alerts:
-        if alert["type"] in synced_types:
-            continue
-        key = (alert["type"], alert["title"])
-        if key not in existing:
-            add_notification(alert["type"], alert["title"], alert["message"])
-            changed = True
-    if changed:
-        save_state()

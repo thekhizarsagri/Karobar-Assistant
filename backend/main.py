@@ -12,7 +12,6 @@ from pydantic import BaseModel
 
 from backend.aggregation import get_analytics_data
 from backend.alerts import clear_all, get_active_alerts
-from backend.chatbot import get_chatbot_response
 from backend.dashboard import build_dashboard_payload, build_current_dashboard_payload
 from backend.insights import get_latest_ai_insights
 from backend.notifications import (
@@ -99,10 +98,6 @@ class StockEntryRequest(BaseModel):
     dayOfMonth: int | None = None
     timeStr: str | None = None
     date: str | None = None
-
-
-class ChatbotRequest(BaseModel):
-    message: str
 
 
 class NotificationRequest(BaseModel):
@@ -204,14 +199,17 @@ def analytics() -> Dict[str, Any]:
     return get_analytics_data()
 
 
-@app.post("/api/chatbot")
-def chatbot(request: ChatbotRequest) -> Dict[str, Any]:
-    return get_chatbot_response(request.message)
-
-
 # SPA fallback: must be the last registered route so it never shadows /api.
 @app.get("/{full_path:path}", include_in_schema=False)
 def spa(full_path: str):
     if full_path.startswith("api/"):
         return {"message": "Not found"}
-    return _serve_index()
+    dist = _frontend_dist_dir()
+    if dist is not None:
+        file_path = (dist / full_path).resolve()
+        if file_path.is_file():
+            return FileResponse(file_path)
+        index_file = _index_file()
+        if index_file is not None:
+            return FileResponse(index_file)
+    return {"message": "Karobar Assistant backend is running. Frontend not built yet."}
