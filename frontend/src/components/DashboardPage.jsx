@@ -10,6 +10,7 @@ import StatCards from "./dashboard/StatCards";
 import StockModal from "./dashboard/StockModal";
 import StockOverviewModal from "./dashboard/StockOverviewModal";
 import AnalyticsPage from "./analytics/AnalyticsPage";
+import AiInsightsPage from "./analytics/AiInsightsPage";
 import { postSale, postStock, addNotification } from "./dashboard/api";
 
 const NOTIFY_TITLES = {
@@ -170,6 +171,8 @@ function DashboardPage({ data, onEditForm, onLogout, onReset }) {
         <div className="app-main">
           {activeNav === "sales" ? (
             <AnalyticsPage data={summary} onBack={() => setActiveNav("dashboard")} />
+          ) : activeNav === "ai" ? (
+            <AiInsightsPage data={summary} onBack={() => setActiveNav("dashboard")} />
           ) : activeNav === "history" ? (
             historyDetailProduct ? (
               <ProductHistoryDetail

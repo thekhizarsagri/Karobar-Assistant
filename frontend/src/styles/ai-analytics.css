@@ -1,0 +1,268 @@
+.ai-analytics-page {
+  gap: 18px;
+}
+
+.ai-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.export-menu {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  border-radius: 999px;
+  padding: 6px 12px;
+}
+
+.export-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #64748b;
+}
+
+.export-link {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1d4ed8;
+  text-decoration: none;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #eff6ff;
+  white-space: nowrap;
+}
+
+.export-link:hover {
+  background: #dbeafe;
+}
+
+.ai-summary-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+}
+
+.ai-summary-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: left;
+}
+
+.ai-summary-value {
+  font-size: 26px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.ai-summary-label {
+  font-size: 13px;
+  color: #64748b;
+}
+
+.ai-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: 18px;
+  align-items: start;
+}
+
+.ai-panel {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  text-align: left;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.ai-panel-heading h2 {
+  margin: 0 0 4px;
+  font-size: 18px;
+  color: #0f172a;
+}
+
+.ai-panel-heading p {
+  margin: 0;
+  font-size: 13px;
+  color: #64748b;
+}
+
+/* ABC table */
+.abc-table {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.abc-row {
+  display: grid;
+  grid-template-columns: 1.2fr 0.5fr 0.6fr 0.9fr 0.7fr 1.4fr;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 14px;
+  font-size: 14px;
+  color: #334155;
+}
+
+.abc-row:nth-child(odd) {
+  background: #f8fafc;
+}
+
+.abc-row-head {
+  background: #1e293b;
+  color: #e2e8f0;
+  font-weight: 700;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.abc-row-head:nth-child(odd) {
+  background: #1e293b;
+}
+
+.abc-product {
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.abc-class {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  color: #fff;
+  font-weight: 800;
+}
+
+.abc-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.abc-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: #334155;
+}
+
+.abc-legend-dot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 7px;
+  color: #fff;
+  font-weight: 800;
+  font-size: 12px;
+}
+
+.abc-legend-count {
+  margin-left: auto;
+  font-weight: 700;
+  color: #64748b;
+}
+
+.abc-share {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #334155;
+}
+
+.abc-share-bar {
+  flex: 1;
+  height: 8px;
+  background: #e2e8f0;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.abc-share-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+/* Velocity */
+.velocity-block {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.velocity-title {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #64748b;
+}
+
+.velocity-empty {
+  color: #94a3b8;
+  font-size: 13px;
+}
+
+.velocity-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.velocity-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: #f8fafc;
+}
+
+.velocity-name {
+  font-weight: 700;
+  color: #0f172a;
+  font-size: 14px;
+}
+
+.velocity-stats {
+  font-size: 13px;
+  color: #64748b;
+  text-align: right;
+}
+
+.velocity-top {
+  color: #047857;
+}
+
+.velocity-slow {
+  color: #b45309;
+}

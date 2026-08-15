@@ -28,6 +28,18 @@ const NAV_ITEMS = [
     ),
   },
   {
+    id: "ai",
+    label: "AI Analytics",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z" />
+        <circle cx="19" cy="18" r="2" />
+        <path d="M19 8V6.5A2.5 2.5 0 0 0 16.5 4H16" />
+        <path d="M5 18l3 3" />
+      </svg>
+    ),
+  },
+  {
     id: "history",
     label: "Product history",
     icon: (

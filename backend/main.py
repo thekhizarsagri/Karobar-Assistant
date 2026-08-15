@@ -6,11 +6,12 @@ import sys
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 from backend.aggregation import get_analytics_data
+from backend.data_analytics import export_dataset, get_advanced_analytics
 from backend.alerts import clear_all, get_active_alerts
 from backend.dashboard import build_dashboard_payload, build_current_dashboard_payload
 from backend.insights import get_latest_ai_insights
@@ -197,6 +198,21 @@ def clear_notifications_endpoint() -> Dict[str, Any]:
 @app.get("/api/analytics")
 def analytics() -> Dict[str, Any]:
     return get_analytics_data()
+
+
+@app.get("/api/analytics/advanced")
+def advanced_analytics() -> Dict[str, Any]:
+    return get_advanced_analytics()
+
+
+@app.get("/api/analytics/export")
+def analytics_export(dataset: str = "abc") -> PlainTextResponse:
+    csv_data = export_dataset(dataset)
+    return PlainTextResponse(
+        csv_data,
+        media_type="text/csv",
+        headers={"Content-Disposition": f'attachment; filename="karobar-{dataset}.csv"'},
+    )
 
 
 # SPA fallback: must be the last registered route so it never shadows /api.

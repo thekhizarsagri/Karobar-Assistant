@@ -27,6 +27,7 @@ export const fixedExpenseItems = [
   { key: "electricity", label: "Electricity", amount: "7200" },
   { key: "internet", label: "Internet", amount: "1500" },
   { key: "transportation", label: "Transportation", amount: "8500" },
+  { key: "labour", label: "Labour Charges", amount: "10000" },
   { key: "marketing", label: "Marketing", amount: "6500" },
   { key: "other", label: "Other", amount: "3000" },
 ];
