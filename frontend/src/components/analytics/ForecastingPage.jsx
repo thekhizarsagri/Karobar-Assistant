@@ -3,10 +3,12 @@ import { ForecastChart } from "./Charts";
 
 const EMPTY = { forecasts: [] };
 
-function ForecastingPage({ data, onBack }) {
+function ForecastingPage({ data }) {
   const [analytics, setAnalytics] = useState(EMPTY);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [showSearch, setShowSearch] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const fetchForecasts = useCallback(async () => {
     setLoading(true);
@@ -27,6 +29,10 @@ function ForecastingPage({ data, onBack }) {
   }, [data, fetchForecasts]);
 
   const forecasts = analytics.forecasts || [];
+  const query = searchQuery.trim().toLowerCase();
+  const visibleForecasts = query
+    ? forecasts.filter((f) => f.product.toLowerCase().includes(query))
+    : forecasts;
 
   return (
     <div className="analytics-page ai-analytics-page">
@@ -39,9 +45,33 @@ function ForecastingPage({ data, onBack }) {
           <button type="button" className="analytics-back-btn" onClick={fetchForecasts}>
             Refresh
           </button>
-          <button type="button" className="analytics-back-btn" onClick={onBack}>Back</button>
+          <button
+            type="button"
+            className={`analytics-back-btn ${showSearch ? "analytics-btn-active" : ""}`}
+            onClick={() => setShowSearch((v) => !v)}
+          >
+            Search
+          </button>
         </div>
       </div>
+
+      {showSearch && (
+        <div className="forecast-search-box">
+          <input
+            type="text"
+            className="forecast-search-input"
+            placeholder="Search product name…"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            autoFocus
+          />
+          {searchQuery.trim() && (
+            <button type="button" className="forecast-search-clear" onClick={() => setSearchQuery("")}>
+              Clear
+            </button>
+          )}
+        </div>
+      )}
 
       {loading ? (
         <div className="empty-state">
@@ -58,6 +88,11 @@ function ForecastingPage({ data, onBack }) {
           <span className="empty-icon">📈</span>
           <p>No forecasts generated. Add sales history to predict demand.</p>
         </div>
+      ) : visibleForecasts.length === 0 ? (
+        <div className="empty-state">
+          <span className="empty-icon">🔍</span>
+          <p>No products match "{searchQuery}".</p>
+        </div>
       ) : (
         <section className="ai-panel">
           <div className="ai-panel-heading">
@@ -65,7 +100,7 @@ function ForecastingPage({ data, onBack }) {
             <p>Visualizing product sales history and the projected next day demand with 95% confidence bounds.</p>
           </div>
           <div className="forecast-charts-grid">
-            {forecasts.map((f) => {
+            {visibleForecasts.map((f) => {
               const trendClass = f.trend || "stable";
               const forecastPoint = {
                 date: "Projected",

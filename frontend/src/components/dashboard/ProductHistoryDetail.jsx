@@ -1,5 +1,10 @@
 import { getProductColor } from "../analytics/constants";
 
+const EXPORT_DATASETS = [
+  ["sales", "Sales history"],
+  ["stock", "Stock history"],
+];
+
 function ProductHistoryDetail({ productName, salesSummary, products, onBack }) {
   const productHistory = salesSummary?.product_history || {};
   const stockHistory = salesSummary?.stock_history || {};
@@ -54,7 +59,22 @@ function ProductHistoryDetail({ productName, salesSummary, products, onBack }) {
             Total sold: {productHistory[productName]?.total_quantity ?? 0} units
           </p>
         </div>
-        <button type="button" className="history-detail-back-btn" onClick={onBack}>Back to history</button>
+        <div className="history-detail-actions">
+          <div className="export-menu">
+            <span className="export-label">Export CSV</span>
+            {EXPORT_DATASETS.map(([ds, label]) => (
+              <a
+                key={ds}
+                className="export-link"
+                href={`/api/history/export?dataset=${ds}&product=${encodeURIComponent(productName)}`}
+                download={`karobar-history-${ds}.csv`}
+              >
+                {label}
+              </a>
+            ))}
+          </div>
+          <button type="button" className="history-detail-back-btn" onClick={onBack}>Back to history</button>
+        </div>
       </div>
 
       <div className="history-detail-section">

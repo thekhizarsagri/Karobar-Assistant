@@ -23,6 +23,41 @@
   margin-bottom: 16px;
 }
 
+.product-trend-dot {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+
+.product-trend-total {
+  margin: 12px 0 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #334155;
+}
+
+.chart-year-select {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.chart-year-select select {
+  border: 1px solid #cbd5e1;
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #0f172a;
+  background: #fff;
+  cursor: pointer;
+}
+
 /* Layout Split: Charts side-by-side or chart + list */
 .analytics-split-layout {
   display: grid;

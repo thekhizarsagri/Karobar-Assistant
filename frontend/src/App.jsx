@@ -32,7 +32,11 @@ function AppRoutes() {
 
   useEffect(() => {
     // Already showing in-session data; nothing to fetch.
-    if (location.pathname !== "/dashboard" || dashboardData) {
+    if (location.pathname !== "/dashboard") {
+      return undefined;
+    }
+    if (dashboardData) {
+      setRestoring(false);
       return undefined;
     }
     // Load the current session's data from the backend (in-memory). On a
@@ -44,7 +48,7 @@ function AppRoutes() {
     fetch("/api/dashboard")
       .then((res) => res.json())
       .then((data) => {
-        if (cancelled || fetchIdRef.current !== id) return;
+        if (cancelled) return;
         if (data && data.business_name) {
           setDashboardData(data);
         } else {
@@ -52,16 +56,20 @@ function AppRoutes() {
         }
       })
       .catch(() => {
-        if (!cancelled && fetchIdRef.current === id) navigate("/welcome", { replace: true });
+        if (!cancelled) navigate("/welcome", { replace: true });
       })
       .finally(() => {
-        if (!cancelled && fetchIdRef.current === id) setRestoring(false);
+        if (fetchIdRef.current === id) setRestoring(false);
       });
     return () => {
       cancelled = true;
-      fetchIdRef.current += 1;
     };
   }, [location.pathname, dashboardData, navigate]);
+
+  // Always start a fresh page at the top when the route changes.
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
 
   const handleFinish = useCallback(
     (data) => {

@@ -53,34 +53,36 @@ function StockModal({ products, isOpen, onClose, onSubmit, initialMode = "oneTim
             </label>
           ) : (
             <>
-              <label className="form-field">
-                <span>Day of Month (1 to 28)</span>
-                <select value={form.dayOfMonth} onChange={(e) => set("dayOfMonth", Number(e.target.value))}>
-                  {Array.from({ length: 28 }, (_, i) => i + 1).map((day) => (
-                    <option key={day} value={day}>{day}{day === 1 ? "st" : day === 2 ? "nd" : day === 3 ? "rd" : "th"} of every month</option>
-                  ))}
-                </select>
-              </label>
-              <label className="form-field">
-                <span>Time (12-hour HH:MM AM/PM)</span>
-                <div className="time-select-grid">
-                  <select value={form.hour} onChange={(e) => set("hour", e.target.value)}>
-                    {Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2, "0")).map((hh) => (
-                      <option key={hh} value={hh}>{hh}</option>
+              <div className="stock-modal-grid">
+                <label className="form-field">
+                  <span>Day of Month (1 to 28)</span>
+                  <select value={form.dayOfMonth} onChange={(e) => set("dayOfMonth", Number(e.target.value))}>
+                    {Array.from({ length: 28 }, (_, i) => i + 1).map((day) => (
+                      <option key={day} value={day}>{day}{day === 1 ? "st" : day === 2 ? "nd" : day === 3 ? "rd" : "th"} of every month</option>
                     ))}
                   </select>
-                  <span className="time-colon">:</span>
-                  <select value={form.minute} onChange={(e) => set("minute", e.target.value)}>
-                    {["00", "05", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55"].map((mm) => (
-                      <option key={mm} value={mm}>{mm}</option>
-                    ))}
-                  </select>
-                  <select value={form.ampm} onChange={(e) => set("ampm", e.target.value)}>
-                    <option value="AM">AM</option>
-                    <option value="PM">PM</option>
-                  </select>
-                </div>
-              </label>
+                </label>
+                <label className="form-field">
+                  <span>Time (AM/PM)</span>
+                  <div className="time-select-grid">
+                    <select value={form.hour} onChange={(e) => set("hour", e.target.value)}>
+                      {Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2, "0")).map((hh) => (
+                        <option key={hh} value={hh}>{hh}</option>
+                      ))}
+                    </select>
+                    <span className="time-colon">:</span>
+                    <select value={form.minute} onChange={(e) => set("minute", e.target.value)}>
+                      {["00", "05", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55"].map((mm) => (
+                        <option key={mm} value={mm}>{mm}</option>
+                      ))}
+                    </select>
+                    <select value={form.ampm} onChange={(e) => set("ampm", e.target.value)}>
+                      <option value="AM">AM</option>
+                      <option value="PM">PM</option>
+                    </select>
+                  </div>
+                </label>
+              </div>
               <p className="stock-modal-note">
                 On day {form.dayOfMonth} at {form.hour}:{form.minute} {form.ampm} of every month, {form.quantity} units will be added automatically.
               </p>

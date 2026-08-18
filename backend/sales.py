@@ -1,4 +1,6 @@
 """Sales recording and history summaries."""
+import csv
+import io
 from datetime import datetime
 from typing import Any, Dict
 
@@ -96,3 +98,40 @@ def _entry_payload(entry: SaleEntry) -> Dict[str, Any]:
         "entry_type": entry.entry_type,
         "created_at": entry.created_at,
     }
+
+
+def export_history(dataset: str = "sales", product_name: str | None = None) -> str:
+    """Return a CSV string of the sales or stock history log.
+
+    When `product_name` is given, only entries for that product are exported.
+    """
+    if dataset == "stock":
+        entries = [
+            entry
+            for entry in stock_log
+            if product_name is None or entry.product_name == product_name
+        ]
+        rows = [
+            {
+                "product_name": entry.product_name,
+                "quantity": entry.quantity,
+                "source": entry.source,
+                "note": entry.note,
+                "created_at": entry.created_at,
+            }
+            for entry in entries
+        ]
+    else:
+        entries = [
+            entry
+            for entry in sales_log
+            if product_name is None or entry.product_name == product_name
+        ]
+        rows = [_entry_payload(entry) for entry in entries]
+
+    buffer = io.StringIO()
+    if rows:
+        writer = csv.DictWriter(buffer, fieldnames=list(rows[0].keys()))
+        writer.writeheader()
+        writer.writerows(rows)
+    return buffer.getvalue()

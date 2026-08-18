@@ -9,13 +9,13 @@
 }
 
 .stock-modal {
-  width: min(520px, calc(100vw - 48px));
-  max-width: 520px;
+  width: min(500px, calc(100vw - 40px));
+  max-width: 500px;
   min-width: 0;
   box-sizing: border-box;
   background: #fff;
-  border-radius: 20px;
-  padding: 24px;
+  border-radius: 18px;
+  padding: 20px;
   box-shadow: 0 24px 70px rgba(15, 23, 42, 0.18);
   overflow-x: hidden;
 }
@@ -160,6 +160,13 @@
   width: 100%;
 }
 
+.stock-modal-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  min-width: 0;
+}
+
 .stock-modal p,
 .stock-modal-subtitle,
 .stock-modal-note {
@@ -199,11 +206,12 @@
 
 .time-select-grid select {
   flex: 1;
-  padding: 12px;
+  min-width: 0;
+  padding: 10px;
   border-radius: 12px;
   border: 1px solid #cbd5e1;
   background: #f8fafc;
-  font-size: 15px;
+  font-size: 14px;
   color: #0f172a;
 }
 
@@ -215,18 +223,20 @@
 
 .scheduled-rules-list {
   display: grid;
-  gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 14px;
 }
 
 .scheduled-rule-card {
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
-  align-items: center;
   gap: 12px;
-  padding: 14px 16px;
+  padding: 16px;
   border-radius: 14px;
   border: 1px solid #bfdbfe;
   background: linear-gradient(135deg, #eff6ff, #f0f9ff);
+  min-width: 0;
 }
 
 .scheduled-rule-info {
@@ -251,6 +261,7 @@
   display: flex;
   gap: 8px;
   flex-shrink: 0;
+  margin-top: auto;
 }
 
 .rule-test-btn {

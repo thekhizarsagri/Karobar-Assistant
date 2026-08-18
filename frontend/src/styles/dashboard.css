@@ -650,22 +650,23 @@
 .add-stock-btn {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 10px 14px;
+  gap: 6px;
+  padding: 7px 12px;
   border: none;
   border-radius: 999px;
   background: #1d4ed8;
   color: #fff;
   cursor: pointer;
   font-weight: 600;
+  font-size: 13px;
 }
 
 .add-stock-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
+  width: 18px;
+  height: 18px;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.18);
 }

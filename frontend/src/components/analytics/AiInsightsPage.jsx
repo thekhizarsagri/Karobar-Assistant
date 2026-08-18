@@ -20,7 +20,7 @@ const EMPTY = {
   velocity: { top_movers: [], slow_movers: [] },
 };
 
-function AiInsightsPage({ data, onBack }) {
+function AiInsightsPage({ data }) {
   const [analytics, setAnalytics] = useState(EMPTY);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -68,7 +68,6 @@ function AiInsightsPage({ data, onBack }) {
               </a>
             ))}
           </div>
-          <button type="button" className="analytics-back-btn" onClick={onBack}>Back</button>
         </div>
       </div>
 
@@ -161,9 +160,6 @@ function AbcPanel({ rows }) {
                 </span>
               </div>
             ))}
-          </div>
-          <div style={{ fontSize: "0.85rem", color: "#64748b", background: "#f8fafc", padding: "16px", borderRadius: "12px", border: "1px solid #e2e8f0" }}>
-            <strong>💡 Recommendation:</strong> Focus customer retention and marketing resources on <strong>Class A</strong> products. Keep minimal inventory for <strong>Class C</strong> items to free up working capital.
           </div>
         </div>
       </div>

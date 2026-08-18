@@ -23,7 +23,7 @@ from backend.notifications import (
     mark_read,
 )
 from backend.persistence import init as init_persistence
-from backend.sales import get_sales_summary, record_sale
+from backend.sales import export_history, get_sales_summary, record_sale
 from backend.stock import add_stock
 from backend.store import reset as reset_store
 
@@ -212,6 +212,19 @@ def analytics_export(dataset: str = "abc") -> PlainTextResponse:
         csv_data,
         media_type="text/csv",
         headers={"Content-Disposition": f'attachment; filename="karobar-{dataset}.csv"'},
+    )
+
+
+@app.get("/api/history/export")
+def history_export(dataset: str = "sales", product: str | None = None) -> PlainTextResponse:
+    csv_data = export_history(dataset, product)
+    filename = f"karobar-history-{dataset}"
+    if product:
+        filename += f"-{product.replace(' ', '_').lower()}"
+    return PlainTextResponse(
+        csv_data,
+        media_type="text/csv",
+        headers={"Content-Disposition": f'attachment; filename="{filename}.csv"'},
     )
 
 
