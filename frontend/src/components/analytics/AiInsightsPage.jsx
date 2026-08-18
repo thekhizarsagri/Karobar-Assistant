@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import TabBar from "./TabBar";
+import { DonutChart, HorizontalBarChart } from "./Charts";
 
-const ABC_COLORS = { A: "#1d4ed8", B: "#f59e0b", C: "#94a3b8" };
+const ABC_COLORS = { A: "#1d4ed8", B: "#f59e0b", C: "#64748b" };
 
 const VIEW_TABS = [
   ["abc", "ABC Pareto"],
@@ -124,24 +125,50 @@ function AbcPanel({ rows }) {
     acc[row.class] = (acc[row.class] || 0) + 1;
     return acc;
   }, {});
+
+  // Prepare donut chart data (product revenue distribution colored by class)
+  const donutData = rows.map((row) => ({
+    label: row.product,
+    value: Math.round(row.revenue),
+    color: ABC_COLORS[row.class] || "#cbd5e1",
+  }));
+
   return (
     <section className="ai-panel">
       <div className="ai-panel-heading">
         <h2>ABC (Pareto) Product Classification</h2>
         <p>Products ranked by revenue share to help you focus on what matters most.</p>
       </div>
-      <div className="abc-legend">
-        {Object.entries(ABC_LABELS).map(([cls, label]) => (
-          <span key={cls} className="abc-legend-item">
-            <span className="abc-legend-dot" style={{ background: ABC_COLORS[cls] }}>
-              {cls}
-            </span>
-            {label}
-            <span className="abc-legend-count">{counts[cls] || 0} product{(counts[cls] || 0) === 1 ? "" : "s"}</span>
-          </span>
-        ))}
+
+      <div className="analytics-split-layout" style={{ alignItems: "center", marginBottom: "28px" }}>
+        {/* Donut Chart visual representation */}
+        <div className="chart-section" style={{ margin: 0, padding: "20px" }}>
+          <div className="chart-section-title">Revenue Share by Product</div>
+          <DonutChart data={donutData} centerTextLabel="Total Revenue" />
+        </div>
+
+        {/* Legend description */}
+        <div className="abc-legend-column" style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+          <div className="abc-legend" style={{ display: "flex", flexDirection: "column", gap: "12px", border: "none", padding: 0 }}>
+            {Object.entries(ABC_LABELS).map(([cls, label]) => (
+              <div key={cls} className="abc-legend-item" style={{ fontSize: "0.95rem" }}>
+                <span className="abc-legend-dot" style={{ background: ABC_COLORS[cls], marginRight: "12px", width: "32px", height: "24px", display: "inline-flex", alignItems: "center", justifyContent: "center", borderRadius: "6px", color: "#fff", fontWeight: "bold", fontSize: "0.75rem" }}>
+                  {cls}
+                </span>
+                <span style={{ fontWeight: 600 }}>{label}</span>
+                <span className="abc-legend-count" style={{ marginLeft: "auto", background: "#f1f5f9", padding: "2px 8px", borderRadius: "12px", fontSize: "0.8rem", fontWeight: "bold" }}>
+                  {counts[cls] || 0} prod
+                </span>
+              </div>
+            ))}
+          </div>
+          <div style={{ fontSize: "0.85rem", color: "#64748b", background: "#f8fafc", padding: "16px", borderRadius: "12px", border: "1px solid #e2e8f0" }}>
+            <strong>💡 Recommendation:</strong> Focus customer retention and marketing resources on <strong>Class A</strong> products. Keep minimal inventory for <strong>Class C</strong> items to free up working capital.
+          </div>
+        </div>
       </div>
-      <div className="abc-table">
+
+      <div className="abc-table" style={{ marginTop: "20px" }}>
         <div className="abc-row abc-row-head">
           <span>Product</span>
           <span>Class</span>
@@ -179,42 +206,50 @@ function AbcPanel({ rows }) {
 }
 
 function VelocityPanel({ velocity }) {
-  if (!velocity.top_movers.length && !velocity.slow_movers.length) return null;
+  const hasTop = velocity.top_movers && velocity.top_movers.length > 0;
+  const hasSlow = velocity.slow_movers && velocity.slow_movers.length > 0;
+
+  if (!hasTop && !hasSlow) return null;
+
+  // Map to HorizontalBarChart format
+  const topMoversData = (velocity.top_movers || []).map((item) => ({
+    label: item.product,
+    value: item.avg_per_day,
+    displayValue: `${item.units} units (${item.avg_per_day}/day)`,
+  }));
+
+  const slowMoversData = (velocity.slow_movers || []).map((item) => ({
+    label: item.product,
+    value: item.units === 0 ? 0 : item.avg_per_day,
+    displayValue: item.units === 0 ? "Dead Stock (0 units)" : `${item.units} units (${item.avg_per_day}/day)`,
+    fill: "#ef4444",
+  }));
+
   return (
     <section className="ai-panel">
       <div className="ai-panel-heading">
         <h2>Product Velocity</h2>
-        <p>Fast movers vs. slow or dead stock.</p>
+        <p>A comparison of average unit sales speeds. High velocity items require constant stock reviews.</p>
       </div>
-      <VelocityList title="Top movers" items={velocity.top_movers} accent="top" />
-      <VelocityList title="Slow movers / dead stock" items={velocity.slow_movers} accent="slow" />
-    </section>
-  );
-}
 
-function VelocityList({ title, items, accent }) {
-  return (
-    <div className="velocity-block">
-      <h3 className="velocity-title">{title}</h3>
-      {items.length === 0 ? (
-        <p className="velocity-empty">No items</p>
-      ) : (
-        <ul className="velocity-list">
-          {items.map((item) => (
-            <li key={item.product} className="velocity-item">
-              <span className="velocity-name">{item.product}</span>
-              <span className={`velocity-stats velocity-${accent}`}>
-                {item.units} units
-                {item.avg_per_day > 0 && <> · {item.avg_per_day}/day</>}
-                {item.days_since_last_sale !== null && (
-                  <> · {item.days_since_last_sale}d ago</>
-                )}
-              </span>
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
+      <div className="analytics-split-layout">
+        {/* Top movers list & chart */}
+        <div className="chart-section" style={{ margin: 0 }}>
+          <div className="chart-section-title" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <span style={{ color: "#10b981" }}>🔥</span> Top Movers (Fast Sales)
+          </div>
+          <HorizontalBarChart data={topMoversData} barColor="#10b981" />
+        </div>
+
+        {/* Slow movers / dead stock list & chart */}
+        <div className="chart-section" style={{ margin: 0 }}>
+          <div className="chart-section-title" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <span style={{ color: "#ef4444" }}>❄️</span> Slow Movers & Dead Stock
+          </div>
+          <HorizontalBarChart data={slowMoversData} barColor="#ef4444" />
+        </div>
+      </div>
+    </section>
   );
 }
 

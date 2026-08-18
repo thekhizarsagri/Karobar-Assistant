@@ -11,6 +11,8 @@ import StockModal from "./dashboard/StockModal";
 import StockOverviewModal from "./dashboard/StockOverviewModal";
 import AnalyticsPage from "./analytics/AnalyticsPage";
 import AiInsightsPage from "./analytics/AiInsightsPage";
+import ForecastingPage from "./analytics/ForecastingPage";
+import { TrendAreaChart } from "./analytics/Charts";
 import { postSale, postStock, addNotification } from "./dashboard/api";
 
 const NOTIFY_TITLES = {
@@ -31,6 +33,39 @@ function DashboardPage({ data, onEditForm, onLogout, onReset }) {
   const [rules, setRules] = useState([]);
   const firedRef = useRef({});
   const rulesRef = useRef([]);
+  const [analytics, setAnalytics] = useState({ daily: {}, monthly: {}, yearly: {} });
+
+  useEffect(() => {
+    const fetchAnalytics = async () => {
+      try {
+        const res = await fetch("/api/analytics");
+        if (res.ok) setAnalytics(await res.json());
+      } catch (err) {
+        console.error("Failed to fetch analytics:", err);
+      }
+    };
+    fetchAnalytics();
+  }, [summary, salesSummary]);
+
+  // Determine active year with sales data, or default to current year
+  const availableYears = Object.keys(analytics.monthly || {})
+    .map((m) => parseInt(m.split("-")[0], 10));
+  const uniqueYears = Array.from(new Set(availableYears)).sort((a, b) => b - a);
+  const activeYear = uniqueYears.length ? uniqueYears[0] : new Date().getFullYear();
+
+  const SHORT_MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const trendData = Array.from({ length: 12 }, (_, m) => {
+    const monthKey = `${activeYear}-${String(m + 1).padStart(2, "0")}`;
+    const monthData = analytics.monthly[monthKey] || {};
+    const monthTotal = Object.values(monthData).reduce((a, b) => a + b, 0);
+    return {
+      label: SHORT_MONTHS[m],
+      value: monthTotal,
+      details: monthData,
+    };
+  });
+
+  const totalSalesThisYear = trendData.reduce((sum, d) => sum + d.value, 0);
 
   useEffect(() => {
     setSummary(data);
@@ -173,6 +208,8 @@ function DashboardPage({ data, onEditForm, onLogout, onReset }) {
             <AnalyticsPage data={summary} onBack={() => setActiveNav("dashboard")} />
           ) : activeNav === "ai" ? (
             <AiInsightsPage data={summary} onBack={() => setActiveNav("dashboard")} />
+          ) : activeNav === "forecast" ? (
+            <ForecastingPage data={summary} onBack={() => setActiveNav("dashboard")} />
           ) : activeNav === "history" ? (
             historyDetailProduct ? (
               <ProductHistoryDetail
@@ -219,6 +256,20 @@ function DashboardPage({ data, onEditForm, onLogout, onReset }) {
                 </StatCards>
 
                 <AlertsCard />
+              </div>
+
+              {/* Smaller sales trend graph on the main dashboard */}
+              <div className="chart-section" style={{ maxWidth: "820px", padding: "20px", marginTop: "10px" }}>
+                <div className="chart-section-title" style={{ fontSize: "1.05rem", fontWeight: 600, color: "#0f172a", marginBottom: "12px" }}>
+                  Sales Trend ({activeYear})
+                </div>
+                {totalSalesThisYear > 0 ? (
+                  <TrendAreaChart data={trendData} height={140} lineColor="#10b981" />
+                ) : (
+                  <div style={{ padding: "20px", textAlign: "center", color: "#94a3b8", fontSize: "0.9rem" }}>
+                    No sales recorded yet for this period.
+                  </div>
+                )}
               </div>
 
               <StockModal
