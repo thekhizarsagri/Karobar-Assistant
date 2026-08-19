@@ -79,7 +79,7 @@ function SetupPage({ initialData, onBack, onFinish }) {
         owner_name: businessInfo.ownerName,
         status: "Demo mode",
         products: payload.products,
-        metrics: { net_profit: 0, gross_profit: 0, total_expenses: 0, break_even: 0 },
+        metrics: { net_profit: 0, gross_profit: 0, total_expenses: 0 },
       });
     }
   };

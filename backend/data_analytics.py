@@ -1,4 +1,4 @@
-"""Advanced data analytics powered by pandas, numpy, and scikit-learn.
+"""Advanced data analytics powered by pandas and numpy.
 
 This module is the AI/ML showcase of the project. It turns the raw in-memory
 sales log into a tidy pandas DataFrame and then derives:

@@ -11,15 +11,11 @@ def calculate_profitability(profile: BusinessProfile) -> Dict[str, float]:
 
     gross_profit = total_revenue - total_cost
     net_profit = gross_profit - total_expenses
-    break_even = max(total_expenses, 1)
 
     return {
-        "total_revenue": round(total_revenue, 2),
-        "total_cost": round(total_cost, 2),
         "gross_profit": round(gross_profit, 2),
         "net_profit": round(net_profit, 2),
         "total_expenses": round(total_expenses, 2),
-        "break_even": round(break_even, 2),
     }
 
 

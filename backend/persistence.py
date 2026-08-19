@@ -24,15 +24,6 @@ from backend.models import BusinessProfile, Expense, Product, SaleEntry, StockEn
 _ACTIVE = False
 
 
-def is_active() -> bool:
-    return _ACTIVE
-
-
-def set_active(value: bool) -> None:
-    global _ACTIVE
-    _ACTIVE = value
-
-
 def _data_dir() -> Path:
     if os.environ.get("KAROBAR_DATA_DIR"):
         return Path(os.environ["KAROBAR_DATA_DIR"])
@@ -48,7 +39,8 @@ def _data_file() -> Path:
 def init() -> None:
     if os.environ.get("KAROBAR_PERSIST", "0") != "1":
         return
-    set_active(True)
+    global _ACTIVE
+    _ACTIVE = True
     _load_from_disk()
 
 

@@ -1,4 +1,5 @@
 import { getProductColor } from "../analytics/constants";
+import { buildProductColorMap } from "../analytics/selectors";
 
 const EXPORT_DATASETS = [
   ["sales", "Sales history"],
@@ -10,12 +11,7 @@ function ProductHistoryDetail({ productName, salesSummary, products, onBack }) {
   const stockHistory = salesSummary?.stock_history || {};
   const productOrder = salesSummary?.product_order || [];
 
-  const order =
-    productOrder.length > 0 ? productOrder : (products || []).map((p) => p.name);
-  const colorMap = {};
-  order.forEach((name, index) => {
-    colorMap[name] = getProductColor(index);
-  });
+  const colorMap = buildProductColorMap(productOrder, products);
 
   const color = colorMap[productName] || getProductColor(0);
   const sales = productHistory[productName]?.entries || [];

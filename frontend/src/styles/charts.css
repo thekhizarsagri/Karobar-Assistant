@@ -23,14 +23,6 @@
   margin-bottom: 16px;
 }
 
-.product-trend-dot {
-  display: inline-block;
-  width: 12px;
-  height: 12px;
-  border-radius: 999px;
-  flex-shrink: 0;
-}
-
 .product-trend-total {
   margin: 12px 0 0;
   font-size: 0.9rem;
@@ -72,39 +64,6 @@
   }
 }
 
-/* Views toggles */
-.view-mode-toggle {
-  display: inline-flex;
-  background: #f1f5f9;
-  border-radius: 10px;
-  padding: 4px;
-  gap: 4px;
-  border: 1px solid #e2e8f0;
-}
-
-.view-mode-toggle button {
-  background: transparent;
-  border: none;
-  font-family: inherit;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #64748b;
-  padding: 8px 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
-
-.view-mode-toggle button:hover {
-  color: #0f172a;
-}
-
-.view-mode-toggle button.active {
-  background: #ffffff;
-  color: #0f172a;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
 /* Chart Canvas SVG properties */
 .chart-svg-container {
   position: relative;
@@ -125,11 +84,6 @@
   stroke: #f1f5f9;
   stroke-width: 1px;
   stroke-dasharray: 2;
-}
-
-.chart-axis-line {
-  stroke: #cbd5e1;
-  stroke-width: 1px;
 }
 
 .chart-axis-text {

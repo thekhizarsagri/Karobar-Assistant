@@ -1,7 +1,6 @@
 """Wire the profile, metrics, sales, and insights into one dashboard payload."""
 from typing import Any, Dict
 
-from backend.insights import get_latest_ai_insights
 from backend.metrics import get_dashboard_summary
 from backend.profile import build_profile_from_form
 from backend.sales import get_sales_summary
@@ -17,7 +16,6 @@ def _dashboard_payload(profile) -> Dict[str, Any]:
         for expense in profile.expenses
     ]
     summary["sales_summary"] = get_sales_summary()
-    summary["ai_insights"] = get_latest_ai_insights()
     return summary
 
 

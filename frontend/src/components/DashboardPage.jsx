@@ -13,6 +13,7 @@ import AnalyticsPage from "./analytics/AnalyticsPage";
 import AiInsightsPage from "./analytics/AiInsightsPage";
 import ForecastingPage from "./analytics/ForecastingPage";
 import { MonthlyBarChart } from "./analytics/Charts";
+import { SHORT_MONTHS } from "./analytics/constants";
 import { postSale, postStock, addNotification } from "./dashboard/api";
 
 const NOTIFY_TITLES = {
@@ -57,7 +58,6 @@ function DashboardPage({ data, onEditForm, onLogout, onReset }) {
     setActiveYear(defaultYear);
   }, [defaultYear]);
 
-  const SHORT_MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   const trendData = Array.from({ length: 12 }, (_, m) => {
     const monthKey = `${activeYear}-${String(m + 1).padStart(2, "0")}`;
     const monthData = analytics.monthly[monthKey] || {};
@@ -98,7 +98,6 @@ function DashboardPage({ data, onEditForm, onLogout, onReset }) {
       setSalesSummary(result.sales_summary);
       setSummary((prev) => ({
         ...prev,
-        ai_insights: result.ai_insights,
         products: result.products ?? prev.products,
       }));
       window.dispatchEvent(new CustomEvent("alerts:updated"));

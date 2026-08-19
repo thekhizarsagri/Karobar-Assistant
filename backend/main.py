@@ -45,6 +45,21 @@ app.add_middleware(
 )
 
 
+class ImmutableStaticFiles(StaticFiles):
+    """Serve versioned build assets with long-lived immutable caching."""
+
+    async def get_response(self, path: str, scope):
+        response = await super().get_response(path, scope)
+        if response.status_code < 400:
+            response.headers["Cache-Control"] = "public, max-age=31536000, immutable"
+        return response
+
+
+def _index_response(index_file: Path) -> FileResponse:
+    """Serve index.html with no-cache so browsers always revalidate after a rebuild."""
+    return FileResponse(index_file, headers={"Cache-Control": "no-cache"})
+
+
 def _frontend_dist_dir() -> Path | None:
     """Locate the built frontend (used by desktop/production deployments)."""
     candidates: List[Path] = []
@@ -70,7 +85,7 @@ def _serve_index():
     index_file = _index_file()
     if index_file is None:
         return {"message": "Karobar Assistant backend is running. Frontend not built yet."}
-    return FileResponse(index_file)
+    return _index_response(index_file)
 
 
 class DemoSetupRequest(BaseModel):
@@ -131,7 +146,7 @@ def root():
 # fall back to index.html for SPA routes (/dashboard, /setup, ...).
 _dist_dir = _frontend_dist_dir()
 if _dist_dir is not None and (_dist_dir / "assets").exists():
-    app.mount("/assets", StaticFiles(directory=_dist_dir / "assets"), name="assets")
+    app.mount("/assets", ImmutableStaticFiles(directory=_dist_dir / "assets"), name="assets")
 
 
 @app.post("/api/dashboard")
@@ -154,11 +169,6 @@ def stock_endpoint(request: StockEntryRequest) -> Dict[str, Any]:
     result = add_stock(request.productName, request.quantity, mode=request.mode, date=request.date)
     result["sales_summary"] = get_sales_summary()
     return result
-
-
-@app.get("/api/ai-insights")
-def ai_insights() -> Dict[str, Any]:
-    return get_latest_ai_insights()
 
 
 @app.get("/api/alerts")
@@ -240,5 +250,5 @@ def spa(full_path: str):
             return FileResponse(file_path)
         index_file = _index_file()
         if index_file is not None:
-            return FileResponse(index_file)
+            return _index_response(index_file)
     return {"message": "Karobar Assistant backend is running. Frontend not built yet."}

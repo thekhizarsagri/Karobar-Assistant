@@ -1,17 +1,20 @@
 import { useMemo } from "react";
 import { getProductColor } from "./constants";
 
+export function buildProductColorMap(order, fallbackProducts = []) {
+  const names = order && order.length > 0 ? order : (fallbackProducts || []).map((p) => p.name);
+  const map = {};
+  names.forEach((name, index) => {
+    map[name] = getProductColor(index);
+  });
+  return map;
+}
+
 export function useProductColorMap(analytics, fallbackProducts = []) {
-  return useMemo(() => {
-    const order =
-      analytics.product_order ||
-      (fallbackProducts || []).map((p) => p.name);
-    const map = {};
-    order.forEach((name, index) => {
-      map[name] = getProductColor(index);
-    });
-    return map;
-  }, [analytics.product_order, fallbackProducts]);
+  return useMemo(
+    () => buildProductColorMap(analytics.product_order, fallbackProducts),
+    [analytics.product_order, fallbackProducts]
+  );
 }
 
 export function useAvailableYears(analytics, selectedYear) {

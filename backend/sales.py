@@ -4,7 +4,6 @@ import io
 from datetime import datetime
 from typing import Any, Dict
 
-from backend.insights import get_latest_ai_insights
 from backend.models import SaleEntry
 from backend.persistence import save_state
 from backend.stock import get_stock_for_product, update_stock_quantity
@@ -12,12 +11,10 @@ from backend.store import product_order, products_snapshot, sales_log, stock_log
 
 
 def get_sales_summary() -> Dict[str, Any]:
-    totals: Dict[str, int] = {}
     product_history: Dict[str, Dict[str, Any]] = {}
     stock_history: Dict[str, list] = {}
 
     for entry in sales_log:
-        totals[entry.product_name] = totals.get(entry.product_name, 0) + entry.quantity
         history = product_history.setdefault(
             entry.product_name,
             {"product_name": entry.product_name, "total_quantity": 0, "entries": []},
@@ -38,11 +35,9 @@ def get_sales_summary() -> Dict[str, Any]:
     return {
         "total_entries": len(sales_log),
         "total_units": sum(entry.quantity for entry in sales_log),
-        "totals_by_product": totals,
         "product_history": product_history,
         "stock_history": stock_history,
         "product_order": product_order(),
-        "recent_entries": [_entry_payload(entry) for entry in reversed(sales_log[-5:])],
     }
 
 
@@ -84,7 +79,6 @@ def record_sale(sale_data: Dict[str, Any]) -> Dict[str, Any]:
     return {
         "message": "Sales recorded",
         "sales_summary": get_sales_summary(),
-        "ai_insights": get_latest_ai_insights(),
         "products": products_snapshot(),
     }
 
