@@ -12,6 +12,7 @@ from pydantic import BaseModel
 
 from backend.aggregation import get_analytics_data
 from backend.data_analytics import export_dataset, get_advanced_analytics
+from backend.inventory import get_inventory_data
 from backend.alerts import clear_all, get_active_alerts
 from backend.dashboard import build_dashboard_payload, build_current_dashboard_payload
 from backend.insights import get_latest_ai_insights
@@ -208,6 +209,11 @@ def clear_notifications_endpoint() -> Dict[str, Any]:
 @app.get("/api/analytics")
 def analytics() -> Dict[str, Any]:
     return get_analytics_data()
+
+
+@app.get("/api/inventory")
+def inventory() -> Dict[str, Any]:
+    return get_inventory_data()
 
 
 @app.get("/api/analytics/advanced")

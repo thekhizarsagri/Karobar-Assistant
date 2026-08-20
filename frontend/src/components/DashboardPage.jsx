@@ -12,6 +12,7 @@ import StockOverviewModal from "./dashboard/StockOverviewModal";
 import AnalyticsPage from "./analytics/AnalyticsPage";
 import AiInsightsPage from "./analytics/AiInsightsPage";
 import ForecastingPage from "./analytics/ForecastingPage";
+import InventoryPage from "./inventory/InventoryPage";
 import { MonthlyBarChart } from "./analytics/Charts";
 import { SHORT_MONTHS } from "./analytics/constants";
 import { postSale, postStock, addNotification } from "./dashboard/api";
@@ -206,7 +207,9 @@ function DashboardPage({ data, onEditForm, onLogout, onReset }) {
         />
 
         <div className="app-main">
-          {activeNav === "sales" ? (
+          {activeNav === "inventory" ? (
+            <InventoryPage products={summary?.products || []} onSubmit={handleStockSubmit} />
+          ) : activeNav === "sales" ? (
             <AnalyticsPage data={summary} onBack={() => setActiveNav("dashboard")} />
           ) : activeNav === "ai" ? (
             <AiInsightsPage data={summary} onBack={() => setActiveNav("dashboard")} />

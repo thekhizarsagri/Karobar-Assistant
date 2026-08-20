@@ -1,9 +1,9 @@
 import { useState } from "react";
 
-function StockModal({ products, isOpen, onClose, onSubmit, initialMode = "oneTime" }) {
+function StockModal({ products, isOpen, onClose, onSubmit, initialMode = "oneTime", initialProduct }) {
   const [mode, setMode] = useState(initialMode);
   const [form, setForm] = useState({
-    productName: products[0]?.name || "",
+    productName: initialProduct || products[0]?.name || "",
     quantity: 1,
     date: new Date().toISOString().split("T")[0],
     dayOfMonth: 1,
