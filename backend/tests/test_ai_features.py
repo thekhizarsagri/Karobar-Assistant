@@ -1,7 +1,13 @@
 import unittest
 
-from backend.alerts import clear_all, dismissed_alerts, get_active_alerts
-from backend.insights import generate_ai_insights
+from backend.alerts import (
+    add_transient_alert,
+    clear_all,
+    dismissed_alerts,
+    get_active_alerts,
+    transient_alerts,
+)
+from backend.insights import empty_insights, generate_ai_insights
 from backend.models import BusinessProfile, Product, Expense
 
 
@@ -69,6 +75,33 @@ class AIFeaturesTests(unittest.TestCase):
             self.assertTrue(any(a["type"] == "stock" for a in active_again))
         finally:
             dismissed_alerts.clear()
+
+    def test_transient_alert_shows_in_feed_and_clears(self):
+        try:
+            dismissed_alerts.clear()
+            transient_alerts.clear()
+            add_transient_alert("stock", "Not enough stock: Coke", "Only 3 units are available.")
+
+            active = get_active_alerts(empty_insights())
+            self.assertTrue(any(a["title"] == "Not enough stock: Coke" for a in active))
+
+            clear_all(empty_insights())
+            self.assertEqual(len(get_active_alerts(empty_insights())), 0)
+            self.assertEqual(transient_alerts, [])
+        finally:
+            dismissed_alerts.clear()
+            transient_alerts.clear()
+
+    def test_transient_alert_does_not_duplicate(self):
+        try:
+            dismissed_alerts.clear()
+            transient_alerts.clear()
+            add_transient_alert("stock", "Not enough stock: Coke", "Only 3 units are available.")
+            add_transient_alert("stock", "Not enough stock: Coke", "Only 3 units are available.")
+            self.assertEqual(len(transient_alerts), 1)
+        finally:
+            dismissed_alerts.clear()
+            transient_alerts.clear()
 
 
 if __name__ == "__main__":

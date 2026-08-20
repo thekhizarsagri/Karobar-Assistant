@@ -1,6 +1,7 @@
 import unittest
 
 from backend.aggregation import get_analytics_data
+from backend.alerts import transient_alerts
 from backend.profile import build_profile_from_form
 from backend.sales import get_sales_summary, record_sale
 from backend.stock import add_stock
@@ -71,6 +72,14 @@ class SalesHistoryTests(unittest.TestCase):
         self.assertEqual(analytics["daily"]["2026-08-10"], {"Coke": 4})
         self.assertEqual(analytics["monthly"]["2026-08"], {"Coke": 4})
         self.assertEqual(analytics["yearly"]["2026"], {"Coke": 4})
+
+    def test_rejected_sale_creates_transient_stock_alert(self):
+        transient_alerts.clear()
+        result = record_sale({"productName": "Coke", "quantity": 999, "period": "day", "entryDate": "2026-08-10", "entryType": "auto"})
+
+        self.assertEqual(result["error"], "insufficient_stock")
+        self.assertTrue(any(a["title"] == "Not enough stock: Coke" for a in transient_alerts))
+        transient_alerts.clear()
 
 
 if __name__ == "__main__":

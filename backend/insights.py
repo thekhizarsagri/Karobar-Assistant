@@ -22,11 +22,17 @@ def generate_ai_insights(profile: BusinessProfile, sales_entries: Optional[List[
 
     for product in profile.products:
         if product.stock_quantity <= product.reorder_point:
+            if product.stock_quantity <= 0:
+                message = f"{product.name} is out of stock. Add stock to keep selling it."
+            elif product.reorder_point > 0:
+                message = f"Only {product.stock_quantity} units remain and the reorder point is {product.reorder_point}."
+            else:
+                message = f"Only {product.stock_quantity} units remain."
             alerts.append(
                 {
                     "type": "stock",
                     "title": f"Low stock for {product.name}",
-                    "message": f"Only {product.stock_quantity} units remain and the reorder point is {product.reorder_point}.",
+                    "message": message,
                 }
             )
             recommendations.append(f"Reorder {product.name} before it runs out.")

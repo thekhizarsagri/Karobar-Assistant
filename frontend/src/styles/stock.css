@@ -8,6 +8,11 @@
   z-index: 1000;
 }
 
+/* Lock background scrolling while any modal with a backdrop is open. */
+body:has(.stock-modal-backdrop) {
+  overflow: hidden;
+}
+
 .stock-modal {
   width: min(500px, calc(100vw - 40px));
   max-width: 500px;

@@ -47,7 +47,7 @@ def init() -> None:
 def save_state() -> None:
     if not _ACTIVE:
         return
-    from backend.alerts import dismissed_alerts
+    from backend.alerts import dismissed_alerts, transient_alerts
     from backend.notifications import _next_id, notifications
     from backend.store import _current_profile, sales_log, stock_log
 
@@ -58,6 +58,7 @@ def save_state() -> None:
         "stock": [_stock_to_dict(e) for e in stock_log],
         "notifications": {"items": notifications, "next_id": _next_id},
         "dismissed_alerts": list(dismissed_alerts),
+        "transient_alerts": [dict(alert) for alert in transient_alerts],
     }
     file_path = _data_file()
     try:
@@ -99,6 +100,9 @@ def _load_from_disk() -> None:
 
     alerts_module.dismissed_alerts.clear()
     alerts_module.dismissed_alerts.extend(state.get("dismissed_alerts", []))
+
+    alerts_module.transient_alerts.clear()
+    alerts_module.transient_alerts.extend(state.get("transient_alerts", []))
 
 
 def _profile_to_dict(profile):

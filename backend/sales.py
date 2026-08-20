@@ -4,6 +4,7 @@ import io
 from datetime import datetime
 from typing import Any, Dict
 
+from backend.alerts import add_transient_alert
 from backend.models import SaleEntry
 from backend.persistence import save_state
 from backend.stock import get_stock_for_product, update_stock_quantity
@@ -49,6 +50,11 @@ def record_sale(sale_data: Dict[str, Any]) -> Dict[str, Any]:
     current_stock = get_stock_for_product(product_name)
 
     if current_stock == 0:
+        add_transient_alert(
+            "stock",
+            f"Out of stock: {product_name}",
+            f"Cannot sell {product_name} — no stock available. Please add stock first.",
+        )
         return {
             "error": "out_of_stock",
             "message": f"No stock available for {product_name}. Please add stock first.",
@@ -56,6 +62,11 @@ def record_sale(sale_data: Dict[str, Any]) -> Dict[str, Any]:
         }
 
     if quantity > current_stock:
+        add_transient_alert(
+            "stock",
+            f"Not enough stock: {product_name}",
+            f"Not enough stock for {product_name}. You tried to sell {quantity} but only {current_stock} unit{'s are' if current_stock != 1 else ' is'} available.",
+        )
         return {
             "error": "insufficient_stock",
             "message": f"Not enough stock for {product_name}. You tried to sell {quantity} but only {current_stock} unit{'s are' if current_stock != 1 else ' is'} available.",
