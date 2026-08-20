@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 const SALES_PERIODS = ["day", "month"];
 
-function RecordSalesTab({ products, notify, submitSale }) {
+function RecordSalesTab({ products, submitSale }) {
   const [selectedPeriod, setSelectedPeriod] = useState("day");
   const [form, setForm] = useState({
     productName: products[0]?.name || "",
@@ -22,17 +22,7 @@ function RecordSalesTab({ products, notify, submitSale }) {
 
   const handleManualSubmit = (event) => {
     event.preventDefault();
-    const available = Number((products.find((p) => p.name === form.productName) || {}).stockAvailable || 0);
     const quantity = Number(form.quantity || 1);
-
-    if (available <= 0) {
-      notify(`⚠️ Cannot sell ${form.productName} — no stock available. Please add stock first.`, "error");
-      return;
-    }
-    if (quantity > available) {
-      notify(`⚠️ Not enough stock for ${form.productName}. You tried to sell ${quantity} but only ${available} unit${available !== 1 ? "s are" : " is"} available.`, "error");
-      return;
-    }
     submitSale(form.productName, quantity, selectedPeriod, entryValueForPeriod(), "manual");
   };
 

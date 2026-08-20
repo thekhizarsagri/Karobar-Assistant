@@ -13,6 +13,7 @@ import AnalyticsPage from "./analytics/AnalyticsPage";
 import AiInsightsPage from "./analytics/AiInsightsPage";
 import ForecastingPage from "./analytics/ForecastingPage";
 import InventoryPage from "./inventory/InventoryPage";
+import ReportsPage from "./reports/ReportsPage";
 import { MonthlyBarChart } from "./analytics/Charts";
 import { SHORT_MONTHS } from "./analytics/constants";
 import { postSale, postStock, addNotification } from "./dashboard/api";
@@ -88,12 +89,8 @@ function DashboardPage({ data, onEditForm, onLogout, onReset }) {
   const submitSale = async (productName, quantity, period, entryDate, entryType = "auto") => {
     try {
       const result = await postSale(productName, quantity, period, entryDate, entryType);
-      if (result.error === "out_of_stock") {
-        notify(`⚠️ Cannot sell ${productName} — no stock available. Please add stock first.`, "error");
-        return;
-      }
-      if (result.error === "insufficient_stock") {
-        notify(`⚠️ ${result.message}`, "error");
+      if (result.error === "out_of_stock" || result.error === "insufficient_stock") {
+        window.dispatchEvent(new CustomEvent("alerts:updated"));
         return;
       }
       setSalesSummary(result.sales_summary);
@@ -238,6 +235,8 @@ function DashboardPage({ data, onEditForm, onLogout, onReset }) {
               onRemove={handleRemoveRule}
               onSubmit={handleStockSubmit}
             />
+          ) : activeNav === "reports" ? (
+            <ReportsPage />
           ) : (
             <>
               <PageHeader
@@ -257,7 +256,7 @@ function DashboardPage({ data, onEditForm, onLogout, onReset }) {
                   onStockOverview={() => setStockOverviewOpen(true)}
                   onAddStock={() => setStockModalOpen(true)}
                 >
-                  <RecordSalesTab products={summary?.products || []} notify={notify} submitSale={submitSale} />
+                  <RecordSalesTab products={summary?.products || []} submitSale={submitSale} />
                 </StatCards>
 
                 <AlertsCard />
