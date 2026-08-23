@@ -3,6 +3,7 @@ import HistoryTab from "./dashboard/HistoryTab";
 import AlertsCard from "./dashboard/AlertsCard";
 import AutomationPage from "./dashboard/AutomationPage";
 import PageHeader from "./dashboard/PageHeader";
+import SettingsPage from "./dashboard/SettingsPage";
 import ProductHistoryDetail from "./dashboard/ProductHistoryDetail";
 import RecordSalesTab from "./dashboard/RecordSalesTab";
 import Sidebar from "./dashboard/Sidebar";
@@ -237,6 +238,8 @@ function DashboardPage({ data, onEditForm, onLogout, onReset }) {
             />
           ) : activeNav === "reports" ? (
             <ReportsPage />
+          ) : activeNav === "settings" ? (
+            <SettingsPage />
           ) : (
             <>
               <PageHeader

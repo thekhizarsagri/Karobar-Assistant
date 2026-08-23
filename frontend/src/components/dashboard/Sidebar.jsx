@@ -100,6 +100,18 @@ const NAV_ITEMS = [
       </svg>
     ),
   },
+  {
+    id: "settings",
+    label: "Settings",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="3" />
+        <path d="M19 21V5a2 2 0 0 0-4 0v16m" />
+        <path d="M3 12v8a2 2 0 0 0 2 2h8m" />
+        <path d="M7 13l5 5 5-5" />
+      </svg>
+    ),
+  },
 ];
 
 function Sidebar({ active, onSelect, open, onToggle }) {
