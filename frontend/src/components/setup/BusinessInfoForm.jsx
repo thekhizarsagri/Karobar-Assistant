@@ -8,13 +8,19 @@ function BusinessInfoForm({ value, onChange }) {
   return (
     <div className="demo-section">
       <div className="section-heading">
-        <span className="step-pill">Step 1</span>
+        <span className="step-pill active">Step 1</span>
         <h2>Business information</h2>
       </div>
       <div className="form-grid">
         <label className="form-field">
           <span>Business Name</span>
-          <input type="text" name="businessName" value={value.businessName} onChange={handleInput} />
+          <input
+            type="text"
+            name="businessName"
+            value={value.businessName}
+            onChange={handleInput}
+            placeholder="Enter business name"
+          />
         </label>
         <label className="form-field">
           <span>Business Type</span>
@@ -28,7 +34,13 @@ function BusinessInfoForm({ value, onChange }) {
         </label>
         <label className="form-field">
           <span>Owner Name</span>
-          <input type="text" name="ownerName" value={value.ownerName} onChange={handleInput} />
+          <input
+            type="text"
+            name="ownerName"
+            value={value.ownerName}
+            onChange={handleInput}
+            placeholder="Enter owner name"
+          />
         </label>
         <label className="form-field">
           <span>Phone Number</span>
@@ -40,15 +52,29 @@ function BusinessInfoForm({ value, onChange }) {
             onChange={handleInput}
             placeholder="+91 9876543210"
             pattern="[0-9+\s-]*"
+            className="form-field.input-wrapper"
           />
+          <p className="form-hint">Enter your phone number with country code</p>
         </label>
         <label className="form-field">
           <span>Business Location</span>
-          <input type="text" name="location" value={value.location} onChange={handleInput} />
+          <input
+            type="text"
+            name="location"
+            value={value.location}
+            onChange={handleInput}
+            placeholder="Enter business location"
+          />
         </label>
         <label className="form-field full-width">
           <span>Business Description</span>
-          <textarea rows="3" name="description" value={value.description} onChange={handleInput} />
+          <textarea
+            rows="3"
+            name="description"
+            value={value.description}
+            onChange={handleInput}
+            placeholder="Describe your business..."
+          />
         </label>
       </div>
     </div>
