@@ -213,8 +213,8 @@ def analytics() -> Dict[str, Any]:
 
 
 @app.get("/api/inventory")
-def inventory() -> Dict[str, Any]:
-    return get_inventory_data()
+def inventory(category: str | None = None) -> Dict[str, Any]:
+    return get_inventory_data(category)
 
 
 @app.get("/api/reports")

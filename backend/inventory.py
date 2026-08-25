@@ -24,12 +24,14 @@ SERVICE_Z = 1.65        # Z-score for a ~95% service level
 DEAD_STOCK_DAYS = 30    # no sales for this long -> considered dead stock
 
 
-def get_inventory_data() -> Dict[str, Any]:
+def get_inventory_data(category: str | None = None) -> Dict[str, Any]:
     profile = get_profile()
     if profile is None:
         return empty_payload()
 
     items = [_product_row(product) for product in profile.products]
+    if category:
+        items = [item for item in items if item["category"] == category]
     return {
         "generated_at": datetime.now().isoformat(timespec="seconds"),
         "summary": _summary(items),

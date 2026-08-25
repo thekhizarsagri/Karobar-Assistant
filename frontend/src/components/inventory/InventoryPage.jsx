@@ -42,6 +42,7 @@ function InventoryPage({ products, onSubmit }) {
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [categoryFilter, setCategoryFilter] = useState("all");
   const [modalOpen, setModalOpen] = useState(false);
   const [initialProduct, setInitialProduct] = useState("");
   const [refreshKey, setRefreshKey] = useState(0);
@@ -74,13 +75,14 @@ function InventoryPage({ products, onSubmit }) {
     const q = query.trim().toLowerCase();
     return items.filter((item) => {
       if (statusFilter !== "all" && item.status !== statusFilter) return false;
+      if (categoryFilter !== "all" && item.category !== categoryFilter) return false;
       if (!q) return true;
       return (
         item.name.toLowerCase().includes(q) ||
         (item.category || "").toLowerCase().includes(q)
       );
     });
-  }, [items, query, statusFilter]);
+  }, [items, query, statusFilter, categoryFilter]);
 
   const attentionItems = items.filter((item) => item.status !== "ok");
 
@@ -221,6 +223,18 @@ function InventoryPage({ products, onSubmit }) {
                   <option value="ok">In stock</option>
                   <option value="reorder">Needs reorder</option>
                   <option value="out">Out of stock</option>
+                </select>
+                <select
+                  className="inv-filter"
+                  value={categoryFilter}
+                  onChange={(e) => setCategoryFilter(e.target.value)}
+                >
+                  <option value="all">All categories</option>
+                  {categories.map((cat) => (
+                    <option key={cat.category} value={cat.category}>
+                      {cat.category}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>
