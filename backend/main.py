@@ -28,6 +28,9 @@ from backend.persistence import init as init_persistence
 from backend.sales import export_history, get_sales_summary, record_sale
 from backend.stock import add_stock
 from backend.store import reset as reset_store
+from backend.abc_analysis import abc_analysis
+from backend.product_velocity import product_velocity
+from backend.forecast_export import forecast_products, export_dataset as export_analytics_dataset
 
 
 @asynccontextmanager
