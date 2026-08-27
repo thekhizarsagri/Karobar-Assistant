@@ -1,12 +1,15 @@
+import React from "react";
 import { getProductColor } from "../analytics/constants";
 import { buildProductColorMap } from "../analytics/selectors";
+import { clearProductHistory } from "./api";
+import { formatStat } from "../../utils/formatNumber";
 
 const EXPORT_DATASETS = [
   ["sales", "Sales history"],
   ["stock", "Stock history"],
 ];
 
-function ProductHistoryDetail({ productName, salesSummary, products, onBack }) {
+function ProductHistoryDetail({ productName, salesSummary, products, onBack, onClearHistory }) {
   const productHistory = salesSummary?.product_history || {};
   const stockHistory = salesSummary?.stock_history || {};
   const productOrder = salesSummary?.product_order || [];
@@ -16,6 +19,22 @@ function ProductHistoryDetail({ productName, salesSummary, products, onBack }) {
   const color = colorMap[productName] || getProductColor(0);
   const sales = productHistory[productName]?.entries || [];
   const stockEntries = stockHistory[productName] || [];
+
+  const [clearing, setClearing] = React.useState(false);
+  const [showConfirmModal, setShowConfirmModal] = React.useState(false);
+
+  const handleClearHistory = async () => {
+    setClearing(true);
+    try {
+      await clearProductHistory(productName);
+      setShowConfirmModal(false);
+      if (onClearHistory) onClearHistory();
+    } catch (err) {
+      console.error("Failed to clear history:", err);
+    } finally {
+      setClearing(false);
+    }
+  };
 
   const formatDateTime = (value) => {
     if (!value) return "";
@@ -52,7 +71,7 @@ function ProductHistoryDetail({ productName, salesSummary, products, onBack }) {
         <div className="history-detail-title-block">
           <h1 style={{ color }}>{productName}</h1>
           <p className="history-detail-subtitle">
-            Total sold: {productHistory[productName]?.total_quantity ?? 0} units
+            Total sold: {formatStat(productHistory[productName]?.total_quantity ?? 0)} units
           </p>
         </div>
         <div className="history-detail-actions">
@@ -69,6 +88,13 @@ function ProductHistoryDetail({ productName, salesSummary, products, onBack }) {
               </a>
             ))}
           </div>
+          <button
+            type="button"
+            className="history-detail-clear-btn"
+            onClick={() => setShowConfirmModal(true)}
+          >
+            Clear History
+          </button>
           <button type="button" className="history-detail-back-btn" onClick={onBack}>Back to history</button>
         </div>
       </div>
@@ -108,6 +134,29 @@ function ProductHistoryDetail({ productName, salesSummary, products, onBack }) {
           </ul>
         )}
       </div>
+
+      {showConfirmModal && (
+        <div className="stock-modal-backdrop">
+          <div className="stock-modal confirm-modal">
+            <div className="stock-modal-header">
+              <div>
+                <h2>Clear History</h2>
+                <p className="stock-modal-subtitle">This action cannot be undone.</p>
+              </div>
+              <button type="button" className="stock-modal-close" onClick={() => setShowConfirmModal(false)}>×</button>
+            </div>
+            <div className="confirm-modal-body">
+              <p>Are you sure you want to clear all sales and stock history for <strong>"{productName}"</strong>?</p>
+            </div>
+            <div className="stock-modal-actions">
+              <button type="button" className="confirm-cancel-btn" onClick={() => setShowConfirmModal(false)}>Cancel</button>
+              <button type="button" className="confirm-delete-btn" onClick={handleClearHistory} disabled={clearing}>
+                {clearing ? "Clearing..." : "Yes, Clear History"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

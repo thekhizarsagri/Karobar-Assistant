@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+const MAX_QUANTITY = 1_000_000_000_000;
+
 function StockModal({ products, isOpen, onClose, onSubmit, initialMode = "oneTime", initialProduct }) {
   const [mode, setMode] = useState(initialMode);
   const [form, setForm] = useState({
@@ -14,7 +16,19 @@ function StockModal({ products, isOpen, onClose, onSubmit, initialMode = "oneTim
 
   if (!isOpen) return null;
 
-  const set = (field, value) => setForm((prev) => ({ ...prev, [field]: value }));
+  const set = (field, value) => {
+    if (field === "quantity") {
+      const num = Number(value);
+      if (value !== "" && (num < 0 || num > MAX_QUANTITY)) return;
+    }
+    setForm((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const qty = Math.min(Number(form.quantity || 1), MAX_QUANTITY);
+    onSubmit({ ...form, quantity: qty, mode });
+  };
 
   return (
     <div className="stock-modal-backdrop">
@@ -32,7 +46,7 @@ function StockModal({ products, isOpen, onClose, onSubmit, initialMode = "oneTim
           <button type="button" className={`stock-modal-tab ${mode === "automatic" ? "active" : ""}`} onClick={() => setMode("automatic")}>Automatic add</button>
         </div>
 
-        <form className="stock-modal-form" onSubmit={(e) => { e.preventDefault(); onSubmit({ ...form, mode }); }}>
+        <form className="stock-modal-form" onSubmit={handleSubmit}>
           <label className="form-field">
             <span>Product</span>
             <select value={form.productName} onChange={(e) => set("productName", e.target.value)}>
@@ -43,7 +57,7 @@ function StockModal({ products, isOpen, onClose, onSubmit, initialMode = "oneTim
           </label>
           <label className="form-field">
             <span>Quantity</span>
-            <input type="number" min="1" value={form.quantity} onChange={(e) => set("quantity", e.target.value)} />
+            <input type="number" min="1" max={MAX_QUANTITY} value={form.quantity} onChange={(e) => set("quantity", e.target.value)} />
           </label>
 
           {mode === "oneTime" ? (

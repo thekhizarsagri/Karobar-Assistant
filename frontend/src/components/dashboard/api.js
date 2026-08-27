@@ -59,3 +59,9 @@ export async function clearAlerts() {
   if (!res.ok) throw new Error("Unable to clear alerts");
   return res.json();
 }
+
+export async function clearProductHistory(productName) {
+  const res = await fetch(`/api/history/clear/${encodeURIComponent(productName)}`, { method: "POST" });
+  if (!res.ok) throw new Error("Unable to clear product history");
+  return res.json();
+}

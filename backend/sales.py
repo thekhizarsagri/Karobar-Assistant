@@ -5,10 +5,11 @@ from datetime import datetime
 from typing import Any, Dict
 
 from backend.alerts import add_transient_alert
+from backend.metrics import calculate_profitability
 from backend.models import SaleEntry
 from backend.persistence import save_state
 from backend.stock import get_stock_for_product, update_stock_quantity
-from backend.store import product_order, products_snapshot, sales_log, stock_log
+from backend.store import get_profile, product_order, products_snapshot, sales_log, stock_log
 
 
 def get_sales_summary() -> Dict[str, Any]:
@@ -87,10 +88,25 @@ def record_sale(sale_data: Dict[str, Any]) -> Dict[str, Any]:
     update_stock_quantity(product_name, -quantity)
     save_state()
 
+    profile = get_profile()
     return {
         "message": "Sales recorded",
         "sales_summary": get_sales_summary(),
         "products": products_snapshot(),
+        "metrics": calculate_profitability(profile) if profile else {},
+    }
+
+
+def clear_product_history(product_name: str) -> Dict[str, Any]:
+    """Remove all sales and stock log entries for a specific product."""
+    sales_log[:] = [e for e in sales_log if e.product_name != product_name]
+    stock_log[:] = [e for e in stock_log if e.product_name != product_name]
+    save_state()
+    profile = get_profile()
+    return {
+        "message": f"History cleared for {product_name}",
+        "sales_summary": get_sales_summary(),
+        "metrics": calculate_profitability(profile) if profile else {},
     }
 
 

@@ -1,7 +1,16 @@
 import { productCategories } from "./constants";
 
+const MAX_VALUE = 1_000_000_000_000;
+
 function ProductsForm({ products, onChange, onAdd, onRemove }) {
-  const set = (index, field, event) => onChange(index, field, event.target.value);
+  const set = (index, field, event) => {
+    const val = event.target.value;
+    if (["sellingPrice", "costPrice", "stockAvailable"].includes(field)) {
+      const num = Number(val);
+      if (val !== "" && (num < 0 || num > MAX_VALUE)) return;
+    }
+    onChange(index, field, val);
+  };
 
   return (
     <div className="demo-section">
@@ -51,6 +60,8 @@ function ProductsForm({ products, onChange, onAdd, onRemove }) {
                 <span>Selling Price (per unit)</span>
                 <input
                   type="number"
+                  min="0"
+                  max={MAX_VALUE}
                   value={product.sellingPrice}
                   onChange={(e) => set(index, "sellingPrice", e)}
                 />
@@ -59,6 +70,8 @@ function ProductsForm({ products, onChange, onAdd, onRemove }) {
                 <span>Cost Price (per unit)</span>
                 <input
                   type="number"
+                  min="0"
+                  max={MAX_VALUE}
                   value={product.costPrice}
                   onChange={(e) => set(index, "costPrice", e)}
                 />
@@ -71,6 +84,7 @@ function ProductsForm({ products, onChange, onAdd, onRemove }) {
                 <input
                   type="number"
                   min="0"
+                  max={MAX_VALUE}
                   value={product.stockAvailable}
                   onChange={(e) => set(index, "stockAvailable", e)}
                 />

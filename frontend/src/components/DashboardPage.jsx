@@ -98,6 +98,7 @@ function DashboardPage({ data, onEditForm, onLogout, onReset }) {
       setSummary((prev) => ({
         ...prev,
         products: result.products ?? prev.products,
+        metrics: result.metrics ?? prev.metrics,
       }));
       window.dispatchEvent(new CustomEvent("alerts:updated"));
     } catch (error) {
@@ -220,6 +221,18 @@ function DashboardPage({ data, onEditForm, onLogout, onReset }) {
                 salesSummary={salesSummary}
                 products={summary?.products || []}
                 onBack={() => setHistoryDetailProduct(null)}
+                onClearHistory={async () => {
+                  try {
+                    const res = await fetch("/api/dashboard");
+                    if (res.ok) {
+                      const updated = await res.json();
+                      if (updated.sales_summary) setSalesSummary(updated.sales_summary);
+                      if (updated.metrics) setSummary((prev) => ({ ...prev, metrics: updated.metrics }));
+                    }
+                  } catch (err) {
+                    console.error("Failed to refresh after clear:", err);
+                  }
+                }}
               />
             ) : (
               <HistoryTab

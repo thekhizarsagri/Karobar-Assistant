@@ -1,4 +1,5 @@
 import { getProductColor, SHORT_MONTHS } from "./constants";
+import { formatStat } from "../../utils/formatNumber";
 
 function MonthlyView({ analytics, selectedYear, availableYears, yearTotal, onYearChange, colorMap }) {
   return (
@@ -15,7 +16,7 @@ function MonthlyView({ analytics, selectedYear, availableYears, yearTotal, onYea
           </label>
         </div>
         <div className="view-summary">
-          <span className="summary-total">Total: {yearTotal} units</span>
+          <span className="summary-total">Total: {formatStat(yearTotal)} units</span>
           <span className="summary-products">per month</span>
         </div>
       </div>
@@ -36,12 +37,12 @@ function MonthlyView({ analytics, selectedYear, availableYears, yearTotal, onYea
               <div key={monthKey} className="year-month-card">
                 <div className="year-month-header">
                   <span className="year-month-name">{SHORT_MONTHS[m]}</span>
-                  <span className="year-month-total">{monthTotal} units</span>
+                  <span className="year-month-total">{formatStat(monthTotal)} units</span>
                 </div>
                 <div className="year-month-products">
                   {products.map(([pName, qty], i) => (
                     <span key={pName} className="year-month-product" style={{ background: colorMap[pName] || getProductColor(i) }}>
-                      {pName}: {qty}
+                      {pName}: {formatStat(qty)}
                     </span>
                   ))}
                 </div>

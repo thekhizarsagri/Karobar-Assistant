@@ -25,7 +25,7 @@ from backend.notifications import (
     mark_read,
 )
 from backend.persistence import init as init_persistence
-from backend.sales import export_history, get_sales_summary, record_sale
+from backend.sales import clear_product_history, export_history, get_sales_summary, record_sale
 from backend.stock import add_stock
 from backend.store import reset as reset_store
 from backend.abc_analysis import abc_analysis
@@ -93,6 +93,13 @@ def _serve_index():
     return _index_response(index_file)
 
 
+TRILLION = 1_000_000_000_000
+
+
+def _cap(value: int, limit: int = TRILLION) -> int:
+    return max(0, min(value, limit))
+
+
 class DemoSetupRequest(BaseModel):
     businessName: str
     businessType: str
@@ -111,6 +118,9 @@ class SaleEntryRequest(BaseModel):
     entryDate: str | None = None
     entryType: str = "auto"
 
+    def model_post_init(self, __context) -> None:
+        self.quantity = _cap(self.quantity)
+
 
 class StockEntryRequest(BaseModel):
     productName: str
@@ -119,6 +129,9 @@ class StockEntryRequest(BaseModel):
     dayOfMonth: int | None = None
     timeStr: str | None = None
     date: str | None = None
+
+    def model_post_init(self, __context) -> None:
+        self.quantity = _cap(self.quantity)
 
 
 class NotificationRequest(BaseModel):
@@ -251,6 +264,11 @@ def history_export(dataset: str = "sales", product: str | None = None) -> PlainT
         media_type="text/csv",
         headers={"Content-Disposition": f'attachment; filename="{filename}.csv"'},
     )
+
+
+@app.post("/api/history/clear/{product}")
+def clear_history_endpoint(product: str) -> Dict[str, Any]:
+    return clear_product_history(product)
 
 
 # SPA fallback: must be the last registered route so it never shadows /api.

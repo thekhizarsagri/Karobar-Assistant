@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { ForecastChart } from "./Charts";
+import { formatStat, formatCompact } from "../../utils/formatNumber";
 
 const EMPTY = { forecasts: [] };
 
@@ -118,8 +119,8 @@ function ForecastingPage({ data }) {
                     </span>
                   </div>
                   <div style={{ display: "flex", justifyContent: "space-between", margin: "10px 0", fontSize: "0.85rem", background: "#f8fafc", padding: "8px 12px", borderRadius: "8px" }}>
-                    <span>Forecast: <strong>{f.next_period_units} units</strong></span>
-                    <span style={{ color: "#64748b" }}>Range: {f.lower} - {f.upper}</span>
+                    <span>Forecast: <strong>{formatStat(f.next_period_units)} units</strong></span>
+                    <span style={{ color: "#64748b" }}>Range: {formatCompact(f.lower)} - {formatCompact(f.upper)}</span>
                   </div>
                   <div style={{ flexGrow: 1 }}>
                     <ForecastChart history={f.history || []} forecast={[forecastPoint]} height={180} />

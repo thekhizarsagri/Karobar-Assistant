@@ -1,3 +1,5 @@
+import { formatStat } from "../../utils/formatNumber";
+
 function StockOverviewModal({ products, isOpen, onClose }) {
   if (!isOpen) return null;
 
@@ -16,14 +18,14 @@ function StockOverviewModal({ products, isOpen, onClose }) {
 
         <div className="stock-overview-summary">
           <span className="stock-overview-summary-label">Total available stock</span>
-          <span className="stock-overview-summary-value">{totalStock.toLocaleString()}</span>
+          <span className="stock-overview-summary-value">{formatStat(totalStock)}</span>
         </div>
 
         <div className="stock-overview-list">
           {(products || []).map((product) => (
             <div key={product.name} className="stock-overview-row">
               <span className="stock-overview-product">{product.name}</span>
-              <span className="stock-overview-units">{Number(product.stockAvailable || 0).toLocaleString()} units</span>
+              <span className="stock-overview-units">{formatStat(Number(product.stockAvailable || 0))} units</span>
             </div>
           ))}
           {(products || []).length === 0 && (

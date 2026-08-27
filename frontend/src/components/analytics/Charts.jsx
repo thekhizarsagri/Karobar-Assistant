@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { formatCompact, formatStat } from "../../utils/formatNumber";
 
 /**
  * Helper to convert degree angles to SVG circular coordinates
@@ -96,7 +97,7 @@ export function DonutChart({ data = [], centerTextLabel = "Total Share" }) {
 
           {/* Centered text display */}
           <text x={center} y={center - 2} textAnchor="middle" className="donut-center-label">
-            {activeSlice ? activeSlice.value.toLocaleString() : total.toLocaleString()}
+            {activeSlice ? formatCompact(activeSlice.value) : formatCompact(total)}
           </text>
           <text x={center} y={center + 16} textAnchor="middle" className="donut-center-sublabel">
             {activeSlice ? `${activeSlice.label} (${activeSlice.percentage}%)` : centerTextLabel}
@@ -117,7 +118,7 @@ export function DonutChart({ data = [], centerTextLabel = "Total Share" }) {
             <span className="donut-legend-text">
               {slice.label} <span style={{ color: "#94a3b8", fontSize: "0.8rem" }}>({slice.percentage}%)</span>
             </span>
-            <span className="donut-legend-val">{slice.value.toLocaleString()}</span>
+            <span className="donut-legend-val">{formatCompact(slice.value)}</span>
           </div>
         ))}
       </div>
@@ -265,7 +266,7 @@ export function MonthlyBarChart({
               <g key={tickVal}>
                 <line className="chart-gridline" x1={padding.left} y1={y} x2={svgWidth - padding.right} y2={y} />
                 <text className="chart-axis-text" x={padding.left - 8} y={y + 4} textAnchor="end">
-                  {tickVal}
+                  {formatCompact(tickVal)}
                 </text>
               </g>
             );
@@ -331,7 +332,7 @@ export function MonthlyBarChart({
             <div className="chart-tooltip-title">{bars[hoveredIndex].label}</div>
             <div className="chart-tooltip-row">
               <span className="chart-tooltip-label">Sales:</span>
-              <span className="chart-tooltip-val">{bars[hoveredIndex].value} units</span>
+              <span className="chart-tooltip-val">{formatStat(bars[hoveredIndex].value)} units</span>
             </div>
           </div>
         )}
@@ -448,7 +449,7 @@ export function ForecastChart({ history = [], forecast = [], height = 180 }) {
             <g key={tickVal}>
               <line className="chart-gridline" x1={padding.left} y1={y} x2={svgWidth - padding.right} y2={y} />
               <text className="chart-axis-text" x={padding.left - 8} y={y + 4} textAnchor="end">
-                {tickVal}
+                {formatCompact(tickVal)}
               </text>
             </g>
           );
@@ -549,15 +550,15 @@ export function ForecastChart({ history = [], forecast = [], height = 180 }) {
           </div>
           <div className="chart-tooltip-row">
             <span className="chart-tooltip-label">Forecasted:</span>
-            <span className="chart-tooltip-val" style={{ color: timeline[hoveredIdx].type === "history" ? "#93c5fd" : "#38bdf8" }}>
-              {timeline[hoveredIdx].value} units
-            </span>
+              <span className="chart-tooltip-val" style={{ color: timeline[hoveredIdx].type === "history" ? "#93c5fd" : "#38bdf8" }}>
+                {formatStat(timeline[hoveredIdx].value)} units
+              </span>
           </div>
           {timeline[hoveredIdx].type === "forecast" && (
             <div className="chart-tooltip-row" style={{ fontSize: "0.72rem", borderTop: "1px dashed rgba(255,255,255,0.1)", paddingTop: "4px" }}>
               <span className="chart-tooltip-label">Bounds:</span>
               <span className="chart-tooltip-val">
-                {timeline[hoveredIdx].lower} - {timeline[hoveredIdx].upper}
+                {formatCompact(timeline[hoveredIdx].lower)} - {formatCompact(timeline[hoveredIdx].upper)}
               </span>
             </div>
           )}

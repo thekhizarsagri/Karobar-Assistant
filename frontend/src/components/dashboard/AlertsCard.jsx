@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { clearAlerts, getAlerts } from "./api";
 
 const POLL_INTERVAL_MS = 15000;
-const MAX_VISIBLE = 5;
+const MAX_VISIBLE = 3;
 
 function AlertIcon({ type }) {
   return (

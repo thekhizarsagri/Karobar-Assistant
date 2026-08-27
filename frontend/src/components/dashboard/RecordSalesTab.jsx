@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 const SALES_PERIODS = ["day", "month"];
+const MAX_QUANTITY = 1_000_000_000_000;
 
 function RecordSalesTab({ products, submitSale }) {
   const [selectedPeriod, setSelectedPeriod] = useState("day");
@@ -22,8 +23,15 @@ function RecordSalesTab({ products, submitSale }) {
 
   const handleManualSubmit = (event) => {
     event.preventDefault();
-    const quantity = Number(form.quantity || 1);
+    const quantity = Math.min(Number(form.quantity || 1), MAX_QUANTITY);
     submitSale(form.productName, quantity, selectedPeriod, entryValueForPeriod(), "manual");
+  };
+
+  const handleQuantityChange = (e) => {
+    const val = e.target.value;
+    if (val === "" || (Number(val) >= 0 && Number(val) <= MAX_QUANTITY)) {
+      setForm((prev) => ({ ...prev, quantity: val }));
+    }
   };
 
   return (
@@ -55,7 +63,7 @@ function RecordSalesTab({ products, submitSale }) {
 
           <label className="form-field">
             <span>Quantity</span>
-            <input type="number" min="1" value={form.quantity} onChange={(e) => setForm((prev) => ({ ...prev, quantity: e.target.value }))} />
+            <input type="number" min="1" max={MAX_QUANTITY} value={form.quantity} onChange={handleQuantityChange} />
           </label>
 
           <label className="form-field">

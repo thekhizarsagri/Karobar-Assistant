@@ -4,6 +4,7 @@ import MonthlyView from "./MonthlyView";
 import TabBar from "./TabBar";
 import YearlyView from "./YearlyView";
 import { getProductColor, SHORT_MONTHS } from "./constants";
+import { formatStat } from "../../utils/formatNumber";
 import {
   useAvailableYears,
   useOverallTotal,
@@ -122,7 +123,7 @@ function AnalyticsPage({ data }) {
             availableYears={availableYears}
             onYearChange={setSelectedYear}
           />
-          <p className="product-trend-total">Total: {productTotal} units</p>
+          <p className="product-trend-total">Total: {formatStat(productTotal)} units</p>
         </div>
       )}
 

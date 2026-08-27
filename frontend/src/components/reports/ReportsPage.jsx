@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { MonthlyBarChart } from "../analytics/Charts";
+import { formatFull, formatCompact } from "../../utils/formatNumber";
 
 const EMPTY = {
   kpi: { score: 0, label: "Needs attention", profit_score: 0, stock_score: 0, turnover_score: 0 },
@@ -20,7 +21,11 @@ const SCORE_COLORS = {
 };
 
 function fmt(value, fractionDigits = 0) {
-  return Number(value || 0).toLocaleString(undefined, {
+  const num = Number(value || 0);
+  if (Math.abs(num) >= 1_000_000) {
+    return formatCompact(num, fractionDigits > 0 ? 1 : 0);
+  }
+  return num.toLocaleString(undefined, {
     minimumFractionDigits: fractionDigits,
     maximumFractionDigits: fractionDigits,
   });

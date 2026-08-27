@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import TabBar from "./TabBar";
 import { DonutChart, HorizontalBarChart } from "./Charts";
+import { formatStat, formatCompact } from "../../utils/formatNumber";
 
 const ABC_COLORS = { A: "#1d4ed8", B: "#f59e0b", C: "#64748b" };
 
@@ -250,8 +251,7 @@ function VelocityPanel({ velocity }) {
 }
 
 function formatMoney(value) {
-  const num = Number(value || 0);
-  return num.toLocaleString(undefined, { maximumFractionDigits: 0 });
+  return formatStat(value);
 }
 
 export default AiInsightsPage;

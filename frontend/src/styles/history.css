@@ -97,6 +97,26 @@
   background: #f1f5f9;
 }
 
+.history-detail-clear-btn {
+  border: 1px solid #fecaca;
+  background: #fef2f2;
+  color: #dc2626;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 10px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.history-detail-clear-btn:hover {
+  background: #fee2e2;
+}
+
+.history-detail-clear-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .history-detail-actions {
   display: flex;
   align-items: center;
@@ -126,4 +146,84 @@
 .history-empty {
   color: #94a3b8;
   margin: 0;
+}
+
+.confirm-modal {
+  max-height: none;
+  overflow: hidden;
+  animation: none;
+}
+
+.stock-modal-backdrop:has(.confirm-modal) {
+  overflow: hidden;
+}
+
+.confirm-modal-body {
+  padding: 12px 0 16px;
+}
+
+.confirm-modal-body p {
+  color: #334155;
+  font-size: 15px;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.stock-modal-actions .confirm-cancel-btn,
+.stock-modal-actions .confirm-delete-btn {
+  animation: none;
+}
+
+.confirm-cancel-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  min-width: 120px;
+  padding: 0 22px;
+  border: 1px solid #cbd5e1;
+  border-radius: 16px;
+  background: #fff;
+  color: #334155;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.25s ease, transform 0.25s ease;
+}
+
+.confirm-cancel-btn:hover {
+  background: #f1f5f9;
+  transform: translateY(-2px);
+}
+
+.confirm-delete-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  min-width: 160px;
+  padding: 0 22px;
+  border: none;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #ef4444, #dc2626 60%);
+  color: white;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 18px 38px rgba(239, 68, 68, 0.24);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+}
+
+.confirm-delete-btn:hover {
+  transform: translateY(-2px);
+  background: #ffffff;
+  color: #dc2626;
+  border: 1px solid rgba(239, 68, 68, 0.18);
+  box-shadow: 0 18px 35px rgba(239, 68, 68, 0.22);
+}
+
+.confirm-delete-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
 }

@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import StockModal from "../dashboard/StockModal";
 import { DonutChart } from "../analytics/Charts";
 import { getProductColor } from "../analytics/constants";
+import { formatFull, formatCompact } from "../../utils/formatNumber";
 
 const STATUS_META = {
   out: { label: "Out of stock", className: "inv-status--out" },
@@ -18,7 +19,11 @@ const SOURCE_LABELS = {
 const SUPPLY_TARGET_DAYS = 14;
 
 function fmt(value, fractionDigits = 0) {
-  return Number(value || 0).toLocaleString(undefined, {
+  const num = Number(value || 0);
+  if (Math.abs(num) >= 1_000_000) {
+    return formatCompact(num, fractionDigits > 0 ? 1 : 0);
+  }
+  return num.toLocaleString(undefined, {
     minimumFractionDigits: fractionDigits,
     maximumFractionDigits: fractionDigits,
   });
