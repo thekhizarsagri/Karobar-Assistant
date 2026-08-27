@@ -1,86 +1,94 @@
-import { useEffect, useState } from 'react';
 import titleImg from '../assets/title-image.png';
 
-const pitchText = 'Manage production, sales, profits, and get AI-powered business advice.';
-
-const featureCards = [
-  { id: 1, title: 'Production Tracking', desc: 'Monitor production workflows in real-time.' },
-  { id: 2, title: 'Sales Analytics', desc: 'Track sales performance and insights.' },
-  { id: 3, title: 'Profit Optimization', desc: 'AI suggestions to maximize profits.' },
-  { id: 4, title: 'Business Advice', desc: 'Personalized AI advice for decisions.' },
-];
-
 function Welcome({ onDemoClick }) {
-  const [pitch, setPitch] = useState('');
-
-  useEffect(() => {
-    let current = 0;
-    const interval = setInterval(() => {
-      current += 1;
-      setPitch(pitchText.slice(0, current));
-      if (current >= pitchText.length) {
-        clearInterval(interval);
-      }
-    }, 35);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  const [date, setDate] = useState('');
-  useEffect(() => {
-    const updateDate = () => {
-      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-      setDate(new Date().toLocaleDateString(undefined, options));
-    };
-    updateDate();
-    const timer = setInterval(updateDate, 86400000);
-    return () => clearInterval(timer);
-  }, []);
-
   return (
     <div className="welcome-container">
-      <img
-        src={titleImg}
-        alt="Karobar Assistant"
-        className="title-image"
-        draggable={false}
-        onDragStart={(e) => e.preventDefault()}
-        onMouseDown={(e) => e.preventDefault()}
-      />
-
-      <p className="pitch-text">
-        {pitch}
-        <span className="cursor" />
-      </p>
-
-      <div className="date-section" style={{ position: 'absolute', top: 20, left: 20 }}>
-        {date}
+      <div className="welcome-left">
+        <img
+          src={titleImg}
+          alt="Karobar Assistant"
+          className="welcome-title-image"
+          draggable={false}
+        />
+        <p className="welcome-subtitle">Unlock the potential of your business data.</p>
+        <p className="welcome-desc">
+          Powerful analytics to drive smart business decisions.<br />
+          Analyze trends, track performance, and grow your business with confidence.
+        </p>
+        <div className="welcome-actions-left">
+          <button type="button" className="welcome-get-started-btn" onClick={onDemoClick}>
+            Try Demo Mode
+          </button>
+          <button type="button" className="welcome-watch-demo-btn" onClick={(e) => e.preventDefault()}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <polygon points="10 8 16 12 10 16 10 8" fill="currentColor" stroke="none" />
+            </svg>
+            Watch Demo
+          </button>
+        </div>
       </div>
 
-      <div className="features-section">
-        {featureCards.map((card) => (
-          <div
-            key={card.id}
-            className="feature-card"
-            style={{
-              animationDelay: `${card.id * 0.2}s`,
-            }}
-          >
-            <span className="feature-icon">📊</span>
-            <h4 className="feature-title">{card.title}</h4>
-            <p className="feature-desc">{card.desc}</p>
+      <div className="welcome-right">
+        <div className="welcome-login-card">
+          <h2 className="welcome-login-title">Login to Your Account</h2>
+
+          <div className="welcome-input-group">
+            <span className="welcome-input-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="2" y="4" width="20" height="16" rx="2" />
+                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+              </svg>
+            </span>
+            <span className="welcome-input-label">Email</span>
+            <input type="email" placeholder="Enter your email" className="welcome-input" disabled />
           </div>
-        ))}
-      </div>
 
-      <div className="action-container">
-        <button type="button" className="register-btn" onMouseDown={(e)=>e.preventDefault()}>Register</button>
-        <button type="button" className="demo-btn" onMouseDown={(e)=>e.preventDefault()} onClick={onDemoClick}>Demo Mode</button>
-      </div>
+          <div className="welcome-input-group">
+            <span className="welcome-input-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+              </svg>
+            </span>
+            <span className="welcome-input-label">Password</span>
+            <input type="password" placeholder="Enter your password" className="welcome-input" disabled />
+          </div>
 
-      <div className="login-section">
-        Already have an account?
-        <button type="button" className="login-btn" onMouseDown={(e)=>e.preventDefault()}>Login</button>
+          <div className="welcome-forgot-row">
+            <span></span>
+            <a href="#" className="welcome-forgot-link" onClick={(e) => e.preventDefault()}>Forgot password?</a>
+          </div>
+
+          <button type="button" className="welcome-login-btn" disabled>
+            Login
+          </button>
+
+          <div className="welcome-divider">
+            <span>Or</span>
+          </div>
+
+          <button type="button" className="welcome-social-btn welcome-google-btn" disabled>
+            <svg width="18" height="18" viewBox="0 0 24 24">
+              <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
+              <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+              <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+              <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+            </svg>
+            Sign in with Google
+          </button>
+
+          <button type="button" className="welcome-social-btn welcome-linkedin-btn" disabled>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff">
+              <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+            </svg>
+            Sign in with LinkedIn
+          </button>
+
+          <p className="welcome-signup-text">
+            Don't have an account? <a href="#" onClick={(e) => e.preventDefault()}>Sign Up</a>
+          </p>
+        </div>
       </div>
     </div>
   );
