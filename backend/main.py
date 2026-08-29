@@ -107,6 +107,11 @@ class DemoSetupRequest(BaseModel):
     phoneNumber: str
     location: str
     description: str
+    email: str = ""
+    username: str = ""
+    password: str = ""
+    currency: str = "₹"
+    taxId: str = ""
     products: list[dict]
     expenses: list[dict]
 

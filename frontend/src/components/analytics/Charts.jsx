@@ -16,13 +16,24 @@ function polarToCartesian(centerX, centerY, radius, angleInDegrees) {
  * Generates an SVG Path for a Donut sector
  */
 function getDonutArcPath(x, y, radius, innerRadius, startAngle, endAngle) {
+  const angleDiff = endAngle - startAngle;
+  if (angleDiff >= 359.99) {
+    return [
+      `M ${x} ${y - radius}`,
+      `A ${radius} ${radius} 0 1 0 ${x} ${y + radius}`,
+      `A ${radius} ${radius} 0 1 0 ${x} ${y - radius}`,
+      `M ${x} ${y - innerRadius}`,
+      `A ${innerRadius} ${innerRadius} 0 1 1 ${x} ${y + innerRadius}`,
+      `A ${innerRadius} ${innerRadius} 0 1 1 ${x} ${y - innerRadius}`,
+      "Z",
+    ].join(" ");
+  }
+
   const start = polarToCartesian(x, y, radius, endAngle);
   const end = polarToCartesian(x, y, radius, startAngle);
   const startInner = polarToCartesian(x, y, innerRadius, endAngle);
   const endInner = polarToCartesian(x, y, innerRadius, startAngle);
 
-  // If the angle difference is exactly 360, clamp it slightly to let SVG draw the arc properly
-  const angleDiff = endAngle - startAngle;
   const largeArcFlag = angleDiff <= 180 ? "0" : "1";
 
   return [

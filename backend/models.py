@@ -10,6 +10,9 @@ class Product:
     cost_price: float
     stock_quantity: int = 0
     reorder_point: int = 0
+    sku: str = ""
+    unit: str = "pcs"
+    description: str = ""
 
 
 @dataclass
@@ -47,5 +50,10 @@ class BusinessProfile:
     phone_number: str
     location: str
     description: str
+    email: str = ""
+    username: str = ""
+    password: str = ""
+    currency: str = "₹"
+    tax_id: str = ""
     products: List[Product] = field(default_factory=list)
     expenses: List[Expense] = field(default_factory=list)

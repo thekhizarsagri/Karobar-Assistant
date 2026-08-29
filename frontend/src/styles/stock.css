@@ -22,7 +22,7 @@ body:has(.stock-modal-backdrop) {
   border-radius: 18px;
   padding: 20px;
   box-shadow: 0 24px 70px rgba(15, 23, 42, 0.18);
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 .stock-overview-modal {

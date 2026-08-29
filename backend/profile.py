@@ -20,6 +20,9 @@ def build_profile_from_form(form_data: Dict[str, Any]) -> BusinessProfile:
             cost_price=_cap(float(product.get("costPrice", 0) or 0)),
             stock_quantity=_cap(int(product.get("stockAvailable", 0) or 0)),
             reorder_point=_cap(int(product.get("reorderPoint", 0) or 0)),
+            sku=str(product.get("sku", "")),
+            unit=str(product.get("unit", "pcs")),
+            description=str(product.get("description", "")),
         )
         for product in form_data.get("products", [])
     ]
@@ -41,6 +44,11 @@ def build_profile_from_form(form_data: Dict[str, Any]) -> BusinessProfile:
         phone_number=form_data.get("phoneNumber", ""),
         location=form_data.get("location", ""),
         description=form_data.get("description", ""),
+        email=str(form_data.get("email", "")),
+        username=str(form_data.get("username", "")),
+        password=str(form_data.get("password", "")),
+        currency=str(form_data.get("currency", "₹")),
+        tax_id=str(form_data.get("taxId", "")),
         products=products,
         expenses=expenses,
     )

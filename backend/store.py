@@ -71,6 +71,9 @@ def products_snapshot() -> List[Dict[str, Any]]:
             "sellingPrice": product.selling_price,
             "costPrice": product.cost_price,
             "stockAvailable": product.stock_quantity,
+            "sku": getattr(product, "sku", ""),
+            "unit": getattr(product, "unit", "pcs"),
+            "description": getattr(product, "description", ""),
         }
         for product in _current_profile.products
     ]
