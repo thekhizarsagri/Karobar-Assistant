@@ -76,22 +76,42 @@ function ForecastingPage({ data }) {
 
       {loading ? (
         <div className="empty-state">
-          <span className="empty-icon">🔍</span>
+          <span className="empty-icon">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="1.5">
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+          </span>
           <p>Crunching your data…</p>
         </div>
       ) : error ? (
         <div className="empty-state">
-          <span className="empty-icon">⚠️</span>
+          <span className="empty-icon">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" strokeWidth="1.5">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+              <line x1="12" y1="9" x2="12" y2="13" />
+              <line x1="12" y1="17" x2="12.01" y2="17" />
+            </svg>
+          </span>
           <p>{error}</p>
         </div>
       ) : forecasts.length === 0 ? (
         <div className="empty-state">
-          <span className="empty-icon">📈</span>
+          <span className="empty-icon">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="1.5">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+            </svg>
+          </span>
           <p>No forecasts generated. Add sales history to predict demand.</p>
         </div>
       ) : visibleForecasts.length === 0 ? (
         <div className="empty-state">
-          <span className="empty-icon">🔍</span>
+          <span className="empty-icon">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="1.5">
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+          </span>
           <p>No products match "{searchQuery}".</p>
         </div>
       ) : (

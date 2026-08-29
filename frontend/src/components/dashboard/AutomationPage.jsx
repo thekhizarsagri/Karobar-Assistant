@@ -32,8 +32,13 @@ function AutomationPage({ products, rules, onRun, onRemove, onSubmit }) {
                 </span>
               </div>
               <div className="scheduled-rule-actions">
-                <button type="button" className="rule-test-btn" onClick={() => onRun(rule)} title="Run this schedule now to test">▶ Run Now</button>
-                <button type="button" className="rule-remove-btn" onClick={() => onRemove(rule.id)} title="Remove this schedule">✕</button>
+                <button type="button" className="rule-test-btn" onClick={() => onRun(rule)} title="Run this schedule now to test">Run Now</button>
+                <button type="button" className="rule-remove-btn" onClick={() => onRemove(rule.id)} title="Remove this schedule">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
+                  </svg>
+                </button>
               </div>
             </div>
           ))}

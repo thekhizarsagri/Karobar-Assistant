@@ -12,7 +12,8 @@
     radial-gradient(circle at 88% 72%, rgba(59, 130, 246, 0.28), transparent 28%),
     radial-gradient(circle at 50% 10%, rgba(14, 165, 233, 0.18), transparent 22%),
     linear-gradient(135deg, #d8f6e5, #dbeafe);
-  animation: welcomeFadeIn 0.6s ease;
+  background-size: 200% 200%;
+  animation: welcomeGradientMove 8s ease-in-out infinite alternate, welcomeFadeIn 0.6s ease;
   position: relative;
   overflow: hidden;
   box-sizing: border-box;
@@ -68,6 +69,24 @@
   object-fit: contain;
   user-select: none;
   -webkit-user-drag: none;
+  animation: titleReveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes titleReveal {
+  0% {
+    opacity: 0;
+    transform: scale(0.92) translateY(10px);
+    filter: blur(6px);
+  }
+  60% {
+    opacity: 1;
+    filter: blur(0px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    filter: blur(0px);
+  }
 }
 
 .welcome-subtitle {
@@ -77,6 +96,8 @@
   margin: 0 0 12px;
   line-height: 1.4;
   text-align: center;
+  opacity: 0;
+  animation: slideUpFade 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.35s forwards;
 }
 
 .welcome-desc {
@@ -85,6 +106,8 @@
   line-height: 1.7;
   margin: 0 auto 32px;
   text-align: center;
+  opacity: 0;
+  animation: slideUpFade 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards;
 }
 
 .welcome-actions-left {
@@ -103,17 +126,19 @@
   font-size: 16px;
   font-weight: 700;
   cursor: pointer;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.35s ease;
   box-shadow: 0 8px 24px rgba(16, 185, 129, 0.3);
+  opacity: 0;
+  animation: slideUpFade 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.65s forwards;
 }
 
 .welcome-get-started-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 32px rgba(16, 185, 129, 0.4);
+  transform: translateY(-1px) scale(1.03) !important;
+  box-shadow: 0 10px 28px rgba(16, 185, 129, 0.4);
 }
 
 .welcome-get-started-btn:active {
-  transform: translateY(0);
+  transform: translateY(0) scale(0.98) !important;
 }
 
 .welcome-watch-demo-btn {
@@ -128,11 +153,18 @@
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: background 0.3s ease, transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  opacity: 0;
+  animation: slideUpFade 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.8s forwards;
 }
 
 .welcome-watch-demo-btn:hover {
   background: rgba(37, 99, 235, 0.06);
+  transform: scale(1.03) !important;
+}
+
+.welcome-watch-demo-btn:active {
+  transform: scale(0.97) !important;
 }
 
 /* ===== RIGHT SIDE - LOGIN CARD ===== */
@@ -151,6 +183,19 @@
   box-shadow:
     0 20px 60px rgba(15, 23, 42, 0.08),
     0 1px 3px rgba(15, 23, 42, 0.04);
+  opacity: 0;
+  animation: cardSlideIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
+}
+
+@keyframes cardSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateX(40px) scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
 }
 
 .welcome-login-title {
@@ -159,6 +204,8 @@
   color: #0f172a;
   margin: 0 0 24px;
   text-align: center;
+  opacity: 0;
+  animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.6s forwards;
 }
 
 /* Input groups */
@@ -171,7 +218,13 @@
   padding: 12px 14px;
   margin-bottom: 16px;
   background: #f8fafc;
-  transition: border-color 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  opacity: 0;
+  animation: slideUpFade 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.7s forwards;
+}
+
+.welcome-input-group:nth-child(2) {
+  animation-delay: 0.8s;
 }
 
 .welcome-input-group:focus-within {
@@ -210,6 +263,8 @@
   display: flex;
   justify-content: flex-end;
   margin-bottom: 20px;
+  opacity: 0;
+  animation: slideUpFade 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.85s forwards;
 }
 
 .welcome-forgot-link {
@@ -217,11 +272,13 @@
   font-weight: 600;
   color: #64748b;
   text-decoration: none;
-  transition: color 0.2s ease;
+  transition: color 0.3s ease, transform 0.3s ease;
+  display: inline-block;
 }
 
 .welcome-forgot-link:hover {
   color: #2563eb;
+  transform: scale(1.03) !important;
 }
 
 /* Login button */
@@ -235,14 +292,20 @@
   font-size: 15px;
   font-weight: 700;
   cursor: pointer;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.35s ease;
   box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3);
   margin-bottom: 20px;
+  opacity: 0;
+  animation: slideUpFade 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.9s forwards;
 }
 
 .welcome-login-btn:hover {
-  transform: translateY(-1px);
+  transform: translateY(-1px) scale(1.02) !important;
   box-shadow: 0 8px 24px rgba(16, 185, 129, 0.35);
+}
+
+.welcome-login-btn:active {
+  transform: translateY(0) scale(0.98) !important;
 }
 
 .welcome-login-btn:disabled {
@@ -257,6 +320,8 @@
   align-items: center;
   gap: 16px;
   margin-bottom: 20px;
+  opacity: 0;
+  animation: slideUpFade 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.95s forwards;
 }
 
 .welcome-divider::before,
@@ -285,9 +350,10 @@
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s ease, transform 0.2s ease;
+  transition: background 0.3s ease, transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   margin-bottom: 12px;
   border: none;
+  opacity: 0;
 }
 
 .welcome-social-btn:disabled {
@@ -300,20 +366,32 @@
   background: #fff;
   color: #334155;
   border: 1px solid #e2e8f0;
+  animation: slideUpFade 0.5s cubic-bezier(0.16, 1, 0.3, 1) 1s forwards;
 }
 
 .welcome-google-btn:hover:not(:disabled) {
   background: #f8fafc;
+  transform: scale(1.02) !important;
+}
+
+.welcome-google-btn:active:not(:disabled) {
+  transform: scale(0.98) !important;
 }
 
 .welcome-linkedin-btn {
   background: #0a66c2;
   color: #fff;
   border: 1px solid #0a66c2;
+  animation: slideUpFade 0.5s cubic-bezier(0.16, 1, 0.3, 1) 1.08s forwards;
 }
 
 .welcome-linkedin-btn:hover:not(:disabled) {
   background: #0958a8;
+  transform: scale(1.02) !important;
+}
+
+.welcome-linkedin-btn:active:not(:disabled) {
+  transform: scale(0.98) !important;
 }
 
 /* Sign up text */
@@ -322,16 +400,21 @@
   font-size: 14px;
   color: #64748b;
   margin: 16px 0 0;
+  opacity: 0;
+  animation: slideUpFade 0.5s cubic-bezier(0.16, 1, 0.3, 1) 1.15s forwards;
 }
 
 .welcome-signup-text a {
   color: #2563eb;
   font-weight: 600;
   text-decoration: none;
+  transition: transform 0.3s ease;
+  display: inline-block;
 }
 
 .welcome-signup-text a:hover {
   text-decoration: underline;
+  transform: scale(1.03) !important;
 }
 
 /* ===== RESPONSIVE ===== */
@@ -426,6 +509,35 @@
     transform: translateY(12px);
   }
   to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes welcomeGradientMove {
+  0% {
+    background-position: 0% 0%;
+  }
+  25% {
+    background-position: 100% 50%;
+  }
+  50% {
+    background-position: 50% 100%;
+  }
+  75% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 0%;
+  }
+}
+
+@keyframes slideUpFade {
+  0% {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  100% {
     opacity: 1;
     transform: translateY(0);
   }

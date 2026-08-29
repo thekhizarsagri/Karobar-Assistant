@@ -74,12 +74,23 @@ function AiInsightsPage({ data }) {
 
       {loading ? (
         <div className="empty-state">
-          <span className="empty-icon">🔍</span>
+          <span className="empty-icon">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="1.5">
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+          </span>
           <p>Crunching your data…</p>
         </div>
       ) : error ? (
         <div className="empty-state">
-          <span className="empty-icon">⚠️</span>
+          <span className="empty-icon">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" strokeWidth="1.5">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+              <line x1="12" y1="9" x2="12" y2="13" />
+              <line x1="12" y1="17" x2="12.01" y2="17" />
+            </svg>
+          </span>
           <p>{error}</p>
         </div>
       ) : (
@@ -233,7 +244,12 @@ function VelocityPanel({ velocity }) {
         {/* Top movers list & chart */}
         <div className="chart-section" style={{ margin: 0 }}>
           <div className="chart-section-title" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <span style={{ color: "#10b981" }}>🔥</span> Top Movers (Fast Sales)
+            <span style={{ color: "#10b981" }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+                <polyline points="17 6 23 6 23 12" />
+              </svg>
+            </span> Top Movers (Fast Sales)
           </div>
           <HorizontalBarChart data={topMoversData} barColor="#10b981" />
         </div>
@@ -241,7 +257,12 @@ function VelocityPanel({ velocity }) {
         {/* Slow movers / dead stock list & chart */}
         <div className="chart-section" style={{ margin: 0 }}>
           <div className="chart-section-title" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <span style={{ color: "#ef4444" }}>❄️</span> Slow Movers & Dead Stock
+            <span style={{ color: "#ef4444" }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <polyline points="23 18 13.5 8.5 8.5 13.5 1 6" />
+                <polyline points="17 18 23 18 23 12" />
+              </svg>
+            </span> Slow Movers & Dead Stock
           </div>
           <HorizontalBarChart data={slowMoversData} barColor="#ef4444" />
         </div>

@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import ModalPortal from "./ModalPortal";
 
 const MAX_QUANTITY = 1_000_000_000_000;
 
-function StockModal({ products, isOpen, onClose, onSubmit, initialMode = "oneTime", initialProduct }) {
-  const [mode, setMode] = useState(initialMode);
-  const [form, setForm] = useState({
+function makeFormState(products, initialProduct, initialMode) {
+  return {
     productName: initialProduct || products[0]?.name || "",
     quantity: 1,
     date: new Date().toISOString().split("T")[0],
@@ -12,7 +12,19 @@ function StockModal({ products, isOpen, onClose, onSubmit, initialMode = "oneTim
     hour: "09",
     minute: "00",
     ampm: "AM",
-  });
+  };
+}
+
+function StockModal({ products, isOpen, onClose, onSubmit, initialMode = "oneTime", initialProduct }) {
+  const [mode, setMode] = useState(initialMode);
+  const [form, setForm] = useState(() => makeFormState(products, initialProduct, initialMode));
+
+  useEffect(() => {
+    if (isOpen) {
+      setMode(initialMode);
+      setForm(makeFormState(products, initialProduct, initialMode));
+    }
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -31,8 +43,9 @@ function StockModal({ products, isOpen, onClose, onSubmit, initialMode = "oneTim
   };
 
   return (
-    <div className="stock-modal-backdrop">
-      <div className="stock-modal">
+    <ModalPortal>
+      <div className="stock-modal-backdrop">
+        <div className="stock-modal">
         <div className="stock-modal-header">
           <div>
             <h2>Add stock</h2>
@@ -111,7 +124,8 @@ function StockModal({ products, isOpen, onClose, onSubmit, initialMode = "oneTim
           </div>
         </form>
       </div>
-    </div>
+      </div>
+    </ModalPortal>
   );
 }
 

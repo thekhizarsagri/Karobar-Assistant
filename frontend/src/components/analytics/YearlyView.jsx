@@ -13,7 +13,13 @@ function YearlyView({ years, total, onOpenYear, colorMap }) {
 
       {years.length === 0 ? (
         <div className="empty-state">
-          <span className="empty-icon">📊</span>
+          <span className="empty-icon">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="1.5">
+              <line x1="18" y1="20" x2="18" y2="10" />
+              <line x1="12" y1="20" x2="12" y2="4" />
+              <line x1="6" y1="20" x2="6" y2="14" />
+            </svg>
+          </span>
           <p>No sales data yet</p>
         </div>
       ) : (

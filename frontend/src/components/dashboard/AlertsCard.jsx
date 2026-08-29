@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { clearAlerts, getAlerts } from "./api";
+import ModalPortal from "./ModalPortal";
 
 const POLL_INTERVAL_MS = 15000;
 const MAX_VISIBLE = 3;
@@ -115,39 +116,41 @@ function AlertsCard() {
       </div>
 
       {showAll && (
-        <div className="stock-modal-backdrop" onClick={() => setShowAll(false)}>
-          <div
-            className="alerts-modal"
-            role="dialog"
-            aria-modal="true"
-            aria-label="All alerts"
-            onClick={(event) => event.stopPropagation()}
-          >
-            <div className="alerts-modal-header">
-              <span>All Alerts</span>
-              <div className="alerts-modal-actions">
-                {items.length > 0 && (
-                  <button type="button" className="alerts-clear" onClick={handleClearAll}>
-                    Clear all
-                  </button>
-                )}
-                <button type="button" className="alerts-modal-close" onClick={() => setShowAll(false)}>×</button>
+        <ModalPortal>
+          <div className="stock-modal-backdrop" onClick={() => setShowAll(false)}>
+            <div
+              className="alerts-modal"
+              role="dialog"
+              aria-modal="true"
+              aria-label="All alerts"
+              onClick={(event) => event.stopPropagation()}
+            >
+              <div className="alerts-modal-header">
+                <span>All Alerts</span>
+                <div className="alerts-modal-actions">
+                  {items.length > 0 && (
+                    <button type="button" className="alerts-clear" onClick={handleClearAll}>
+                      Clear all
+                    </button>
+                  )}
+                  <button type="button" className="alerts-modal-close" onClick={() => setShowAll(false)}>×</button>
+                </div>
               </div>
+              {items.length === 0 ? (
+                <div className="alerts-empty">
+                  <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z" />
+                    <path d="M12 9v4" />
+                    <path d="M12 17h.01" />
+                  </svg>
+                  <p>No alerts right now</p>
+                </div>
+              ) : (
+                <div className="alerts-modal-list">{renderList(items)}</div>
+              )}
             </div>
-            {items.length === 0 ? (
-              <div className="alerts-empty">
-                <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z" />
-                  <path d="M12 9v4" />
-                  <path d="M12 17h.01" />
-                </svg>
-                <p>No alerts right now</p>
-              </div>
-            ) : (
-              <div className="alerts-modal-list">{renderList(items)}</div>
-            )}
           </div>
-        </div>
+        </ModalPortal>
       )}
     </>
   );

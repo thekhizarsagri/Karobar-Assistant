@@ -140,12 +140,12 @@ function DashboardPage({ data, onEditForm, onLogout, onReset }) {
         rulesRef.current = next;
         return next;
       });
-      notify(`🗓️ Automatic add saved: ${quantity} units of ${payload.productName} on day ${newRule.dayOfMonth} of every month at ${payload.hour}:${payload.minute} ${payload.ampm}.`, "info");
+      notify(`Automatic add saved: ${quantity} units of ${payload.productName} on day ${newRule.dayOfMonth} of every month at ${payload.hour}:${payload.minute} ${payload.ampm}.`, "info");
       return;
     }
 
     addStock(payload.productName, quantity, payload.date || "");
-    notify(`✅ Added ${quantity} units to ${payload.productName} on ${new Date((payload.date || new Date().toISOString().split("T")[0]) + "T00:00:00").toLocaleDateString()}.`, "success");
+    notify(`Added ${quantity} units to ${payload.productName} on ${new Date((payload.date || new Date().toISOString().split("T")[0]) + "T00:00:00").toLocaleDateString()}.`, "success");
   };
 
   const to24Hour = (hour12Str, ampm) => {
@@ -161,7 +161,7 @@ function DashboardPage({ data, onEditForm, onLogout, onReset }) {
   const fireRule = (rule) => {
     const timeString = `${rule.hour}:${rule.minute} ${rule.ampm}`;
     addStock(rule.productName, rule.quantity);
-    notify(`✅ Stock added: ${rule.quantity} units automatically added to ${rule.productName} on day ${rule.dayOfMonth} at ${timeString}.`, "success");
+    notify(`Stock added: ${rule.quantity} units automatically added to ${rule.productName} on day ${rule.dayOfMonth} at ${timeString}.`, "success");
   };
 
   useEffect(() => {
@@ -192,6 +192,8 @@ function DashboardPage({ data, onEditForm, onLogout, onReset }) {
   const handleNav = (nav) => {
     setActiveNav(nav);
     setHistoryDetailProduct(null);
+    const scrollable = document.querySelector(".page-transition-slide:not(.slide-hidden)");
+    if (scrollable) scrollable.scrollTop = 0;
     window.scrollTo(0, 0);
   };
 

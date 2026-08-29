@@ -1,6 +1,7 @@
 import React from "react";
 import { getProductColor } from "../analytics/constants";
 import { buildProductColorMap } from "../analytics/selectors";
+import ModalPortal from "./ModalPortal";
 import { clearProductHistory } from "./api";
 import { formatStat } from "../../utils/formatNumber";
 
@@ -136,26 +137,28 @@ function ProductHistoryDetail({ productName, salesSummary, products, onBack, onC
       </div>
 
       {showConfirmModal && (
-        <div className="stock-modal-backdrop">
-          <div className="stock-modal confirm-modal">
-            <div className="stock-modal-header">
-              <div>
-                <h2>Clear History</h2>
-                <p className="stock-modal-subtitle">This action cannot be undone.</p>
+        <ModalPortal>
+          <div className="stock-modal-backdrop">
+            <div className="stock-modal confirm-modal">
+              <div className="stock-modal-header">
+                <div>
+                  <h2>Clear History</h2>
+                  <p className="stock-modal-subtitle">This action cannot be undone.</p>
+                </div>
+                <button type="button" className="stock-modal-close" onClick={() => setShowConfirmModal(false)}>×</button>
               </div>
-              <button type="button" className="stock-modal-close" onClick={() => setShowConfirmModal(false)}>×</button>
-            </div>
-            <div className="confirm-modal-body">
-              <p>Are you sure you want to clear all sales and stock history for <strong>"{productName}"</strong>?</p>
-            </div>
-            <div className="stock-modal-actions">
-              <button type="button" className="confirm-cancel-btn" onClick={() => setShowConfirmModal(false)}>Cancel</button>
-              <button type="button" className="confirm-delete-btn" onClick={handleClearHistory} disabled={clearing}>
-                {clearing ? "Clearing..." : "Yes, Clear History"}
-              </button>
+              <div className="confirm-modal-body">
+                <p>Are you sure you want to clear all sales and stock history for <strong>"{productName}"</strong>?</p>
+              </div>
+              <div className="stock-modal-actions">
+                <button type="button" className="confirm-cancel-btn" onClick={() => setShowConfirmModal(false)}>Cancel</button>
+                <button type="button" className="confirm-delete-btn" onClick={handleClearHistory} disabled={clearing}>
+                  {clearing ? "Clearing..." : "Yes, Clear History"}
+                </button>
+              </div>
             </div>
           </div>
-        </div>
+        </ModalPortal>
       )}
     </div>
   );
