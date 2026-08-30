@@ -73,20 +73,14 @@ function AppRoutes() {
     []
   );
 
-  const handleReset = useCallback(async () => {
+  const handleLogout = useCallback(async () => {
     try {
       await fetch("/api/reset", { method: "POST" });
     } catch {
       /* ignore */
     }
     setDashboardData(null);
-    navigate("/welcome", { replace: true });
-  }, [navigate]);
-
-  const handleLogout = useCallback(() => {
-    setDashboardData(null);
-    navigate("/welcome", { replace: true });
-  }, [navigate]);
+  }, []);
 
   return (
     <Routes>
@@ -98,6 +92,7 @@ function AppRoutes() {
             initialPage="welcome"
             dashboardData={dashboardData}
             onFinish={handleFinish}
+            onLogout={handleLogout}
           />
         }
       />
@@ -108,6 +103,7 @@ function AppRoutes() {
             initialPage="setup"
             dashboardData={dashboardData}
             onFinish={handleFinish}
+            onLogout={handleLogout}
           />
         }
       />
@@ -117,11 +113,11 @@ function AppRoutes() {
           restoring ? (
             <DashboardLoading />
           ) : (
-            <DashboardPage
-              data={dashboardData}
-              onEditForm={() => navigate("/setup")}
+            <SwipePages
+              initialPage="dashboard"
+              dashboardData={dashboardData}
+              onFinish={handleFinish}
               onLogout={handleLogout}
-              onReset={handleReset}
             />
           )
         }
@@ -131,7 +127,7 @@ function AppRoutes() {
   );
 }
 
-function SwipePages({ initialPage, dashboardData, onFinish }) {
+function SwipePages({ initialPage, dashboardData, onFinish, onLogout }) {
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [sliding, setSliding] = useState(false);
   const [slideDir, setSlideDir] = useState(null);
@@ -147,23 +143,15 @@ function SwipePages({ initialPage, dashboardData, onFinish }) {
     requestAnimationFrame(() => setReady(true));
   }, [initialPage]);
 
-  const goToSetup = useCallback(() => {
+  const startSlide = useCallback((dir) => {
     if (sliding) return;
-    setSlideDir("to-setup");
+    setSlideDir(dir);
     setSliding(true);
   }, [sliding]);
 
-  const goToWelcome = useCallback(() => {
-    if (sliding) return;
-    setSlideDir("to-welcome");
-    setSliding(true);
-  }, [sliding]);
-
-  const goToDashboard = useCallback(() => {
-    if (sliding) return;
-    setSlideDir("to-dashboard");
-    setSliding(true);
-  }, [sliding]);
+  const goToSetup = useCallback(() => startSlide("to-setup"), [startSlide]);
+  const goToWelcome = useCallback(() => startSlide("to-welcome"), [startSlide]);
+  const goToDashboard = useCallback(() => startSlide("to-dashboard"), [startSlide]);
 
   useEffect(() => {
     if (!sliding || !slideDir) return;
@@ -179,6 +167,21 @@ function SwipePages({ initialPage, dashboardData, onFinish }) {
     }, 570);
     return () => clearTimeout(timer);
   }, [sliding, slideDir]);
+
+  const slideToWelcome = useCallback((afterSlide) => {
+    setSlideDir("to-welcome");
+    setSliding(true);
+    setTimeout(() => {
+      setSetupKey((k) => k + 1);
+      setCurrentPage("welcome");
+      setSlideDir(null);
+      setSliding(false);
+      window.history.pushState({}, "", "/welcome");
+      const el = slideRefs.welcome?.current;
+      if (el) el.scrollTop = 0;
+      afterSlide?.();
+    }, 570);
+  }, []);
 
   const handleFinishWithSlide = useCallback(
     (data) => {
@@ -222,33 +225,8 @@ function SwipePages({ initialPage, dashboardData, onFinish }) {
             data={dashboardData}
             onEditForm={goToSetup}
             onLogout={() => {
-              setSlideDir("to-welcome");
-              setSliding(true);
-              setTimeout(() => {
-                setDashboardData(null);
-                setSetupKey((k) => k + 1);
-                setCurrentPage("welcome");
-                setSlideDir(null);
-                setSliding(false);
-                window.history.pushState({}, "", "/welcome");
-                const el = slideRefs.welcome?.current;
-                if (el) el.scrollTop = 0;
-              }, 570);
-            }}
-            onReset={async () => {
-              try { await fetch("/api/reset", { method: "POST" }); } catch {}
-              setSlideDir("to-welcome");
-              setSliding(true);
-              setTimeout(() => {
-                setDashboardData(null);
-                setSetupKey((k) => k + 1);
-                setCurrentPage("welcome");
-                setSlideDir(null);
-                setSliding(false);
-                window.history.pushState({}, "", "/welcome");
-                const el = slideRefs.welcome?.current;
-                if (el) el.scrollTop = 0;
-              }, 570);
+              onLogout();
+              slideToWelcome();
             }}
           />
         </div>

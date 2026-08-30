@@ -8,8 +8,6 @@ from typing import Any, Dict, List
 
 import pandas as pd
 
-from backend.store import get_profile
-
 
 def abc_analysis(df: pd.DataFrame, profile) -> List[Dict[str, Any]]:
     """Run ABC analysis on a product revenue DataFrame.
@@ -17,8 +15,6 @@ def abc_analysis(df: pd.DataFrame, profile) -> List[Dict[str, Any]]:
     Returns list of dicts with keys: product, class, units, revenue,
     revenue_pct, cumulative_pct.
     """
-    from backend.models import Product
-
     revenue: Dict[str, float] = {product.name: 0.0 for product in profile.products}
     units: Dict[str, int] = {product.name: 0 for product in profile.products}
     if not df.empty:

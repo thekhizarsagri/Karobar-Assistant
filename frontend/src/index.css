@@ -4,7 +4,7 @@
   --bg: #fff;
   --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
   --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  font: 18px/145% var(--sans);
+  font: 14px/145% var(--sans);
   letter-spacing: 0.18px;
   color-scheme: light;
   color: var(--text);
@@ -46,9 +46,9 @@ h2 {
 }
 
 h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
+  font-size: 28px;
+  letter-spacing: -0.5px;
+  margin: 24px 0;
 }
 
 h2 {
@@ -64,7 +64,7 @@ p {
 
 @media (max-width: 1024px) {
   h1 {
-    font-size: 36px;
+    font-size: 22px;
     margin: 20px 0;
   }
 

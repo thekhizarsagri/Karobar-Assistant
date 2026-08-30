@@ -1,9 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import TabBar from "./TabBar";
-import { DonutChart, HorizontalBarChart } from "./Charts";
-import { formatStat, formatCompact } from "../../utils/formatNumber";
-
-const ABC_COLORS = { A: "#1d4ed8", B: "#f59e0b", C: "#64748b" };
+import AbcPanel from "./AbcPanel";
+import VelocityPanel from "./VelocityPanel";
+import { formatStat } from "../../utils/formatNumber";
 
 const VIEW_TABS = [
   ["abc", "ABC Pareto"],
@@ -108,7 +107,7 @@ function AiInsightsPage({ data }) {
 function SummaryCards({ summary }) {
   const cards = [
     { label: "Total units sold", value: summary.total_units },
-    { label: "Total revenue", value: formatMoney(summary.total_revenue) },
+    { label: "Total revenue", value: formatStat(summary.total_revenue) },
     { label: "Active products", value: summary.active_products },
     { label: "Days with data", value: summary.days_with_data },
   ];
@@ -122,157 +121,6 @@ function SummaryCards({ summary }) {
       ))}
     </div>
   );
-}
-
-const ABC_LABELS = {
-  A: "Top revenue drivers (~80% of revenue)",
-  B: "Steady contributors (next ~15%)",
-  C: "Low / slow contributors (last ~5%)",
-};
-
-function AbcPanel({ rows }) {
-  if (!rows.length) return null;
-  const counts = rows.reduce((acc, row) => {
-    acc[row.class] = (acc[row.class] || 0) + 1;
-    return acc;
-  }, {});
-
-  // Prepare donut chart data (product revenue distribution colored by class)
-  const donutData = rows.map((row) => ({
-    label: row.product,
-    value: Math.round(row.revenue),
-    color: ABC_COLORS[row.class] || "#cbd5e1",
-  }));
-
-  return (
-    <section className="ai-panel">
-      <div className="ai-panel-heading">
-        <h2>ABC (Pareto) Product Classification</h2>
-        <p>Products ranked by revenue share to help you focus on what matters most.</p>
-      </div>
-
-      <div className="analytics-split-layout" style={{ alignItems: "center", marginBottom: "28px" }}>
-        {/* Donut Chart visual representation */}
-        <div className="chart-section" style={{ margin: 0, padding: "20px" }}>
-          <div className="chart-section-title">Revenue Share by Product</div>
-          <DonutChart data={donutData} centerTextLabel="Total Revenue" />
-        </div>
-
-        {/* Legend description */}
-        <div className="abc-legend-column" style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-          <div className="abc-legend" style={{ display: "flex", flexDirection: "column", gap: "12px", border: "none", padding: 0 }}>
-            {Object.entries(ABC_LABELS).map(([cls, label]) => (
-              <div key={cls} className="abc-legend-item" style={{ fontSize: "0.95rem" }}>
-                <span className="abc-legend-dot" style={{ background: ABC_COLORS[cls], marginRight: "12px", width: "32px", height: "24px", display: "inline-flex", alignItems: "center", justifyContent: "center", borderRadius: "6px", color: "#fff", fontWeight: "bold", fontSize: "0.75rem" }}>
-                  {cls}
-                </span>
-                <span style={{ fontWeight: 600 }}>{label}</span>
-                <span className="abc-legend-count" style={{ marginLeft: "auto", background: "#f1f5f9", padding: "2px 8px", borderRadius: "12px", fontSize: "0.8rem", fontWeight: "bold" }}>
-                  {counts[cls] || 0} prod
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <div className="abc-table" style={{ marginTop: "20px" }}>
-        <div className="abc-row abc-row-head">
-          <span>Product</span>
-          <span>Class</span>
-          <span>Units</span>
-          <span>Revenue</span>
-          <span>Revenue %</span>
-          <span>Cumulative share</span>
-        </div>
-        {rows.map((row) => {
-          const width = Math.min(100, Math.max(row.cumulative_pct, 2));
-          return (
-            <div className="abc-row" key={row.product}>
-              <span className="abc-product">{row.product}</span>
-              <span className="abc-class" style={{ background: ABC_COLORS[row.class] }}>
-                {row.class}
-              </span>
-              <span>{row.units}</span>
-              <span>{formatMoney(row.revenue)}</span>
-              <span>{row.revenue_pct}%</span>
-              <span className="abc-share">
-                <span className="abc-share-bar">
-                  <span
-                    className="abc-share-fill"
-                    style={{ width: `${width}%`, background: ABC_COLORS[row.class] }}
-                  />
-                </span>
-                {row.cumulative_pct}%
-              </span>
-            </div>
-          );
-        })}
-      </div>
-    </section>
-  );
-}
-
-function VelocityPanel({ velocity }) {
-  const hasTop = velocity.top_movers && velocity.top_movers.length > 0;
-  const hasSlow = velocity.slow_movers && velocity.slow_movers.length > 0;
-
-  if (!hasTop && !hasSlow) return null;
-
-  // Map to HorizontalBarChart format
-  const topMoversData = (velocity.top_movers || []).map((item) => ({
-    label: item.product,
-    value: item.avg_per_day,
-    displayValue: `${item.units} units (${item.avg_per_day}/day)`,
-  }));
-
-  const slowMoversData = (velocity.slow_movers || []).map((item) => ({
-    label: item.product,
-    value: item.units === 0 ? 0 : item.avg_per_day,
-    displayValue: item.units === 0 ? "Dead Stock (0 units)" : `${item.units} units (${item.avg_per_day}/day)`,
-    fill: "#ef4444",
-  }));
-
-  return (
-    <section className="ai-panel">
-      <div className="ai-panel-heading">
-        <h2>Product Velocity</h2>
-        <p>A comparison of average unit sales speeds. High velocity items require constant stock reviews.</p>
-      </div>
-
-      <div className="analytics-split-layout">
-        {/* Top movers list & chart */}
-        <div className="chart-section" style={{ margin: 0 }}>
-          <div className="chart-section-title" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <span style={{ color: "#10b981" }}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
-                <polyline points="17 6 23 6 23 12" />
-              </svg>
-            </span> Top Movers (Fast Sales)
-          </div>
-          <HorizontalBarChart data={topMoversData} barColor="#10b981" />
-        </div>
-
-        {/* Slow movers / dead stock list & chart */}
-        <div className="chart-section" style={{ margin: 0 }}>
-          <div className="chart-section-title" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <span style={{ color: "#ef4444" }}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <polyline points="23 18 13.5 8.5 8.5 13.5 1 6" />
-                <polyline points="17 18 23 18 23 12" />
-              </svg>
-            </span> Slow Movers & Dead Stock
-          </div>
-          <HorizontalBarChart data={slowMoversData} barColor="#ef4444" />
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function formatMoney(value) {
-  return formatStat(value);
 }
 
 export default AiInsightsPage;
