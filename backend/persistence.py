@@ -19,7 +19,7 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-from backend.models import BusinessProfile, Expense, Product, SaleEntry, StockEntry
+from backend.models import BusinessProfile, Expense, Product, PurchaseOrder, SaleEntry, StockEntry, Supplier
 
 _ACTIVE = False
 
@@ -49,13 +49,15 @@ def save_state() -> None:
         return
     from backend.alerts import dismissed_alerts, transient_alerts
     from backend.notifications import _next_id, notifications
-    from backend.store import _current_profile, sales_log, stock_log
+    from backend.store import _current_profile, purchase_orders, sales_log, stock_log, supplier_list
 
     state = {
         "saved_at": datetime.now().isoformat(timespec="seconds"),
         "profile": _profile_to_dict(_current_profile),
         "sales": [_sale_to_dict(e) for e in sales_log],
         "stock": [_stock_to_dict(e) for e in stock_log],
+        "suppliers": [_supplier_to_dict(s) for s in supplier_list],
+        "purchase_orders": [_purchase_order_to_dict(p) for p in purchase_orders],
         "notifications": {"items": notifications, "next_id": _next_id},
         "dismissed_alerts": list(dismissed_alerts),
         "transient_alerts": [dict(alert) for alert in transient_alerts],
@@ -87,11 +89,17 @@ def _load_from_disk() -> None:
     if profile is not None:
         store_module.sales_log.clear()
         store_module.stock_log.clear()
+        store_module.supplier_list.clear()
+        store_module.purchase_orders.clear()
         store_module._current_profile = profile
         for e in state.get("sales", []):
             store_module.sales_log.append(_sale_from_dict(e))
         for e in state.get("stock", []):
             store_module.stock_log.append(_stock_from_dict(e))
+        for s in state.get("suppliers", []):
+            store_module.supplier_list.append(_supplier_from_dict(s))
+        for po in state.get("purchase_orders", []):
+            store_module.purchase_orders.append(_purchase_order_from_dict(po))
 
     notif = state.get("notifications") or {}
     notifications_module.notifications.clear()
@@ -165,6 +173,62 @@ def _profile_from_dict(data):
         description=data.get("description", ""),
         products=products,
         expenses=expenses,
+    )
+
+
+def _supplier_to_dict(supplier: Supplier) -> dict:
+    return {
+        "name": supplier.name,
+        "contact_person": supplier.contact_person,
+        "phone": supplier.phone,
+        "email": supplier.email,
+        "address": supplier.address,
+        "payment_terms": supplier.payment_terms,
+        "created_at": supplier.created_at,
+    }
+
+
+def _supplier_from_dict(data) -> Supplier:
+    return Supplier(
+        name=data.get("name", ""),
+        contact_person=data.get("contact_person", ""),
+        phone=data.get("phone", ""),
+        email=data.get("email", ""),
+        address=data.get("address", ""),
+        payment_terms=data.get("payment_terms", ""),
+        created_at=data.get("created_at", ""),
+    )
+
+
+def _purchase_order_to_dict(order: PurchaseOrder) -> dict:
+    return {
+        "id": order.id,
+        "supplier_name": order.supplier_name,
+        "product_name": order.product_name,
+        "quantity": order.quantity,
+        "unit_cost": order.unit_cost,
+        "total_cost": order.total_cost,
+        "status": order.status,
+        "expected_delivery_date": order.expected_delivery_date,
+        "note": order.note,
+        "created_at": order.created_at,
+        "updated_at": order.updated_at,
+    }
+
+
+def _purchase_order_from_dict(data) -> PurchaseOrder:
+    return PurchaseOrder(
+        id=int(data.get("id", 1) or 1),
+        supplier_name=data.get("supplier_name", ""),
+        product_name=data.get("product_name", ""),
+        quantity=int(data.get("quantity", 0) or 0),
+        unit_cost=float(data.get("unit_cost", 0) or 0),
+        total_cost=float(data.get("total_cost", 0) or 0),
+        status=data.get("status", "ordered"),
+        expected_delivery_date=data.get("expected_delivery_date", ""),
+        note=data.get("note", ""),
+        created_at=data.get("created_at", ""),
+        updated_at=data.get("updated_at", ""),
     )
 
 

@@ -2,12 +2,14 @@
 from typing import Any, Dict, List, Optional
 
 from backend.alerts import reset_alerts
-from backend.models import BusinessProfile, SaleEntry, StockEntry
+from backend.models import BusinessProfile, PurchaseOrder, SaleEntry, StockEntry, Supplier
 from backend.notifications import clear_notifications
 from backend.persistence import save_state
 
 sales_log: List[SaleEntry] = []
 stock_log: List[StockEntry] = []
+supplier_list: List[Supplier] = []
+purchase_orders: List[PurchaseOrder] = []
 _current_profile: Optional[BusinessProfile] = None
 
 
@@ -16,6 +18,8 @@ def set_profile(profile: BusinessProfile) -> None:
     global _current_profile
     sales_log.clear()
     stock_log.clear()
+    supplier_list.clear()
+    purchase_orders.clear()
     clear_notifications()
     reset_alerts()
     _current_profile = profile
@@ -42,6 +46,8 @@ def reset() -> None:
     global _current_profile
     sales_log.clear()
     stock_log.clear()
+    supplier_list.clear()
+    purchase_orders.clear()
     clear_notifications()
     reset_alerts()
     _current_profile = None

@@ -28,6 +28,7 @@ from backend.persistence import init as init_persistence
 from backend.sales import clear_product_history, export_history, get_sales_summary, record_sale
 from backend.stock import add_stock
 from backend.store import reset as reset_store
+from backend.suppliers import add_supplier, create_purchase_order, get_purchase_order_summary, get_purchase_orders, get_suppliers
 from backend.abc_analysis import abc_analysis
 from backend.product_velocity import product_velocity
 from backend.forecast_export import forecast_products, export_dataset as export_analytics_dataset
@@ -152,6 +153,26 @@ class NotificationReadRequest(BaseModel):
 @app.get("/api/health")
 def health() -> Dict[str, str]:
     return {"status": "ok"}
+
+
+@app.get("/api/suppliers")
+def suppliers_endpoint() -> Dict[str, Any]:
+    return {"suppliers": get_suppliers(), "summary": get_purchase_order_summary()}
+
+
+@app.post("/api/suppliers")
+def add_supplier_endpoint(request: Dict[str, Any]) -> Dict[str, Any]:
+    return add_supplier(request)
+
+
+@app.get("/api/purchase-orders")
+def purchase_orders_endpoint() -> Dict[str, Any]:
+    return {"orders": get_purchase_orders(), "summary": get_purchase_order_summary()}
+
+
+@app.post("/api/purchase-orders")
+def create_purchase_order_endpoint(request: Dict[str, Any]) -> Dict[str, Any]:
+    return create_purchase_order(request)
 
 
 @app.post("/api/reset")

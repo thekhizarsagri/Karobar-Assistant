@@ -43,6 +43,32 @@ class StockEntry:
 
 
 @dataclass
+class Supplier:
+    name: str
+    contact_person: str = ""
+    phone: str = ""
+    email: str = ""
+    address: str = ""
+    payment_terms: str = ""
+    created_at: str = ""
+
+
+@dataclass
+class PurchaseOrder:
+    id: int
+    supplier_name: str
+    product_name: str
+    quantity: int
+    unit_cost: float
+    total_cost: float
+    status: str = "ordered"
+    expected_delivery_date: str = ""
+    note: str = ""
+    created_at: str = ""
+    updated_at: str = ""
+
+
+@dataclass
 class BusinessProfile:
     business_name: str
     business_type: str

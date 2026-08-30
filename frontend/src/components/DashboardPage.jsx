@@ -15,6 +15,7 @@ import AiInsightsPage from "./analytics/AiInsightsPage";
 import ForecastingPage from "./analytics/ForecastingPage";
 import InventoryPage from "./inventory/InventoryPage";
 import ReportsPage from "./reports/ReportsPage";
+import SuppliersPage from "./dashboard/SuppliersPage";
 import { MonthlyBarChart } from "./analytics/Charts";
 import { SHORT_MONTHS } from "./analytics/constants";
 import { postSale, postStock, addNotification } from "./dashboard/api";
@@ -251,6 +252,8 @@ function DashboardPage({ data, onEditForm, onLogout, onReset }) {
               onRemove={handleRemoveRule}
               onSubmit={handleStockSubmit}
             />
+          ) : activeNav === "suppliers" ? (
+            <SuppliersPage />
           ) : activeNav === "reports" ? (
             <ReportsPage />
           ) : activeNav === "settings" ? (

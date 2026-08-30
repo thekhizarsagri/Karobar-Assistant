@@ -71,6 +71,17 @@ const NAV_ITEMS = [
     ),
   },
   {
+    id: "suppliers",
+    label: "Suppliers",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M4 7h16v10H4z" />
+        <path d="M8 7V5h8v2" />
+        <path d="M9 12h6" />
+      </svg>
+    ),
+  },
+  {
     id: "automation",
     label: "Automation",
     icon: (
