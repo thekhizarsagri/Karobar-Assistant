@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import HistoryTab from "./dashboard/HistoryTab";
 import AlertsCard from "./dashboard/AlertsCard";
 import AutomationPage from "./dashboard/AutomationPage";
@@ -10,6 +10,7 @@ import Sidebar from "./dashboard/Sidebar";
 import StatCards from "./dashboard/StatCards";
 import StockModal from "./dashboard/StockModal";
 import StockOverviewModal from "./dashboard/StockOverviewModal";
+import useStockAutomation from "./dashboard/useStockAutomation";
 import AnalyticsPage from "./analytics/AnalyticsPage";
 import AiInsightsPage from "./analytics/AiInsightsPage";
 import ForecastingPage from "./analytics/ForecastingPage";
@@ -26,7 +27,7 @@ const NOTIFY_TITLES = {
   info: "Notification",
 };
 
-function DashboardPage({ data, onEditForm, onLogout, onReset }) {
+function DashboardPage({ data, onEditForm, onLogout }) {
   const [summary, setSummary] = useState(data);
   const [salesSummary, setSalesSummary] = useState(data?.sales_summary || null);
   const [activeNav, setActiveNav] = useState("dashboard");
@@ -35,8 +36,6 @@ function DashboardPage({ data, onEditForm, onLogout, onReset }) {
   const [stockOverviewOpen, setStockOverviewOpen] = useState(false);
   const [historyDetailProduct, setHistoryDetailProduct] = useState(null);
   const [rules, setRules] = useState([]);
-  const firedRef = useRef({});
-  const rulesRef = useRef([]);
   const [analytics, setAnalytics] = useState({ daily: {}, monthly: {}, yearly: {} });
 
   useEffect(() => {
@@ -119,7 +118,9 @@ function DashboardPage({ data, onEditForm, onLogout, onReset }) {
     return null;
   };
 
-  const handleStockSubmit = (payload) => {
+  const { fireRule, handleRemoveRule } = useStockAutomation(rules, setRules, addStock, notify);
+
+  const handleStockSubmit = async (payload) => {
     setStockModalOpen(false);
     const quantity = Number(payload.quantity || 0);
     if (!payload.productName || quantity <= 0) return;
@@ -135,59 +136,14 @@ function DashboardPage({ data, onEditForm, onLogout, onReset }) {
         ampm: payload.ampm,
         createdAt: new Date().toISOString(),
       };
-      setRules((prev) => {
-        const next = [...prev, newRule];
-        rulesRef.current = next;
-        return next;
-      });
+      setRules((prev) => [...prev, newRule]);
       notify(`Automatic add saved: ${quantity} units of ${payload.productName} on day ${newRule.dayOfMonth} of every month at ${payload.hour}:${payload.minute} ${payload.ampm}.`, "info");
       return;
     }
 
-    addStock(payload.productName, quantity, payload.date || "");
+    await addStock(payload.productName, quantity, payload.date || "");
     notify(`Added ${quantity} units to ${payload.productName} on ${new Date((payload.date || new Date().toISOString().split("T")[0]) + "T00:00:00").toLocaleDateString()}.`, "success");
   };
-
-  const to24Hour = (hour12Str, ampm) => {
-    let h = parseInt(hour12Str, 10);
-    if (ampm === "AM") {
-      if (h === 12) h = 0;
-    } else if (h !== 12) {
-      h += 12;
-    }
-    return h;
-  };
-
-  const fireRule = (rule) => {
-    const timeString = `${rule.hour}:${rule.minute} ${rule.ampm}`;
-    addStock(rule.productName, rule.quantity);
-    notify(`Stock added: ${rule.quantity} units automatically added to ${rule.productName} on day ${rule.dayOfMonth} at ${timeString}.`, "success");
-  };
-
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      const now = new Date();
-      const fireKeyBase = `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}`;
-      rulesRef.current.forEach((rule) => {
-        const matchesDay = now.getDate() === rule.dayOfMonth;
-        const matchesMinute = now.getMinutes() === parseInt(rule.minute, 10);
-        const matchesHour = now.getHours() === to24Hour(rule.hour, rule.ampm);
-        const fireKey = `${fireKeyBase}-${rule.id}`;
-        if (matchesDay && matchesHour && matchesMinute && !firedRef.current[fireKey]) {
-          firedRef.current[fireKey] = true;
-          fireRule(rule);
-        }
-      });
-    }, 30000);
-    return () => clearInterval(intervalId);
-  }, []);
-
-  const handleRemoveRule = (ruleId) =>
-    setRules((prev) => {
-      const next = prev.filter((r) => r.id !== ruleId);
-      rulesRef.current = next;
-      return next;
-    });
 
   const handleNav = (nav) => {
     setActiveNav(nav);
@@ -262,7 +218,6 @@ function DashboardPage({ data, onEditForm, onLogout, onReset }) {
                 greeting={getGreeting()}
                 onEditForm={onEditForm}
                 onLogout={onLogout}
-                onReset={onReset}
               />
 
               <div className="dashboard-row">
@@ -271,7 +226,17 @@ function DashboardPage({ data, onEditForm, onLogout, onReset }) {
                   grossProfit={summary?.metrics?.gross_profit ?? 0}
                   netProfit={summary?.metrics?.net_profit ?? 0}
                   totalExpenses={summary?.metrics?.total_expenses ?? 0}
-                  onStockOverview={() => setStockOverviewOpen(true)}
+                  onStockOverview={async () => {
+                    try {
+                      const res = await fetch("/api/dashboard");
+                      if (res.ok) {
+                        const updated = await res.json();
+                        if (updated.products) updateProducts(updated.products);
+                        if (updated.sales_summary) setSalesSummary(updated.sales_summary);
+                      }
+                    } catch {}
+                    setStockOverviewOpen(true);
+                  }}
                   onAddStock={() => setStockModalOpen(true)}
                 >
                   <RecordSalesTab products={summary?.products || []} submitSale={submitSale} />

@@ -3,11 +3,10 @@ import NotificationBell from "./NotificationBell";
 
 const MENU_ITEMS = [
   { id: "editForm", label: "Edit form" },
-  { id: "reset", label: "Start fresh" },
   { id: "logout", label: "Logout" },
 ];
 
-function PageHeader({ ownerName, greeting, onEditForm, onLogout, onReset, hideGreeting = false }) {
+function PageHeader({ ownerName, greeting, onEditForm, onLogout, hideGreeting = false }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
 
@@ -33,14 +32,7 @@ function PageHeader({ ownerName, greeting, onEditForm, onLogout, onReset, hideGr
   const handleMenuClick = (id) => {
     setMenuOpen(false);
     if (id === "editForm") onEditForm?.();
-    if (id === "reset") onReset?.();
     if (id === "logout") onLogout?.();
-  };
-
-  const handleResetClick = () => {
-    if (window.confirm("Start fresh? This will delete all saved data.")) {
-      onReset?.();
-    }
   };
 
   const initials = (ownerName || "?").trim().split(/\s+/).map((w) => w[0]).join("").slice(0, 2).toUpperCase();
@@ -71,7 +63,7 @@ function PageHeader({ ownerName, greeting, onEditForm, onLogout, onReset, hideGr
                   key={item.id}
                   type="button"
                   className="profile-menu-item"
-                  onClick={() => (item.id === "reset" ? handleResetClick() : handleMenuClick(item.id))}
+                  onClick={() => handleMenuClick(item.id)}
                 >
                   {item.label}
                 </button>

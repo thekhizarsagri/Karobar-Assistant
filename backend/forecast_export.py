@@ -10,15 +10,12 @@ from typing import Any, Dict, List, Optional
 import numpy as np
 import pandas as pd
 
-from backend.store import get_profile
-
 _FORECAST_WINDOW = 14
 
 
 def _parse_ts(date_str: str) -> pd.Timestamp:
     for fmt in ("%Y-%m-%d", "%Y-%m", "%Y"):
         try:
-            from datetime import datetime
             return pd.Timestamp(datetime.strptime(date_str, fmt))
         except (ValueError, TypeError):
             continue
@@ -48,8 +45,6 @@ def forecast_products(df: pd.DataFrame, profile) -> List[Dict[str, Any]]:
     Returns list of dicts with keys: product, next_period_units, lower,
     upper, trend, confidence, mape, history.
     """
-    from backend.models import Product
-
     forecasts: List[Dict[str, Any]] = []
     for product in profile.products:
         prod = df[df["product_name"] == product.name]

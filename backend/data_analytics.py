@@ -11,9 +11,8 @@ sales log into a tidy pandas DataFrame and then derives:
 """
 
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict
 
-import numpy as np
 import pandas as pd
 
 from backend.store import get_profile, sales_log
@@ -24,7 +23,6 @@ _DATE_FORMATS = ("%Y-%m-%d", "%Y-%m", "%Y")
 def _parse_ts(date_str: str) -> pd.Timestamp:
     for fmt in _DATE_FORMATS:
         try:
-            from datetime import datetime
             return pd.Timestamp(datetime.strptime(date_str, fmt))
         except (ValueError, TypeError):
             continue

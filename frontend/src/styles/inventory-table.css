@@ -1,0 +1,241 @@
+/* ==========================================================================
+   Inventory Table — Table styling, toolbar, filters, stock levels, movements
+   ========================================================================== */
+
+.inv-table-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.inv-table-toolbar .inv-section-title {
+  margin: 0;
+}
+
+.inv-toolbar-controls {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.inv-search,
+.inv-filter {
+  padding: 9px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  background: #f8fafc;
+  font-size: 13px;
+  color: #0f172a;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.inv-search {
+  width: 220px;
+}
+
+.inv-search::placeholder {
+  color: #94a3b8;
+}
+
+.inv-table-wrap {
+  overflow-x: auto;
+}
+
+.inv-table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+}
+
+.inv-table th {
+  text-align: left;
+  padding: 10px 12px;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #64748b;
+  border-bottom: 1px solid #e2e8f0;
+  white-space: nowrap;
+}
+
+.inv-table td {
+  padding: 14px 12px;
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
+  font-size: 13.5px;
+}
+
+.inv-table tbody tr:hover {
+  background: #f8fafc;
+}
+
+.inv-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.inv-product-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.inv-product-name {
+  font-weight: 700;
+  color: #0f172a;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.inv-product-category {
+  font-size: 11.5px;
+  color: #94a3b8;
+}
+
+.inv-stock-num {
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.inv-bar-track {
+  margin-top: 6px;
+  width: 90px;
+  max-width: 100%;
+  height: 6px;
+  border-radius: 999px;
+  background: #e2e8f0;
+  overflow: hidden;
+}
+
+.inv-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+
+.inv-bar--good {
+  background: #10b981;
+}
+
+.inv-bar--medium {
+  background: #f59e0b;
+}
+
+.inv-bar--low {
+  background: #ef4444;
+}
+
+.inv-bar-none {
+  margin-top: 6px;
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+.inv-supply {
+  font-weight: 600;
+  color: #334155;
+  white-space: nowrap;
+}
+
+.inv-value {
+  font-weight: 700;
+  color: #0f172a;
+  white-space: nowrap;
+}
+
+.inv-margin {
+  font-weight: 700;
+  color: #059669;
+  white-space: nowrap;
+}
+
+.inv-reorder-qty {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+  font-size: 12.5px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.inv-sub {
+  margin-top: 2px;
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+.inv-muted {
+  color: #94a3b8;
+}
+
+.inv-empty-cell {
+  text-align: center;
+  color: #94a3b8;
+  padding: 24px 12px !important;
+}
+
+/* Movements */
+.inv-movement-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 340px;
+  overflow-y: auto;
+}
+
+.inv-movement-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  min-width: 0;
+}
+
+.inv-movement-qty {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  padding: 6px 8px;
+  border-radius: 999px;
+  background: #ecfdf5;
+  color: #047857;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.inv-movement-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.inv-movement-product {
+  font-weight: 700;
+  color: #0f172a;
+  font-size: 13px;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.inv-movement-meta {
+  font-size: 11.5px;
+  color: #94a3b8;
+}

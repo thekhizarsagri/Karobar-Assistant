@@ -14,11 +14,11 @@ def get_profile_products():
 
 
 def get_stock_for_product(product_name: str) -> int:
-    """Return current stock for a product, or -1 if not found."""
+    """Return current stock for a product, or 0 if not found."""
     for product in get_profile_products():
         if product.name == product_name:
             return product.stock_quantity
-    return -1
+    return 0
 
 
 def update_stock_quantity(product_name: str, delta: int) -> int:

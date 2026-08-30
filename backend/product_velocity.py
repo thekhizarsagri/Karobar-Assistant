@@ -7,8 +7,6 @@ from typing import Any, Dict, List
 
 import pandas as pd
 
-from backend.store import get_profile
-
 
 def product_velocity(df: pd.DataFrame, profile) -> Dict[str, Any]:
     """Compute top-mover and slow-mover lists from a product-level DataFrame.
@@ -17,8 +15,6 @@ def product_velocity(df: pd.DataFrame, profile) -> Dict[str, Any]:
     Each item has: product, units, avg_per_day, last_sale, days_since_last_sale.
     """
     from datetime import datetime
-
-    import pandas as pd
 
     stats: List[Dict[str, Any]] = []
     now = pd.Timestamp(datetime.now().date())
