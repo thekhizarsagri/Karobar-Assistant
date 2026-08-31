@@ -14,7 +14,10 @@ function fmt(value, fractionDigits = 0) {
 export default function EoqSection({ eoq }) {
   return (
     <section className="inv-section">
-      <h2 className="inv-section-title">Economic order quantity (EOQ)</h2>
+      <div className="rep-section-header">
+        <span className="rep-section-icon rep-section-icon--purple">📦</span>
+        <h2>Economic order quantity (EOQ)</h2>
+      </div>
       <p className="rep-note">
         Estimated optimal order size: <strong>√(2 × annual demand × order cost ÷ holding cost)</strong>.
         Order cost {fmt(50, 0)} and a {Math.round(20)}% annual holding rate are assumed.

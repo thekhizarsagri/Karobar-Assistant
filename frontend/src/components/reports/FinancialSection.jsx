@@ -14,7 +14,10 @@ function fmt(value, fractionDigits = 0) {
 export default function FinancialSection({ financials, gmroi, turnover }) {
   return (
     <section className="inv-section">
-      <h2 className="inv-section-title">Financial summary</h2>
+      <div className="rep-section-header">
+        <span className="rep-section-icon rep-section-icon--green">💰</span>
+        <h2>Financial summary</h2>
+      </div>
       <div className="rep-metric-grid">
         <div className="rep-metric"><span className="rep-metric-value">{fmt(financials.revenue, 2)}</span><span className="rep-metric-label">Revenue (sales)</span></div>
         <div className="rep-metric"><span className="rep-metric-value">{fmt(financials.cogs, 2)}</span><span className="rep-metric-label">Cost of goods sold</span></div>
@@ -24,7 +27,10 @@ export default function FinancialSection({ financials, gmroi, turnover }) {
         <div className="rep-metric"><span className="rep-metric-value">{fmt(financials.units_sold)}</span><span className="rep-metric-label">Units sold</span></div>
       </div>
 
-      <h2 className="inv-section-title rep-subtitle">Efficiency</h2>
+      <div className="rep-section-header rep-subtitle">
+        <span className="rep-section-icon rep-section-icon--blue">⚡</span>
+        <h2>Efficiency</h2>
+      </div>
       <div className="rep-metric-grid">
         <div className="rep-metric"><span className="rep-metric-value rep-metric--blue">{fmt(gmroi.value, 2)}</span><span className="rep-metric-label">GMROI (margin ÷ inventory cost)</span></div>
         <div className="rep-metric"><span className="rep-metric-value rep-metric--blue">{fmt(turnover.ratio, 2)}</span><span className="rep-metric-label">Inventory turnover / year</span></div>

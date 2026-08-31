@@ -25,8 +25,11 @@ function AbcPanel({ rows }) {
   return (
     <section className="ai-panel">
       <div className="ai-panel-heading">
-        <h2>ABC (Pareto) Product Classification</h2>
-        <p>Products ranked by revenue share to help you focus on what matters most.</p>
+        <span className="rep-section-icon rep-section-icon--abc" style={{ background: "#eff6ff" }}>📊</span>
+        <div>
+          <h2>ABC (Pareto) Product Classification</h2>
+          <p>Products ranked by revenue share to help you focus on what matters most.</p>
+        </div>
       </div>
 
       <div className="analytics-split-layout" style={{ alignItems: "center", marginBottom: "28px" }}>

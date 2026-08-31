@@ -14,7 +14,10 @@ function fmt(value, fractionDigits = 0) {
 export default function ExpenseParetoSection({ expenses }) {
   return (
     <section className="inv-section">
-      <h2 className="inv-section-title">Expense Pareto (80/20)</h2>
+      <div className="rep-section-header">
+        <span className="rep-section-icon rep-section-icon--red">📊</span>
+        <h2>Expense Pareto (80/20)</h2>
+      </div>
       {expenses.pareto.length === 0 ? (
         <p className="inv-muted">No enabled expenses to report.</p>
       ) : (

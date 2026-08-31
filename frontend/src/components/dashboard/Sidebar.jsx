@@ -1,4 +1,6 @@
 import titleImg from "../../assets/title-image.png";
+import titleImgDark from "../../assets/title-image-dark.png";
+import { useTheme } from "../../ThemeContext";
 
 const NAV_ITEMS = [
   {
@@ -115,13 +117,14 @@ const NAV_ITEMS = [
 ];
 
 function Sidebar({ active, onSelect, open, onToggle }) {
+  const { dark } = useTheme();
   return (
     <>
       <button
         type="button"
         className={`sidebar-toggle ${open ? "" : "sidebar-toggle--closed"}`}
         onClick={onToggle}
-        aria-label={open ? "Hide panel" : "Show panel"}
+        aria-label="Toggle sidebar"
       >
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
           <polyline points={open ? "15 18 9 12 15 6" : "9 18 15 12 9 6"} />
@@ -129,7 +132,7 @@ function Sidebar({ active, onSelect, open, onToggle }) {
       </button>
       <aside className={`sidebar ${open ? "" : "sidebar-closed"}`}>
         <div className="sidebar-brand">
-          <img src={titleImg} alt="Karobar Assistant" className="sidebar-logo" draggable={false} />
+          <img src={dark ? titleImgDark : titleImg} alt="Karobar Assistant" className="sidebar-logo" draggable={false} />
         </div>
         <nav className="sidebar-nav">
           {NAV_ITEMS.map((item) => (

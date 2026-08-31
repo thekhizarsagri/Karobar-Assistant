@@ -104,6 +104,8 @@ function AiInsightsPage({ data }) {
   );
 }
 
+const SUMMARY_ICONS = ["📦", "💰", "🏷️", "📅"];
+
 function SummaryCards({ summary }) {
   const cards = [
     { label: "Total units sold", value: summary.total_units },
@@ -113,8 +115,9 @@ function SummaryCards({ summary }) {
   ];
   return (
     <div className="ai-summary-cards">
-      {cards.map((card) => (
+      {cards.map((card, i) => (
         <div key={card.label} className="ai-summary-card">
+          <span className="ai-summary-icon" style={{ fontSize: "20px", marginBottom: "4px" }}>{SUMMARY_ICONS[i]}</span>
           <span className="ai-summary-value">{card.value}</span>
           <span className="ai-summary-label">{card.label}</span>
         </div>

@@ -1,60 +1,82 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useTheme } from "../../ThemeContext";
+import { getNotificationToggle, toggleNotificationSwitch } from "./api";
+
+const SETTINGS_LIST = [
+  { id: "darkMode", label: "Dark Mode", description: "Switch to dark color theme", icon: "🌙" },
+  { id: "notifications", label: "Turn off notifications", description: "Disable all push notifications", icon: "🔔" },
+];
 
 function SettingsPage() {
-  const [darkMode, setDarkMode] = useState(false);
-  const [notifications, setNotifications] = useState(true);
+  const { dark, toggle: toggleTheme } = useTheme();
+  const [notificationsEnabled, setNotificationsEnabled] = useState(true);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchToggleState = async () => {
+      try {
+        const result = await getNotificationToggle();
+        setNotificationsEnabled(result.enabled);
+      } catch {
+        /* keep default */
+      }
+      setLoading(false);
+    };
+    fetchToggleState();
+  }, []);
+
+  const toggleSetting = async (id) => {
+    if (id === "notifications") {
+      const newEnabled = !notificationsEnabled;
+      try {
+        await toggleNotificationSwitch(newEnabled);
+      } catch {
+        return;
+      }
+      setNotificationsEnabled(newEnabled);
+      window.dispatchEvent(new CustomEvent("notifications:updated"));
+    } else if (id === "darkMode") {
+      toggleTheme();
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="demo-section">
+        <div className="section-heading">
+          <h2>Settings</h2>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="demo-section">
       <div className="section-heading">
-        <span className="step-pill active">Settings</span>
         <h2>Settings</h2>
       </div>
 
-      <div className="form-grid">
-        <div className="form-field">
-          <span>Appearance</span>
-          <label className="form-field.input-wrapper">
-            <input
-              type="checkbox"
-              checked={darkMode}
-              onChange={() => setDarkMode((v) => !v)}
-              id="dark-mode-toggle"
-            />
-            <span className="form-field.slider" />
-            <span className="form-hint">Dark mode</span>
-          </label>
-        </div>
-
-        <div className="form-field">
-          <span>Notification Settings</span>
-          <label className="form-field.input-wrapper">
-            <input
-              type="checkbox"
-              checked={notifications}
-              onChange={() => setNotifications((v) => !v)}
-              id="notifications-toggle"
-            />
-            <span className="form-field.slider" />
-            <span className="form-hint">Enable notifications</span>
-          </label>
-        </div>
-
-        <div className="form-field full-width">
-          <span>Data Management</span>
-          <div style={{ marginTop: 12 }}>
-            <button
-              type="button"
-              className="demo-back-btn"
-              style={{
-                width: "100%",
-                justifyContent: "center",
-              }}
-            >
-              Reset All Data
-            </button>
+      <div className="settings-list">
+        {SETTINGS_LIST.map((item) => (
+          <div key={item.id} className="settings-item">
+            <div className="settings-item-info">
+              <span className="settings-item-icon">{item.icon}</span>
+              <div>
+                <span className="settings-item-label">{item.label}</span>
+                <span className="settings-item-desc">{item.description}</span>
+              </div>
+            </div>
+            <label className="toggle-switch">
+              <input
+                type="checkbox"
+                checked={item.id === "notifications" ? !notificationsEnabled : dark}
+                onChange={() => toggleSetting(item.id)}
+                id={`toggle-${item.id}`}
+              />
+              <span className="toggle-slider" />
+            </label>
           </div>
-        </div>
+        ))}
       </div>
     </div>
   );

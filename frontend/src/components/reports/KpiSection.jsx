@@ -19,7 +19,7 @@ function fmt(value, fractionDigits = 0) {
 }
 
 function ScoreRing({ score, label }) {
-  const size = 150;
+  const size = 170;
   const stroke = 14;
   const radius = (size - stroke) / 2;
   const circumference = 2 * Math.PI * radius;
@@ -42,10 +42,10 @@ function ScoreRing({ score, label }) {
         transform={`rotate(-90 ${size / 2} ${size / 2})`}
         style={{ transition: "stroke-dashoffset 0.6s ease" }}
       />
-      <text x="50%" y="47%" textAnchor="middle" dominantBaseline="central" className="rep-score-text">
+      <text x="50%" y="46%" textAnchor="middle" dominantBaseline="central" className="rep-score-text">
         {score}
       </text>
-      <text x="50%" y="63%" textAnchor="middle" dominantBaseline="central" className="rep-score-label">
+      <text x="50%" y="64%" textAnchor="middle" dominantBaseline="central" className="rep-score-label">
         {label}
       </text>
     </svg>
@@ -68,21 +68,26 @@ function SubScore({ label, value, color }) {
 
 export default function KpiSection({ kpi }) {
   return (
-    <section className="inv-section rep-kpi">
-      <div className="rep-kpi-score">
-        <ScoreRing score={kpi.score} label={kpi.label} />
-        <div className="rep-kpi-caption">
-          <h2>Business health score</h2>
-          <p>
-            Weighted from profit margin, stock health, and inventory turnover. A score of 100
-            is excellent.
-          </p>
-        </div>
+    <section className="inv-section">
+      <div className="rep-section-header">
+        <span className="rep-section-icon rep-section-icon--green">🎯</span>
+        <h2>Business health score</h2>
       </div>
-      <div className="rep-subscore-grid">
-        <SubScore label="Profitability" value={kpi.profit_score} color="#10b981" />
-        <SubScore label="Stock health" value={kpi.stock_score} color="#3b82f6" />
-        <SubScore label="Inventory turnover" value={kpi.turnover_score} color="#8b5cf6" />
+      <div className="rep-kpi">
+        <div className="rep-kpi-score">
+          <ScoreRing score={kpi.score} label={kpi.label} />
+          <div className="rep-kpi-caption">
+            <p>
+              Weighted from profit margin, stock health, and inventory turnover. A score of 100
+              is excellent.
+            </p>
+          </div>
+        </div>
+        <div className="rep-subscore-grid">
+          <SubScore label="Profitability" value={kpi.profit_score} color="#10b981" />
+          <SubScore label="Stock health" value={kpi.stock_score} color="#3b82f6" />
+          <SubScore label="Inventory turnover" value={kpi.turnover_score} color="#8b5cf6" />
+        </div>
       </div>
     </section>
   );

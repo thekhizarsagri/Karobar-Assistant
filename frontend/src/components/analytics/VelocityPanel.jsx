@@ -22,8 +22,11 @@ function VelocityPanel({ velocity }) {
   return (
     <section className="ai-panel">
       <div className="ai-panel-heading">
-        <h2>Product Velocity</h2>
-        <p>A comparison of average unit sales speeds. High velocity items require constant stock reviews.</p>
+        <span className="rep-section-icon rep-section-icon--velocity" style={{ background: "#ecfdf5" }}>🚀</span>
+        <div>
+          <h2>Product Velocity</h2>
+          <p>A comparison of average unit sales speeds. High velocity items require constant stock reviews.</p>
+        </div>
       </div>
 
       <div className="analytics-split-layout">

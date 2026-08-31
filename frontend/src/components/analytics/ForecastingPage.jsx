@@ -117,8 +117,11 @@ function ForecastingPage({ data }) {
       ) : (
         <section className="ai-panel">
           <div className="ai-panel-heading">
-            <h2>Projected Demand</h2>
-            <p>Visualizing product sales history and the projected next day demand with 95% confidence bounds.</p>
+            <span className="rep-section-icon" style={{ background: "#eff6ff" }}>📈</span>
+            <div>
+              <h2>Projected Demand</h2>
+              <p>Visualizing product sales history and the projected next day demand with 95% confidence bounds.</p>
+            </div>
           </div>
           <div className="forecast-charts-grid">
             {visibleForecasts.map((f) => {
@@ -131,21 +134,21 @@ function ForecastingPage({ data }) {
               };
 
               return (
-                <div key={f.product} className="chart-section" style={{ margin: 0, display: "flex", flexDirection: "column" }}>
+                <div key={f.product} className="chart-section forecast-card">
                   <div className="forecast-card-header">
-                    <h3 style={{ margin: 0, fontSize: "1.05rem", fontWeight: 600, color: "#0f172a" }}>{f.product}</h3>
-                    <span className={`forecast-card-meta ${trendClass}`} style={{ fontSize: "0.7rem", fontWeight: 700 }}>
+                    <h3 className="forecast-card-product">{f.product}</h3>
+                    <span className={`forecast-card-meta ${trendClass}`}>
                       {trendClass.toUpperCase()}
                     </span>
                   </div>
-                  <div style={{ display: "flex", justifyContent: "space-between", margin: "10px 0", fontSize: "0.85rem", background: "#f8fafc", padding: "8px 12px", borderRadius: "8px" }}>
+                  <div className="forecast-card-range">
                     <span>Forecast: <strong>{formatStat(f.next_period_units)} units</strong></span>
-                    <span style={{ color: "#64748b" }}>Range: {formatCompact(f.lower)} - {formatCompact(f.upper)}</span>
+                    <span className="forecast-card-range-vals">Range: {formatCompact(f.lower)} - {formatCompact(f.upper)}</span>
                   </div>
-                  <div style={{ flexGrow: 1 }}>
+                  <div className="forecast-card-chart">
                     <ForecastChart history={f.history || []} forecast={[forecastPoint]} height={180} />
                   </div>
-                  <div style={{ marginTop: "10px", fontSize: "0.75rem", color: "#94a3b8", textAlign: "right" }}>
+                  <div className="forecast-card-footer">
                     Confidence: <strong style={{ color: f.confidence === "high" ? "#10b981" : f.confidence === "medium" ? "#f59e0b" : "#94a3b8" }}>{f.confidence.toUpperCase()}</strong> (MAPE: {f.mape !== null ? `${f.mape}%` : "N/A"})
                   </div>
                 </div>

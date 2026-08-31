@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { BrowserRouter, Navigate, Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import { ThemeProvider } from "./ThemeContext";
 import "./App.css";
 import Welcome from "./components/Welcome";
 import SetupPage from "./components/SetupPage";
@@ -7,9 +8,11 @@ import DashboardPage from "./components/DashboardPage";
 
 function App() {
   return (
-    <BrowserRouter>
-      <AppRoutes />
-    </BrowserRouter>
+    <ThemeProvider>
+      <BrowserRouter>
+        <AppRoutes />
+      </BrowserRouter>
+    </ThemeProvider>
   );
 }
 

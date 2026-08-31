@@ -3,13 +3,16 @@ import { MonthlyBarChart } from "../analytics/Charts";
 export default function SeasonalitySection({ seasonality, seasonData }) {
   return (
     <section className="inv-section">
-      <h2 className="inv-section-title">Seasonality index</h2>
+      <div className="rep-section-header">
+        <span className="rep-section-icon rep-section-icon--teal">📈</span>
+        <h2>Seasonality index</h2>
+      </div>
       {seasonality.has_data ? (
         <>
-          <div className="chart-section" style={{ maxWidth: "820px", padding: "20px" }}>
+          <div className="chart-section" style={{ maxWidth: "860px", padding: "24px" }}>
             <MonthlyBarChart
               data={seasonData}
-              height={200}
+              height={220}
               barColor="#3b82f6"
               title="Monthly demand vs. the average month (1.0 = average)"
             />

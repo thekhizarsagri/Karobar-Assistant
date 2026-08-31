@@ -36,9 +36,16 @@
   font-weight: 700;
   padding: 8px 16px;
   border-radius: 999px;
-  border: 2px solid;
+  border: 2px solid var(--product-color, #cbd5e1);
+  background: #fff;
+  color: var(--product-color, #334155);
   cursor: pointer;
-  transition: opacity 0.15s, transform 0.15s;
+  transition: opacity 0.15s, transform 0.15s, background 0.15s, color 0.15s;
+}
+
+.history-product-btn--active {
+  background: var(--product-color, #1d4ed8);
+  color: #fff;
 }
 
 .history-product-btn:hover {

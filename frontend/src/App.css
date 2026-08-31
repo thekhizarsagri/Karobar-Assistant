@@ -15,6 +15,7 @@
 @import './styles/ai-analytics.css';
 @import './styles/controls.css';
 @import './styles/charts.css';
+@import './styles/dark-mode.css';
 
 html, body {
   margin: 0;
@@ -26,10 +27,12 @@ html, body {
   min-height: 100vh;
   overflow-x: hidden;
   background:
-    radial-gradient(circle at 15% 20%, rgba(16, 185, 129, 0.32), transparent 30%),
-    radial-gradient(circle at 88% 72%, rgba(59, 130, 246, 0.28), transparent 28%),
-    radial-gradient(circle at 50% 10%, rgba(14, 165, 233, 0.18), transparent 22%),
-    linear-gradient(135deg, #d8f6e5, #dbeafe);
+    radial-gradient(circle at 15% 20%, rgba(16, 185, 129, 0.42), transparent 38%),
+    radial-gradient(circle at 88% 72%, rgba(59, 130, 246, 0.4), transparent 36%),
+    radial-gradient(circle at 50% 10%, rgba(14, 165, 233, 0.3), transparent 30%),
+    radial-gradient(circle at 70% 45%, rgba(16, 185, 129, 0.15), transparent 42%),
+    radial-gradient(circle at 25% 80%, rgba(59, 130, 246, 0.12), transparent 38%),
+    linear-gradient(135deg, #d4f5e4, #e4effc, #dce8f8);
 }
 
 /* Page Transition Animations */
@@ -79,4 +82,111 @@ html, body {
   visibility: hidden;
   pointer-events: none;
   opacity: 0;
+}
+/* ==========================================================================
+   Dark Mode
+   ========================================================================== */
+[data-theme="dark"] {
+  --color-bg-primary: #0c1222;
+  --color-bg-secondary: #111a2e;
+  --color-bg-card: #141e33;
+  --color-bg-gradient-1: rgba(16, 185, 129, 0.12);
+  --color-bg-gradient-2: rgba(59, 130, 246, 0.1);
+  --color-bg-gradient-3: rgba(14, 165, 233, 0.08);
+  --color-bg-main: #0c1222;
+  --color-text-primary: #e2e8f0;
+  --color-text-secondary: #94a3b8;
+  --color-text-heading: #f1f5f9;
+  --color-border: #1e2d45;
+  --color-border-light: #182438;
+  --text-color: #e2e8f0;
+  --muted-color: #94a3b8;
+  --card-bg: #141e33;
+}
+
+[data-theme="dark"] #root {
+  background:
+    radial-gradient(circle at 10% 15%, rgba(6, 95, 70, 0.35), transparent 35%),
+    radial-gradient(circle at 85% 75%, rgba(30, 64, 175, 0.3), transparent 32%),
+    radial-gradient(circle at 50% 5%, rgba(14, 165, 233, 0.15), transparent 28%),
+    radial-gradient(circle at 65% 40%, rgba(16, 185, 129, 0.1), transparent 35%),
+    radial-gradient(circle at 20% 85%, rgba(59, 130, 246, 0.08), transparent 30%),
+    linear-gradient(160deg, #0c1222, #0f1a2e, #0a0f1a);
+}
+
+[data-theme="dark"] body {
+  background: #0c1222;
+}
+
+[data-theme="dark"] .demo-page--dashboard .app-main {
+  background: transparent;
+}
+
+[data-theme="dark"] h1, [data-theme="dark"] h2 {
+  color: #f1f5f9;
+}
+
+[data-theme="dark"] p {
+  color: #94a3b8;
+}
+
+/* ── Sidebar ── */
+[data-theme="dark"] .sidebar {
+  background: rgba(14, 22, 40, 0.92) !important;
+  border-right-color: rgba(30, 45, 70, 0.6) !important;
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .sidebar-item {
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .sidebar-item:hover {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+}
+
+[data-theme="dark"] .sidebar-item.active {
+  background: linear-gradient(135deg, #10b981, #059669 60%);
+  color: #fff;
+}
+
+[data-theme="dark"] .sidebar-toggle {
+  background: #141e33;
+  border-color: #1e2d45;
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .sidebar-toggle:hover {
+  background: #1a2740;
+  color: #e2e8f0;
+}
+
+/* ── Step pills ── */
+[data-theme="dark"] .step-pill {
+  background: #1e2d45;
+  color: #e2e8f0;
+}
+
+[data-theme="dark"] .step-pill.active {
+  background: #10b981;
+}
+
+/* ── Settings ── */
+[data-theme="dark"] .settings-item-icon {
+  background: #1e2d45;
+}
+
+[data-theme="dark"] .settings-reset-btn {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8) !important;
+  color: #fff !important;
+  border: none !important;
+  box-shadow: 0 12px 28px rgba(37, 99, 235, 0.18) !important;
+}
+
+[data-theme="dark"] .settings-reset-btn:hover {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8) !important;
+  color: #fff !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 18px 35px rgba(37, 99, 235, 0.22) !important;
 }

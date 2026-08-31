@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { clearNotifications, getNotifications, markAllNotificationsRead } from "./api";
+import { clearNotifications, getNotifications, getNotificationToggle, markAllNotificationsRead } from "./api";
 
 const POLL_INTERVAL_MS = 15000;
 
@@ -19,10 +19,18 @@ function NotificationBell() {
   const [open, setOpen] = useState(false);
   const [items, setItems] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
+  const [notificationsEnabled, setNotificationsEnabled] = useState(true);
   const containerRef = useRef(null);
 
   const refresh = useCallback(async () => {
     try {
+      const toggleResult = await getNotificationToggle();
+      setNotificationsEnabled(toggleResult.enabled);
+      if (!toggleResult.enabled) {
+        setItems([]);
+        setUnreadCount(0);
+        return { items: [], unread_count: 0, enabled: false };
+      }
       const result = await getNotifications();
       setItems(result.items || []);
       setUnreadCount(result.unread_count || 0);
@@ -84,14 +92,14 @@ function NotificationBell() {
           <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
           <path d="M13.73 21a2 2 0 0 1-3.46 0" />
         </svg>
-        {unreadCount > 0 && <span className="notification-badge">{unreadCount > 9 ? "9+" : unreadCount}</span>}
+        {unreadCount > 0 && notificationsEnabled && <span className="notification-badge">{unreadCount > 9 ? "9+" : unreadCount}</span>}
       </button>
 
       {open && (
         <div className="notification-panel">
           <div className="notification-panel-header">
             <span>Notifications</span>
-            {items.length > 0 && (
+            {notificationsEnabled && items.length > 0 && (
               <button type="button" className="notification-mark-read" onClick={handleClearAll}>
                 Clear all
               </button>
@@ -99,7 +107,15 @@ function NotificationBell() {
           </div>
 
           <div className="notification-list">
-            {items.length === 0 ? (
+            {!notificationsEnabled ? (
+              <div className="notification-empty">
+                <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                  <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                </svg>
+                <p>Notifications are turned off</p>
+              </div>
+            ) : items.length === 0 ? (
               <div className="notification-empty">
                 <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />

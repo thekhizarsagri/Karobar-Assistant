@@ -1,3 +1,13 @@
+:root {
+  --radius: 12px;
+  --font-family: "Inter", system-ui, sans-serif;
+  --text-color: #0f172a;
+  --muted-color: #64748b;
+  --accent: #1d4ed8;
+  --accent-hover: #1e40af;
+  --card-bg: #fff;
+}
+
 .stock-modal-backdrop {
   position: fixed;
   inset: 0;
@@ -18,10 +28,10 @@ body:has(.stock-modal-backdrop) {
   max-width: 500px;
   min-width: 0;
   box-sizing: border-box;
-  background: #fff;
-  border-radius: 18px;
-  padding: 20px;
-  box-shadow: 0 24px 70px rgba(15, 23, 42, 0.18);
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
   overflow: hidden;
 }
 
@@ -36,23 +46,23 @@ body:has(.stock-modal-backdrop) {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 12px;
-  padding: 14px 16px;
-  border-radius: 14px;
+  gap: 16px;
+  padding: 16px 20px;
+  border-radius: var(--radius);
   background: linear-gradient(135deg, #ecfdf5, #f0fdfa);
   border: 1px solid #a7f3d0;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
 }
 
 .stock-overview-summary-label {
-  font-size: 0.9rem;
+  font-size: 14px;
   color: #065f46;
   font-weight: 600;
   min-width: 0;
 }
 
 .stock-overview-summary-value {
-  font-size: 1.25rem;
+  font-size: 20px;
   font-weight: 800;
   color: #047857;
   min-width: 0;
@@ -73,9 +83,9 @@ body:has(.stock-modal-backdrop) {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 12px;
-  padding: 14px 16px;
-  border-radius: 14px;
+  gap: 16px;
+  padding: 16px 20px;
+  border-radius: var(--radius);
   border: 1px solid #dbeafe;
   background: #fff;
   color: #0f172a;
@@ -87,6 +97,7 @@ body:has(.stock-modal-backdrop) {
   color: #1e3a5f;
   min-width: 0;
   overflow-wrap: break-word;
+  font-size: 15px;
 }
 
 .stock-overview-units {
@@ -94,6 +105,7 @@ body:has(.stock-modal-backdrop) {
   font-weight: 700;
   color: #1d4ed8;
   white-space: nowrap;
+  font-size: 15px;
 }
 
 .stock-overview-empty {
@@ -139,23 +151,24 @@ body:has(.stock-modal-backdrop) {
 
 .stock-modal-tabs {
   display: flex;
-  gap: 10px;
-  margin-bottom: 18px;
+  gap: 12px;
+  margin-bottom: 20px;
 }
 
 .stock-modal-tab {
   border: 1px solid #cbd5e1;
   background: #f8fafc;
-  padding: 10px 12px;
-  border-radius: 999px;
+  padding: 10px 14px;
+  border-radius: var(--radius);
   cursor: pointer;
   color: #334155;
+  font-size: 14px;
 }
 
 .stock-modal-tab.active {
-  background: #1d4ed8;
+  background: var(--accent);
   color: #fff;
-  border-color: #1d4ed8;
+  border-color: var(--accent);
 }
 
 .stock-modal-form {
@@ -213,11 +226,11 @@ body:has(.stock-modal-backdrop) {
   flex: 1;
   min-width: 0;
   padding: 10px;
-  border-radius: 12px;
+  border-radius: var(--radius);
   border: 1px solid #cbd5e1;
   background: #f8fafc;
   font-size: 14px;
-  color: #0f172a;
+  color: var(--text-color);
 }
 
 .time-colon {
@@ -236,9 +249,9 @@ body:has(.stock-modal-backdrop) {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 12px;
-  padding: 16px;
-  border-radius: 14px;
+  gap: 16px;
+  padding: 20px;
+  border-radius: var(--radius);
   border: 1px solid #bfdbfe;
   background: linear-gradient(135deg, #eff6ff, #f0f9ff);
   min-width: 0;
@@ -254,12 +267,12 @@ body:has(.stock-modal-backdrop) {
 .scheduled-rule-product {
   font-weight: 700;
   color: #1e3a5f;
-  font-size: 0.95rem;
+  font-size: 15px;
 }
 
 .scheduled-rule-detail {
-  font-size: 0.83rem;
-  color: #475569;
+  font-size: 13px;
+  color: var(--muted-color);
 }
 
 .scheduled-rule-actions {
@@ -270,28 +283,28 @@ body:has(.stock-modal-backdrop) {
 }
 
 .rule-test-btn {
-  padding: 7px 14px;
+  padding: 8px 16px;
   border: none;
-  border-radius: 999px;
-  background: #1d4ed8;
+  border-radius: var(--radius);
+  background: var(--accent);
   color: #fff;
-  font-size: 0.82rem;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   transition: background 0.18s;
 }
 
 .rule-test-btn:hover {
-  background: #1e40af;
+  background: var(--accent-hover);
 }
 
 .rule-remove-btn {
-  padding: 7px 12px;
+  padding: 8px 12px;
   border: 1px solid #fca5a5;
-  border-radius: 999px;
+  border-radius: var(--radius);
   background: #fff;
   color: #ef4444;
-  font-size: 0.82rem;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   transition: background 0.18s, color 0.18s;

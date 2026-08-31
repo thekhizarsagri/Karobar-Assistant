@@ -292,23 +292,37 @@
 /* Forecast charts grid styling */
 .forecast-charts-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
   gap: 20px;
   margin-top: 20px;
+}
+
+.forecast-card {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .forecast-card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
+}
+
+.forecast-card-product {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text-color, #0f172a);
 }
 
 .forecast-card-meta {
-  font-size: 0.75rem;
-  font-weight: 600;
-  padding: 2px 8px;
+  font-size: 12px;
+  font-weight: 800;
+  padding: 4px 12px;
   border-radius: 999px;
+  letter-spacing: 0.03em;
 }
 
 .forecast-card-meta.upward {
@@ -325,4 +339,33 @@
 .forecast-card-meta.steady {
   background: #f1f5f9;
   color: #475569;
+}
+
+.forecast-card-range {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 0 12px;
+  font-size: 14px;
+  background: #f8fafc;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+}
+
+.forecast-card-range-vals {
+  color: var(--muted-color, #64748b);
+  font-weight: 600;
+}
+
+.forecast-card-chart {
+  flex-grow: 1;
+}
+
+.forecast-card-footer {
+  margin-top: 12px;
+  font-size: 12px;
+  color: #94a3b8;
+  text-align: right;
+  font-weight: 600;
 }

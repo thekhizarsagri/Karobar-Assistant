@@ -96,10 +96,9 @@ function AnalyticsPage({ data }) {
                 <button
                   key={name}
                   type="button"
-                  className="history-product-btn"
+                  className={`history-product-btn ${active ? "history-product-btn--active" : ""}`}
                   style={{
-                    background: active ? color : "#fff",
-                    color: active ? "#fff" : color,
+                    "--product-color": color,
                     borderColor: color,
                   }}
                   onClick={() => setSelectedProduct(active ? null : name)}

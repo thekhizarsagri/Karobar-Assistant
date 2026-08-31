@@ -1,11 +1,18 @@
 import titleImg from '../assets/title-image.png';
+import titleImgDark from '../assets/title-image-dark.png';
+import { useTheme } from '../ThemeContext';
 
 function Welcome({ onDemoClick }) {
+  const { dark, toggle } = useTheme();
+
   return (
     <div className="welcome-container">
+      <button type="button" className="welcome-theme-toggle" onClick={toggle}>
+        {dark ? "☀️ Light" : "🌙 Dark"}
+      </button>
       <div className="welcome-left">
         <img
-          src={titleImg}
+          src={dark ? titleImgDark : titleImg}
           alt="Karobar Assistant"
           className="welcome-title-image"
           draggable={false}

@@ -26,6 +26,22 @@ export async function getNotifications() {
   return res.json();
 }
 
+export async function getNotificationToggle() {
+  const res = await fetch("/api/notifications/toggle");
+  if (!res.ok) throw new Error("Unable to load notification toggle");
+  return res.json();
+}
+
+export async function toggleNotificationSwitch(enabled) {
+  const res = await fetch("/api/notifications/toggle", {
+    method: "POST",
+    headers: jsonHeaders,
+    body: JSON.stringify({ enabled }),
+  });
+  if (!res.ok) throw new Error("Unable to toggle notifications");
+  return res.json();
+}
+
 export async function addNotification({ type = "info", title, message }) {
   const res = await fetch("/api/notifications", {
     method: "POST",

@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
 import StockModal from "../dashboard/StockModal";
-import { getProductColor } from "../analytics/constants";
 import { formatCompact } from "../../utils/formatNumber";
 import InventoryTable from "./InventoryTable";
 import InventoryMovements from "./InventoryMovements";
@@ -65,16 +64,6 @@ function InventoryPage({ products, onSubmit }) {
   }, [items, query, statusFilter, categoryFilter]);
 
   const attentionItems = items.filter((item) => item.status !== "ok");
-
-  const categoryChart = useMemo(
-    () =>
-      categories.map((cat, index) => ({
-        label: cat.category,
-        value: cat.retail_value,
-        color: getProductColor(index),
-      })),
-    [categories]
-  );
 
   const openAdd = (productName = "") => {
     setInitialProduct(productName);
@@ -197,7 +186,6 @@ function InventoryPage({ products, onSubmit }) {
 
           {/* Breakdown + movements */}
           <InventoryMovements
-            categoryChart={categoryChart}
             summary={summary}
             movements={movements}
           />

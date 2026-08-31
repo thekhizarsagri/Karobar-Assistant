@@ -1,58 +1,65 @@
 .sales-panel {
   display: grid;
-  gap: 18px;
+  gap: 20px;
   margin-top: 8px;
 }
 
 .sales-card {
-  width: min(100%, 420px);
-  padding: 20px;
-  border-radius: 20px;
-  background: #fff;
+  width: min(100%, 440px);
+  padding: 28px;
+  border-radius: 16px;
+  background: var(--card-bg, #fff);
   border: 1px solid #e2e8f0;
-  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.06);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
   box-sizing: border-box;
 }
 
 .sales-card h3 {
-  margin: 0 0 8px;
-  color: #0f172a;
+  margin: 0 0 10px;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text-color, #0f172a);
 }
 
 .sales-card p {
-  margin: 0 0 16px;
-  color: #475569;
+  margin: 0 0 18px;
+  font-size: 14px;
+  color: var(--muted-color, #64748b);
 }
 
 .sales-periods {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  margin-bottom: 14px;
+  margin-bottom: 18px;
 }
 
 .frequency-pill {
-  border: 1px solid #cbd5e1;
+  border: 1px solid #e2e8f0;
   border-radius: 999px;
-  background: white;
-  color: #0f172a;
-  padding: 10px 16px;
-  font-weight: 600;
+  background: #fff;
+  color: #334155;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 700;
   cursor: pointer;
-  transition: transform 0.24s ease, background 0.24s ease, border-color 0.24s ease;
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .frequency-pill.active {
-  background: #2563eb;
-  color: white;
+  background: var(--accent, #2563eb);
+  color: #fff;
   border-color: transparent;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
 }
 
-.frequency-pill:hover {
+.frequency-pill:hover:not(.active) {
   transform: translateY(-1px);
+  background: #f8fafc;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.06);
 }
 
 .sales-form {
   display: grid;
-  gap: 14px;
+  gap: 16px;
 }

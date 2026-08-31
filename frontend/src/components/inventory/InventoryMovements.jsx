@@ -1,4 +1,3 @@
-import { DonutChart } from "../analytics/Charts";
 import { formatCompact } from "../../utils/formatNumber";
 import { SOURCE_LABELS } from "./inventoryConstants";
 
@@ -19,18 +18,9 @@ function formatDate(iso) {
   return date.toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" });
 }
 
-export default function InventoryMovements({ categoryChart, summary, movements }) {
+export default function InventoryMovements({ summary, movements }) {
   return (
     <div className="inv-bottom-grid">
-      <section className="inv-section">
-        <h2 className="inv-section-title">Stock value by category</h2>
-        {categoryChart.length > 0 ? (
-          <DonutChart data={categoryChart} centerTextLabel="Retail value" />
-        ) : (
-          <p className="inv-muted">No category data yet.</p>
-        )}
-      </section>
-
       <section className="inv-section">
         <h2 className="inv-section-title">Valuation summary</h2>
         <div className="inv-valuation">

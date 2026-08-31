@@ -3,8 +3,11 @@ import BusinessInfoForm from "./setup/BusinessInfoForm";
 import ProductsForm from "./setup/ProductsForm";
 import { defaultProduct, fixedExpenseItems } from "./setup/constants";
 import titleImg from "../assets/title-image.png";
+import titleImgDark from "../assets/title-image-dark.png";
+import { useTheme } from "../ThemeContext";
 
 function SetupPage({ initialData, onBack, onFinish }) {
+  const { dark } = useTheme();
   const [businessInfo, setBusinessInfo] = useState({
     businessName: initialData?.business_name ?? "Apex Glass & Packaging Co.",
     businessType: initialData?.business_type ?? "Manufacturing",
@@ -162,7 +165,7 @@ function SetupPage({ initialData, onBack, onFinish }) {
         <div className="navbar-left">
           <div className="setup-brand-container">
             <img
-              src={titleImg}
+              src={dark ? titleImgDark : titleImg}
               alt="Karobar Assistant"
               className="setup-nav-title-image"
               draggable={false}

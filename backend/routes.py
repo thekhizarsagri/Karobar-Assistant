@@ -13,10 +13,12 @@ from backend.dashboard import build_dashboard_payload, build_current_dashboard_p
 from backend.insights import get_latest_ai_insights
 from backend.notifications import (
     add_notification,
+    are_notifications_enabled,
     clear_notifications,
     get_notifications,
     mark_all_read,
     mark_read,
+    toggle_notifications,
 )
 from backend.sales import clear_product_history, export_history, get_sales_summary, record_sale
 from backend.stock import add_stock
@@ -97,6 +99,17 @@ def mark_notifications_read(request: NotificationReadRequest | None = None) -> D
 def clear_notifications_endpoint() -> Dict[str, Any]:
     clear_notifications()
     return get_notifications()
+
+
+@router.get("/api/notifications/toggle")
+def get_notification_toggle() -> Dict[str, Any]:
+    return {"enabled": are_notifications_enabled()}
+
+
+@router.post("/api/notifications/toggle")
+def toggle_notification_switch(request: Dict[str, Any]) -> Dict[str, Any]:
+    enabled = bool(request.get("enabled", True))
+    return toggle_notifications(enabled)
 
 
 @router.get("/api/analytics")

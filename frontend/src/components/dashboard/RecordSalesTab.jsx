@@ -37,7 +37,7 @@ function RecordSalesTab({ products, submitSale }) {
   return (
     <div className="sales-panel">
       <div className="sales-card">
-        <h3>Add sales record</h3>
+        <h3>🛒 Add sales record</h3>
         <div className="sales-periods">
           {SALES_PERIODS.map((period) => (
             <button
