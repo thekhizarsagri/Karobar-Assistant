@@ -48,6 +48,16 @@ class StockEntryRequest(BaseModel):
         self.quantity = _cap(self.quantity)
 
 
+class SaleDeleteRequest(BaseModel):
+    productName: str
+    quantity: int = 1
+    period: str = "day"
+    entryDate: str | None = None
+
+    def model_post_init(self, __context) -> None:
+        self.quantity = _cap(self.quantity)
+
+
 class NotificationRequest(BaseModel):
     type: str = "info"
     title: str

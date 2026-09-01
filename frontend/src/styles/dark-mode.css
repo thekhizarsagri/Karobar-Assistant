@@ -1,6 +1,24 @@
 /* ==========================================================================
-   Dark Mode Overrides — single source of truth
-   ========================================================================== */
+    Dark Mode Overrides — single source of truth
+    ========================================================================== */
+
+[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+/* ── Emoji icon containers — remove background squares ── */
+[data-theme="dark"] .rep-section-icon,
+[data-theme="dark"] .rep-section-icon--green,
+[data-theme="dark"] .rep-section-icon--blue,
+[data-theme="dark"] .rep-section-icon--amber,
+[data-theme="dark"] .rep-section-icon--purple,
+[data-theme="dark"] .rep-section-icon--red,
+[data-theme="dark"] .rep-section-icon--teal,
+[data-theme="dark"] .rep-section-icon--velocity,
+[data-theme="dark"] .rep-section-icon--abc,
+[data-theme="dark"] .settings-item-icon {
+  background: transparent !important;
+}
 
 /* ── Global elements ── */
 [data-theme="dark"] button {
@@ -464,6 +482,142 @@
   box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2);
 }
 
+/* ── Sales mode toggle ── */
+[data-theme="dark"] .sales-mode-btn {
+  background: #141e33;
+  border-color: #1e2d45;
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .sales-mode-btn:hover:not(.active) {
+  background: #1a2740;
+}
+
+[data-theme="dark"] .sales-mode-btn.active {
+  background: #10b981;
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2);
+}
+
+/* ── Edit sales calendar ── */
+[data-theme="dark"] .edit-sales-calendar {
+  background: #141e33;
+  border-color: #1e2d45;
+}
+
+[data-theme="dark"] .edit-cal-title {
+  color: #e2e8f0;
+}
+
+[data-theme="dark"] .edit-cal-nav {
+  background: #1a2740;
+  border-color: #1e2d45;
+  color: #e2e8f0;
+}
+
+[data-theme="dark"] .edit-cal-nav:hover {
+  background: #1e2d45;
+  border-color: #2a3a55;
+}
+
+[data-theme="dark"] .edit-cal-title-btn {
+  color: #e2e8f0;
+}
+
+[data-theme="dark"] .edit-cal-title-btn:hover {
+  background: #1a2740;
+}
+
+[data-theme="dark"] .edit-cal-dropdown {
+  background: #141e33;
+  border-color: #1e2d45;
+}
+
+[data-theme="dark"] .edit-cal-dropdown-item {
+  color: #e2e8f0;
+}
+
+[data-theme="dark"] .edit-cal-dropdown-item:hover {
+  background: #1a2740;
+}
+
+[data-theme="dark"] .edit-cal-dropdown-item--active {
+  background: #10b981;
+  color: #fff;
+}
+
+[data-theme="dark"] .edit-cal-day {
+  color: #e2e8f0;
+}
+
+[data-theme="dark"] .edit-cal-day:hover:not(.edit-cal-day--empty):not(.edit-cal-day--selected) {
+  background: #1a2740;
+}
+
+[data-theme="dark"] .edit-cal-day--today {
+  background: rgba(59, 130, 246, 0.15);
+  color: #60a5fa;
+}
+
+[data-theme="dark"] .edit-cal-day--selected {
+  background: #10b981;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2);
+}
+
+/* ── Month grid ── */
+[data-theme="dark"] .edit-sales-month-btn {
+  background: #141e33;
+  border-color: #1e2d45;
+  color: #e2e8f0;
+}
+
+[data-theme="dark"] .edit-sales-month-btn:hover:not(.edit-sales-month-btn--selected) {
+  background: #1a2740;
+  border-color: #2a3a55;
+}
+
+[data-theme="dark"] .edit-sales-month-btn--selected {
+  background: #10b981;
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2);
+}
+
+/* ── Product cards ── */
+[data-theme="dark"] .edit-sales-product-card {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.12), rgba(59, 130, 246, 0.05));
+  border-color: rgba(59, 130, 246, 0.25);
+}
+
+[data-theme="dark"] .edit-sales-product-name {
+  color: #e2e8f0;
+}
+
+[data-theme="dark"] .edit-sales-product-stock {
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .edit-sales-btn--minus {
+  background: #1a2740;
+  border-color: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+}
+
+[data-theme="dark"] .edit-sales-btn--minus:hover {
+  background: rgba(239, 68, 68, 0.12);
+}
+
+[data-theme="dark"] .edit-sales-btn--plus {
+  background: #10b981;
+  color: #fff;
+}
+
+[data-theme="dark"] .edit-sales-btn--plus:hover {
+  background: #059669;
+}
+
 /* ==========================================================================
    Analytics
    ========================================================================== */
@@ -545,7 +699,7 @@
 }
 
 [data-theme="dark"] .product-card {
-  background: #141e33;
+  background: transparent;
   border-color: #1e2d45;
 }
 
@@ -858,12 +1012,12 @@
    History
    ========================================================================== */
 [data-theme="dark"] .history-panel {
-  background: #141e33;
+  background: transparent;
   border-color: #1e2d45;
 }
 
 [data-theme="dark"] .history-product-btn {
-  background: rgba(15, 23, 42, 0.5);
+  background: transparent;
   color: var(--product-color, #94a3b8);
   border-color: var(--product-color, #1e2d45);
 }
@@ -875,7 +1029,7 @@
 }
 
 [data-theme="dark"] .history-product-btn:hover {
-  background: rgba(15, 23, 42, 0.7);
+  background: rgba(255, 255, 255, 0.05);
 }
 
 /* ==========================================================================

@@ -10,6 +10,16 @@ export async function postSale(productName, quantity, period, entryDate, entryTy
   return res.json();
 }
 
+export async function deleteSale(productName, quantity, period, entryDate) {
+  const res = await fetch("/api/sales/delete", {
+    method: "POST",
+    headers: jsonHeaders,
+    body: JSON.stringify({ productName, quantity, period, entryDate }),
+  });
+  if (!res.ok) throw new Error("Unable to delete sales entry");
+  return res.json();
+}
+
 export async function postStock(productName, quantity, date) {
   const res = await fetch("/api/stock", {
     method: "POST",

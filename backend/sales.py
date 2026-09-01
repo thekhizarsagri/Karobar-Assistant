@@ -97,6 +97,52 @@ def record_sale(sale_data: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
+def remove_sale(sale_data: Dict[str, Any]) -> Dict[str, Any]:
+    """Remove or decrement a sale entry for a product on a given date."""
+    product_name = sale_data.get("productName", "")
+    quantity = int(sale_data.get("quantity", 1) or 1)
+    period = sale_data.get("period", "day")
+    entry_date = sale_data.get("entryDate", "")
+
+    target_entries = [
+        e for e in sales_log
+        if e.product_name == product_name
+        and e.period == period
+        and e.entry_date == entry_date
+    ]
+
+    if not target_entries:
+        return {
+            "error": "no_sale_found",
+            "message": f"No sale found for {product_name} on {entry_date}.",
+            "products": products_snapshot(),
+        }
+
+    remaining = quantity
+    for entry in target_entries:
+        if remaining <= 0:
+            break
+        if entry.quantity <= remaining:
+            remaining -= entry.quantity
+            sales_log.remove(entry)
+        else:
+            entry.quantity -= remaining
+            remaining = 0
+
+    restored = quantity - remaining
+    if restored > 0:
+        update_stock_quantity(product_name, restored)
+
+    save_state()
+    profile = get_profile()
+    return {
+        "message": f"Removed {restored} sale(s) for {product_name}",
+        "sales_summary": get_sales_summary(),
+        "products": products_snapshot(),
+        "metrics": calculate_profitability(profile) if profile else {},
+    }
+
+
 def clear_product_history(product_name: str) -> Dict[str, Any]:
     """Remove all sales and stock log entries for a specific product."""
     sales_log[:] = [e for e in sales_log if e.product_name != product_name]

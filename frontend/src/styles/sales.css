@@ -63,3 +63,361 @@
   display: grid;
   gap: 16px;
 }
+
+/* ==========================================================================
+   Edit Sales Page
+   ========================================================================== */
+.edit-sales-page {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.edit-sales-body {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+/* ── Calendar section (left) ── */
+.edit-sales-calendar-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.edit-sales-period-toggle {
+  display: flex;
+  gap: 8px;
+}
+
+/* ── Day calendar ── */
+.edit-sales-calendar {
+  background: var(--card-bg, #fff);
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+  width: 320px;
+}
+
+.edit-cal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.edit-cal-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--text-color, #0f172a);
+}
+
+.edit-cal-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #fff;
+  color: var(--text-color, #334155);
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.edit-cal-nav:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+/* ── Title row (clickable month / year) ── */
+.edit-cal-title-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.edit-cal-title-btn {
+  border: none;
+  background: transparent;
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--text-color, #0f172a);
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 8px;
+  transition: background 0.15s ease;
+}
+
+.edit-cal-title-btn:hover {
+  background: #f1f5f9;
+}
+
+/* ── Dropdown (month/year picker) ── */
+.edit-cal-dropdown {
+  margin-bottom: 12px;
+  padding: 10px;
+  background: var(--card-bg, #fff);
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+}
+
+.edit-cal-dropdown-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.edit-cal-dropdown-item {
+  padding: 10px 8px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-color, #334155);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.edit-cal-dropdown-item:hover {
+  background: #f1f5f9;
+}
+
+.edit-cal-dropdown-item--active {
+  background: var(--accent, #2563eb);
+  color: #fff;
+  font-weight: 700;
+}
+
+.edit-cal-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  margin-bottom: 6px;
+}
+
+.edit-cal-weekday {
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted-color, #94a3b8);
+  padding: 4px 0;
+}
+
+.edit-cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.edit-cal-day {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text-color, #334155);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.edit-cal-day:hover:not(.edit-cal-day--empty):not(.edit-cal-day--selected) {
+  background: #f1f5f9;
+}
+
+.edit-cal-day--empty {
+  cursor: default;
+}
+
+.edit-cal-day--today {
+  background: rgba(37, 99, 235, 0.08);
+  color: var(--accent, #2563eb);
+  font-weight: 800;
+}
+
+.edit-cal-day--selected {
+  background: var(--accent, #2563eb);
+  color: #fff;
+  font-weight: 800;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+}
+
+/* ── Month panel ── */
+.edit-sales-month-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.edit-sales-month-panel .edit-cal-header {
+  margin-bottom: 0;
+}
+
+.edit-sales-month-panel .edit-cal-title-row {
+  justify-content: center;
+}
+
+.edit-sales-month-panel .edit-cal-title-btn {
+  font-size: 18px;
+}
+
+.edit-sales-month-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  width: 320px;
+}
+
+.edit-sales-month-btn {
+  padding: 14px 10px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: var(--card-bg, #fff);
+  color: var(--text-color, #334155);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.edit-sales-month-btn:hover:not(.edit-sales-month-btn--selected) {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  transform: translateY(-1px);
+}
+
+.edit-sales-month-btn--selected {
+  background: var(--accent, #2563eb);
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+}
+
+/* ── Product cards (right) ── */
+.edit-sales-products {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 14px;
+}
+
+.edit-sales-product-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px;
+  border-radius: 14px;
+  border: 1px solid #bfdbfe;
+  background: linear-gradient(135deg, #eff6ff, #f0f9ff);
+  min-width: 0;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.edit-sales-product-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+}
+
+.edit-sales-product-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.edit-sales-product-name {
+  font-weight: 700;
+  color: #1e3a5f;
+  font-size: 15px;
+}
+
+.edit-sales-product-stock {
+  font-size: 13px;
+  color: var(--muted-color, #64748b);
+}
+
+.edit-sales-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+  margin-top: auto;
+}
+
+.edit-sales-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.edit-sales-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.edit-sales-btn--minus {
+  background: #fff;
+  border: 1px solid #fca5a5;
+  color: #ef4444;
+}
+
+.edit-sales-btn--minus:hover {
+  background: #fef2f2;
+  transform: scale(1.05);
+}
+
+.edit-sales-btn--plus {
+  background: var(--accent, #2563eb);
+  color: #fff;
+}
+
+.edit-sales-btn--plus:hover {
+  background: #1d4ed8;
+  transform: scale(1.05);
+}
+
+.edit-sales-btn--flash {
+  animation: editSalesFlash 0.3s ease;
+}
+
+@keyframes editSalesFlash {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+@media (max-width: 768px) {
+  .edit-sales-body {
+    grid-template-columns: 1fr;
+  }
+
+  .edit-sales-calendar-section {
+    align-items: stretch;
+  }
+
+  .edit-sales-calendar,
+  .edit-sales-month-grid {
+    width: 100%;
+  }
+}

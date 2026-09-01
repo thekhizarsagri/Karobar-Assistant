@@ -6,6 +6,7 @@ import PageHeader from "./dashboard/PageHeader";
 import SettingsPage from "./dashboard/SettingsPage";
 import ProductHistoryDetail from "./dashboard/ProductHistoryDetail";
 import RecordSalesTab from "./dashboard/RecordSalesTab";
+import AdjustSalesTab from "./dashboard/AdjustSalesTab";
 import Sidebar from "./dashboard/Sidebar";
 import StatCards from "./dashboard/StatCards";
 import StockModal from "./dashboard/StockModal";
@@ -18,7 +19,7 @@ import InventoryPage from "./inventory/InventoryPage";
 import ReportsPage from "./reports/ReportsPage";
 import { MonthlyBarChart } from "./analytics/Charts";
 import { SHORT_MONTHS } from "./analytics/constants";
-import { postSale, postStock, addNotification } from "./dashboard/api";
+import { postSale, postStock, addNotification, deleteSale } from "./dashboard/api";
 
 const NOTIFY_TITLES = {
   error: "Action failed",
@@ -105,6 +106,24 @@ function DashboardPage({ data, onEditForm, onLogout }) {
     }
   };
 
+  const removeSaleHandler = async (productName, quantity, period, entryDate) => {
+    try {
+      const result = await deleteSale(productName, quantity, period, entryDate);
+      if (result.error === "no_sale_found") {
+        return;
+      }
+      setSalesSummary(result.sales_summary);
+      setSummary((prev) => ({
+        ...prev,
+        products: result.products ?? prev.products,
+        metrics: result.metrics ?? prev.metrics,
+      }));
+      window.dispatchEvent(new CustomEvent("alerts:updated"));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const addStock = async (productName, quantity, date) => {
     try {
       const result = await postStock(productName, quantity, date);
@@ -168,6 +187,12 @@ function DashboardPage({ data, onEditForm, onLogout }) {
             <InventoryPage products={summary?.products || []} onSubmit={handleStockSubmit} />
           ) : activeNav === "sales" ? (
             <AnalyticsPage data={summary} onBack={() => setActiveNav("dashboard")} />
+          ) : activeNav === "editSales" ? (
+            <AdjustSalesTab
+              products={summary?.products || []}
+              submitSale={submitSale}
+              removeSale={removeSaleHandler}
+            />
           ) : activeNav === "ai" ? (
             <AiInsightsPage data={summary} onBack={() => setActiveNav("dashboard")} />
           ) : activeNav === "forecast" ? (

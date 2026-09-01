@@ -45,7 +45,7 @@ export default function InventoryMovements({ summary, movements }) {
           <p className="inv-muted">No stock movements yet.</p>
         ) : (
           <ul className="inv-movement-list">
-            {movements.map((move, index) => (
+            {movements.slice(0, 4).map((move, index) => (
               <li key={`${move.product}-${move.created_at}-${index}`} className="inv-movement-item">
                 <span className="inv-movement-qty">+{fmt(move.quantity)}</span>
                 <span className="inv-movement-detail">

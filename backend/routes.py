@@ -20,13 +20,14 @@ from backend.notifications import (
     mark_read,
     toggle_notifications,
 )
-from backend.sales import clear_product_history, export_history, get_sales_summary, record_sale
+from backend.sales import clear_product_history, export_history, get_sales_summary, record_sale, remove_sale
 from backend.stock import add_stock
 from backend.store import reset as reset_store
 from backend.schemas import (
     DemoSetupRequest,
     NotificationReadRequest,
     NotificationRequest,
+    SaleDeleteRequest,
     SaleEntryRequest,
     StockEntryRequest,
 )
@@ -58,6 +59,11 @@ def current_dashboard() -> Dict[str, Any]:
 @router.post("/api/sales")
 def sales(request: SaleEntryRequest) -> Dict[str, Any]:
     return record_sale(request.model_dump())
+
+
+@router.post("/api/sales/delete")
+def delete_sale(request: SaleDeleteRequest) -> Dict[str, Any]:
+    return remove_sale(request.model_dump())
 
 
 @router.post("/api/stock")
