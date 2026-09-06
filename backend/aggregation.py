@@ -11,10 +11,7 @@ from typing import Any, Dict
 import pandas as pd
 
 from backend.store import product_order, sales_log
-
-# Accepted date granularities, most specific first. entry_date may be a full
-# day "2026-08-10", a month "2026-08", or a plain year "2026".
-DATE_FORMATS = ("%Y-%m-%d", "%Y-%m", "%Y")
+from backend.utils import parse_date, DATE_FORMATS
 
 
 def _sales_frame() -> pd.DataFrame:
@@ -25,7 +22,7 @@ def _sales_frame() -> pd.DataFrame:
     """
     rows: list[Dict[str, Any]] = []
     for entry in sales_log:
-        date_obj = _parse_date(entry.entry_date)
+        date_obj = parse_date(entry.entry_date)
         if date_obj is None:
             continue
         rows.append(
@@ -71,12 +68,3 @@ def get_analytics_data() -> Dict[str, Any]:
         "yearly": yearly,
         "product_order": product_order(),
     }
-
-
-def _parse_date(date_str: str):
-    for fmt in DATE_FORMATS:
-        try:
-            return datetime.strptime(date_str, fmt)
-        except (ValueError, TypeError):
-            continue
-    return None

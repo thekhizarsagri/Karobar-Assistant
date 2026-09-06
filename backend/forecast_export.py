@@ -10,16 +10,9 @@ from typing import Any, Dict, List, Optional
 import numpy as np
 import pandas as pd
 
+from backend.utils import parse_ts
+
 _FORECAST_WINDOW = 14
-
-
-def _parse_ts(date_str: str) -> pd.Timestamp:
-    for fmt in ("%Y-%m-%d", "%Y-%m", "%Y"):
-        try:
-            return pd.Timestamp(datetime.strptime(date_str, fmt))
-        except (ValueError, TypeError):
-            continue
-    return pd.NaT
 
 
 def _holdout_mape(window: np.ndarray) -> Optional[float]:

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import HistoryTab from "./dashboard/HistoryTab";
 import AlertsCard from "./dashboard/AlertsCard";
 import AutomationPage from "./dashboard/AutomationPage";
@@ -13,6 +13,7 @@ import StockModal from "./dashboard/StockModal";
 import StockOverviewModal from "./dashboard/StockOverviewModal";
 import MonthlyExpensesPage from "./dashboard/MonthlyExpensesPage";
 import useStockAutomation from "./dashboard/useStockAutomation";
+import useDashboardState from "./dashboard/useDashboardState";
 import AnalyticsPage from "./analytics/AnalyticsPage";
 import AiInsightsPage from "./analytics/AiInsightsPage";
 import ForecastingPage from "./analytics/ForecastingPage";
@@ -20,123 +21,27 @@ import InventoryPage from "./inventory/InventoryPage";
 import ReportsPage from "./reports/ReportsPage";
 import { MonthlyBarChart } from "./analytics/Charts";
 import { SHORT_MONTHS } from "./analytics/constants";
-import { postSale, postStock, addNotification, deleteSale } from "./dashboard/api";
 
-const NOTIFY_TITLES = {
-  error: "Action failed",
-  success: "Success",
-  warning: "Heads up",
-  info: "Notification",
-};
+function getGreeting() {
+  const hour = new Date().getHours();
+  if (hour >= 5 && hour < 12) return "Good Morning";
+  if (hour >= 12 && hour < 18) return "Good Afternoon";
+  if (hour >= 18 && hour < 22) return "Good Evening";
+  return "Hello";
+}
 
 function DashboardPage({ data, onEditForm, onLogout }) {
-  const [summary, setSummary] = useState(data);
-  const [salesSummary, setSalesSummary] = useState(data?.sales_summary || null);
+  const {
+    summary, setSummary, salesSummary, setSalesSummary,
+    rules, setRules, activeYear, setActiveYear, uniqueYears,
+    notify, updateProducts, submitSale, removeSaleHandler, addStock,
+  } = useDashboardState(data);
+
   const [activeNav, setActiveNav] = useState("dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [stockModalOpen, setStockModalOpen] = useState(false);
   const [stockOverviewOpen, setStockOverviewOpen] = useState(false);
   const [historyDetailProduct, setHistoryDetailProduct] = useState(null);
-  const [rules, setRules] = useState([]);
-  const [analytics, setAnalytics] = useState({ daily: {}, monthly: {}, yearly: {} });
-
-  useEffect(() => {
-    const fetchAnalytics = async () => {
-      try {
-        const res = await fetch("/api/analytics");
-        if (res.ok) setAnalytics(await res.json());
-      } catch (err) {
-        console.error("Failed to fetch analytics:", err);
-      }
-    };
-    fetchAnalytics();
-  }, [summary, salesSummary]);
-
-  // Determine active year with sales data, or default to current year
-  const availableYears = Object.keys(analytics.monthly || {})
-    .map((m) => parseInt(m.split("-")[0], 10));
-  const uniqueYears = Array.from(new Set(availableYears)).sort((a, b) => b - a);
-  const defaultYear = uniqueYears.length ? uniqueYears[0] : new Date().getFullYear();
-  const [activeYear, setActiveYear] = useState(defaultYear);
-  useEffect(() => {
-    setActiveYear(defaultYear);
-  }, [defaultYear]);
-
-  const trendData = Array.from({ length: 12 }, (_, m) => {
-    const monthKey = `${activeYear}-${String(m + 1).padStart(2, "0")}`;
-    const monthData = analytics.monthly[monthKey] || {};
-    const monthTotal = Object.values(monthData).reduce((a, b) => a + b, 0);
-    return {
-      label: SHORT_MONTHS[m],
-      value: monthTotal,
-      details: monthData,
-    };
-  });
-
-  useEffect(() => {
-    setSummary(data);
-    setSalesSummary(data?.sales_summary || null);
-  }, [data]);
-
-  const notify = async (message, type = "info") => {
-    try {
-      await addNotification({ type, title: NOTIFY_TITLES[type] || NOTIFY_TITLES.info, message });
-      window.dispatchEvent(new CustomEvent("notifications:updated"));
-    } catch (error) {
-      console.error(error);
-    }
-  };
-  const updateProducts = (products) => setSummary((prev) => ({ ...prev, products }));
-
-  const submitSale = async (productName, quantity, period, entryDate, entryType = "auto") => {
-    try {
-      const result = await postSale(productName, quantity, period, entryDate, entryType);
-      if (result.error === "out_of_stock" || result.error === "insufficient_stock") {
-        window.dispatchEvent(new CustomEvent("alerts:updated"));
-        return;
-      }
-      setSalesSummary(result.sales_summary);
-      setSummary((prev) => ({
-        ...prev,
-        products: result.products ?? prev.products,
-        metrics: result.metrics ?? prev.metrics,
-      }));
-      window.dispatchEvent(new CustomEvent("alerts:updated"));
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const removeSaleHandler = async (productName, quantity, period, entryDate) => {
-    try {
-      const result = await deleteSale(productName, quantity, period, entryDate);
-      if (result.error === "no_sale_found") {
-        return;
-      }
-      setSalesSummary(result.sales_summary);
-      setSummary((prev) => ({
-        ...prev,
-        products: result.products ?? prev.products,
-        metrics: result.metrics ?? prev.metrics,
-      }));
-      window.dispatchEvent(new CustomEvent("alerts:updated"));
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const addStock = async (productName, quantity, date) => {
-    try {
-      const result = await postStock(productName, quantity, date);
-      if (result.sales_summary) setSalesSummary(result.sales_summary);
-      if (result.products) updateProducts(result.products);
-      window.dispatchEvent(new CustomEvent("alerts:updated"));
-      return result;
-    } catch (error) {
-      console.error(error);
-    }
-    return null;
-  };
 
   const { fireRule, handleRemoveRule } = useStockAutomation(rules, setRules, addStock, notify);
 
@@ -172,6 +77,13 @@ function DashboardPage({ data, onEditForm, onLogout }) {
     if (scrollable) scrollable.scrollTop = 0;
     window.scrollTo(0, 0);
   };
+
+  const trendData = Array.from({ length: 12 }, (_, m) => {
+    const monthKey = `${activeYear}-${String(m + 1).padStart(2, "0")}`;
+    const monthData = summary?.analytics?.monthly?.[monthKey] || {};
+    const monthTotal = Object.values(monthData).reduce((a, b) => a + b, 0);
+    return { label: SHORT_MONTHS[m], value: monthTotal, details: monthData };
+  });
 
   return (
     <div className="demo-page demo-page--dashboard">
@@ -324,14 +236,6 @@ function DashboardPage({ data, onEditForm, onLogout }) {
       </div>
     </div>
   );
-}
-
-function getGreeting() {
-  const hour = new Date().getHours();
-  if (hour >= 5 && hour < 12) return "Good Morning";
-  if (hour >= 12 && hour < 18) return "Good Afternoon";
-  if (hour >= 18 && hour < 22) return "Good Evening";
-  return "Hello";
 }
 
 export default DashboardPage;

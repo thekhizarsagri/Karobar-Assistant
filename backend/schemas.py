@@ -1,12 +1,7 @@
 """Pydantic request schemas for the API."""
 from pydantic import BaseModel
 
-
-TRILLION = 1_000_000_000_000
-
-
-def _cap(value: int, limit: int = TRILLION) -> int:
-    return max(0, min(value, limit))
+from backend.utils import cap
 
 
 class DemoSetupRequest(BaseModel):
@@ -33,7 +28,7 @@ class SaleEntryRequest(BaseModel):
     entryType: str = "auto"
 
     def model_post_init(self, __context) -> None:
-        self.quantity = _cap(self.quantity)
+        self.quantity = cap(self.quantity)
 
 
 class StockEntryRequest(BaseModel):
@@ -45,7 +40,7 @@ class StockEntryRequest(BaseModel):
     date: str | None = None
 
     def model_post_init(self, __context) -> None:
-        self.quantity = _cap(self.quantity)
+        self.quantity = cap(self.quantity)
 
 
 class SaleDeleteRequest(BaseModel):
@@ -55,7 +50,7 @@ class SaleDeleteRequest(BaseModel):
     entryDate: str | None = None
 
     def model_post_init(self, __context) -> None:
-        self.quantity = _cap(self.quantity)
+        self.quantity = cap(self.quantity)
 
 
 class NotificationRequest(BaseModel):
