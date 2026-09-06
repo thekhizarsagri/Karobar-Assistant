@@ -1,4 +1,4 @@
-from backend.models import BusinessProfile, Expense, Product, SaleEntry, StockEntry
+from backend.models import BusinessProfile, Expense, ExpenseDeduction, Product, SaleEntry, StockEntry
 
 
 def _profile_to_dict(profile):
@@ -23,8 +23,28 @@ def _profile_to_dict(profile):
             for p in profile.products
         ],
         "expenses": [
-            {"key": e.key, "label": e.label, "amount": e.amount, "enabled": e.enabled}
+            {
+                "key": e.key,
+                "label": e.label,
+                "amount": e.amount,
+                "enabled": e.enabled,
+                "deduction_day": e.deduction_day,
+                "deduction_time": e.deduction_time,
+                "last_deducted": e.last_deducted,
+            }
             for e in profile.expenses
+        ],
+        "available_balance": profile.available_balance,
+        "expense_deductions": [
+            {
+                "expense_key": d.expense_key,
+                "expense_label": d.expense_label,
+                "amount": d.amount,
+                "deducted_at": d.deducted_at,
+                "balance_before": d.balance_before,
+                "balance_after": d.balance_after,
+            }
+            for d in profile.expense_deductions
         ],
     }
 
@@ -49,8 +69,22 @@ def _profile_from_dict(data):
             label=e.get("label", ""),
             amount=float(e.get("amount", 0) or 0),
             enabled=e.get("enabled", True),
+            deduction_day=int(e.get("deduction_day", 1) or 1),
+            deduction_time=e.get("deduction_time", "00:00") or "00:00",
+            last_deducted=e.get("last_deducted", "") or "",
         )
         for e in data.get("expenses", [])
+    ]
+    deductions = [
+        ExpenseDeduction(
+            expense_key=d["expense_key"],
+            expense_label=d.get("expense_label", ""),
+            amount=float(d.get("amount", 0) or 0),
+            deducted_at=d.get("deducted_at", ""),
+            balance_before=float(d.get("balance_before", 0) or 0),
+            balance_after=float(d.get("balance_after", 0) or 0),
+        )
+        for d in data.get("expense_deductions", [])
     ]
     return BusinessProfile(
         business_name=data.get("business_name", ""),
@@ -61,6 +95,8 @@ def _profile_from_dict(data):
         description=data.get("description", ""),
         products=products,
         expenses=expenses,
+        available_balance=float(data.get("available_balance", 0) or 0),
+        expense_deductions=deductions,
     )
 
 

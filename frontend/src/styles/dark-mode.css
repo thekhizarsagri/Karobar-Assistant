@@ -283,6 +283,202 @@
   background: #1d4ed8;
 }
 
+/* ── Monthly Expenses Page ── */
+[data-theme="dark"] .expenses-stat-card {
+  background: #141e33;
+  border-color: #1e2d45;
+}
+
+[data-theme="dark"] .expenses-stat-label {
+  color: #64748b;
+}
+
+[data-theme="dark"] .expenses-stat-value {
+  color: #e2e8f0;
+}
+
+[data-theme="dark"] .expenses-section-title {
+  color: #e2e8f0;
+}
+
+[data-theme="dark"] .expenses-page-item {
+  background: #141e33;
+  border-color: #1e2d45;
+}
+
+[data-theme="dark"] .expenses-page-item:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .expenses-page-item.completed {
+  background: #111a2e;
+}
+
+[data-theme="dark"] .expenses-page-dot.on {
+  background: #10b981;
+}
+
+[data-theme="dark"] .expenses-page-dot.off {
+  background: #475569;
+}
+
+[data-theme="dark"] .expenses-page-item-name {
+  color: #e2e8f0;
+}
+
+[data-theme="dark"] .expenses-page-item-amount {
+  color: #e2e8f0;
+}
+
+/* ── Expense Schedule Modal ── */
+[data-theme="dark"] .expense-sched-modal {
+  background: #0f1729;
+  box-shadow: 0 32px 64px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="dark"] .expense-sched-title {
+  color: #f1f5f9;
+}
+
+[data-theme="dark"] .expense-sched-subtitle {
+  color: #64748b;
+}
+
+[data-theme="dark"] .expense-sched-close {
+  background: #1a2740;
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .expense-sched-close:hover {
+  background: #1e2d45;
+  color: #e2e8f0;
+}
+
+[data-theme="dark"] .expense-sched-summary {
+  border-top-color: #1e2d45;
+}
+
+[data-theme="dark"] .expense-sched-row {
+  background: #141e33;
+  border-color: #1e2d45;
+}
+
+[data-theme="dark"] .expense-sched-row.active {
+  background: #1a2740;
+  border-color: #7c3aed;
+  box-shadow: 0 2px 12px rgba(124, 58, 237, 0.15);
+}
+
+[data-theme="dark"] .expense-sched-row-name {
+  color: #e2e8f0;
+}
+
+[data-theme="dark"] .expense-sched-row-amount {
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .expense-sched-row-controls {
+  border-top-color: #1e2d45;
+}
+
+[data-theme="dark"] .expense-sched-select {
+  background: #1a2740;
+  border-color: #1e2d45;
+  color: #e2e8f0;
+}
+
+[data-theme="dark"] .expense-sched-select:focus {
+  border-color: #8b5cf6;
+}
+
+[data-theme="dark"] .expense-sched-preview {
+  background: #111a2e;
+  color: #64748b;
+}
+
+[data-theme="dark"] .expense-sched-preview strong {
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .expense-sched-actions {
+  border-top-color: #1e2d45;
+  background: #111a2e;
+}
+
+/* ── Expense Form Modal ── */
+[data-theme="dark"] .expense-form-modal {
+  background: #0f1729;
+  box-shadow: 0 32px 64px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="dark"] .expense-form-title {
+  color: #f1f5f9;
+}
+
+[data-theme="dark"] .expense-form-subtitle {
+  color: #64748b;
+}
+
+[data-theme="dark"] .expense-form-error {
+  background: rgba(220, 38, 38, 0.1);
+  border-color: rgba(220, 38, 38, 0.2);
+}
+
+[data-theme="dark"] .expense-form-input {
+  background: #1a2740;
+  border-color: #1e2d45;
+  color: #e2e8f0;
+}
+
+[data-theme="dark"] .expense-form-input:focus {
+  border-color: #8b5cf6;
+  background: #1a2740;
+}
+
+[data-theme="dark"] .expense-form-input::placeholder {
+  color: #475569;
+}
+
+[data-theme="dark"] .expense-form-input:disabled {
+  background: #111a2e;
+  color: #475569;
+}
+
+[data-theme="dark"] .expense-form-toggle-label {
+  color: #e2e8f0;
+}
+
+[data-theme="dark"] .expense-form-actions {
+  border-top-color: #1e2d45;
+  background: #111a2e;
+}
+
+[data-theme="dark"] .expenses-empty {
+  background: #141e33;
+  border-color: #1e2d45;
+}
+
+[data-theme="dark"] .expenses-action-btn {
+  background: #1a2740;
+  border-color: #1e2d45;
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .expenses-action-btn:hover {
+  background: #1e2d45;
+  color: #e2e8f0;
+}
+
+[data-theme="dark"] .expenses-action-btn--danger:hover {
+  background: rgba(220, 38, 38, 0.1);
+  color: #ef4444;
+  border-color: rgba(220, 38, 38, 0.2);
+}
+
+[data-theme="dark"] .expenses-add-btn {
+  background: linear-gradient(135deg, #7c3aed, #6d28d9);
+}
+
 /* ==========================================================================
    Sidebar (additional)
    ========================================================================== */

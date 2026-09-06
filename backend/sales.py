@@ -86,6 +86,13 @@ def record_sale(sale_data: Dict[str, Any]) -> Dict[str, Any]:
     )
     sales_log.append(entry)
     update_stock_quantity(product_name, -quantity)
+
+    profile = get_profile()
+    if profile:
+        price_map = {p.name: p.selling_price for p in profile.products}
+        sale_revenue = quantity * price_map.get(product_name, 0)
+        profile.available_balance += sale_revenue
+
     save_state()
 
     profile = get_profile()
@@ -132,6 +139,11 @@ def remove_sale(sale_data: Dict[str, Any]) -> Dict[str, Any]:
     restored = quantity - remaining
     if restored > 0:
         update_stock_quantity(product_name, restored)
+        profile = get_profile()
+        if profile:
+            price_map = {p.name: p.selling_price for p in profile.products}
+            refund_revenue = restored * price_map.get(product_name, 0)
+            profile.available_balance -= refund_revenue
 
     save_state()
     profile = get_profile()

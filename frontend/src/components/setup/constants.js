@@ -113,11 +113,11 @@ export const defaultProduct = {
 };
 
 export const fixedExpenseItems = [
-  { key: "rent", label: "Office / Factory Rent", amount: "18000" },
-  { key: "electricity", label: "Electricity & Utilities", amount: "7200" },
-  { key: "labour", label: "Staff & Labour Payroll", amount: "22000" },
-  { key: "internet", label: "Internet & Cloud Software", amount: "2500" },
-  { key: "transportation", label: "Logistics & Transport", amount: "8500" },
-  { key: "marketing", label: "Marketing & Advertising", amount: "6500" },
-  { key: "other", label: "Miscellaneous Expenses", amount: "3000" },
+  { key: "rent", label: "Office / Factory Rent", amount: "18000", defaultDay: 1, defaultTime: "09:00" },
+  { key: "electricity", label: "Electricity & Utilities", amount: "7200", defaultDay: 5, defaultTime: "10:00" },
+  { key: "labour", label: "Staff & Labour Payroll", amount: "22000", defaultDay: 1, defaultTime: "08:00" },
+  { key: "internet", label: "Internet & Cloud Software", amount: "2500", defaultDay: 10, defaultTime: "11:00" },
+  { key: "transportation", label: "Logistics & Transport", amount: "8500", defaultDay: 15, defaultTime: "09:00" },
+  { key: "marketing", label: "Marketing & Advertising", amount: "6500", defaultDay: 20, defaultTime: "10:00" },
+  { key: "other", label: "Miscellaneous Expenses", amount: "3000", defaultDay: 28, defaultTime: "23:59" },
 ];

@@ -3,14 +3,22 @@ import { createContext, useCallback, useContext, useEffect, useState } from "rea
 const ThemeContext = createContext({ dark: false, toggle: () => {} });
 
 function getInitialDark() {
+  const osDark = window.matchMedia?.("(prefers-color-scheme: dark)").matches ?? false;
   try {
-    const saved = localStorage.getItem("karobar-theme");
-    if (saved === "dark") return true;
-    if (saved === "light") return false;
+    const explicit = localStorage.getItem("karobar-theme-explicit");
+    if (explicit === "true") {
+      const stored = localStorage.getItem("karobar-theme");
+      const osTheme = osDark ? "dark" : "light";
+      if (stored === osTheme) {
+        localStorage.removeItem("karobar-theme-explicit");
+        return osDark;
+      }
+      return stored === "dark";
+    }
   } catch {
     /* ignore */
   }
-  return window.matchMedia?.("(prefers-color-scheme: dark)").matches ?? false;
+  return osDark;
 }
 
 export function ThemeProvider({ children }) {
@@ -34,8 +42,16 @@ export function ThemeProvider({ children }) {
     if (!mq) return;
     const handler = (e) => {
       try {
-        const saved = localStorage.getItem("karobar-theme");
-        if (saved) return;
+        const explicit = localStorage.getItem("karobar-theme-explicit");
+        if (explicit === "true") {
+          const stored = localStorage.getItem("karobar-theme");
+          const osTheme = e.matches ? "dark" : "light";
+          if (stored === osTheme) {
+            localStorage.removeItem("karobar-theme-explicit");
+          } else {
+            return;
+          }
+        }
       } catch {
         /* ignore */
       }
@@ -45,7 +61,25 @@ export function ThemeProvider({ children }) {
     return () => mq.removeEventListener("change", handler);
   }, []);
 
-  const toggle = useCallback(() => setDark((v) => !v), []);
+  const toggle = useCallback(() => {
+    setDark((v) => {
+      const next = !v;
+      try {
+        localStorage.setItem("karobar-theme", next ? "dark" : "light");
+        const mq = window.matchMedia?.("(prefers-color-scheme: dark)");
+        const osIsDark = mq?.matches ?? false;
+        const matchesOs = (next && osIsDark) || (!next && !osIsDark);
+        if (matchesOs) {
+          localStorage.removeItem("karobar-theme-explicit");
+        } else {
+          localStorage.setItem("karobar-theme-explicit", "true");
+        }
+      } catch {
+        /* ignore */
+      }
+      return next;
+    });
+  }, []);
 
   return (
     <ThemeContext.Provider value={{ dark, toggle }}>

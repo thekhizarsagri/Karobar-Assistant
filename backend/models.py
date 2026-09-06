@@ -21,6 +21,19 @@ class Expense:
     label: str
     amount: float
     enabled: bool = True
+    deduction_day: int = 1
+    deduction_time: str = "00:00"
+    last_deducted: str = ""
+
+
+@dataclass
+class ExpenseDeduction:
+    expense_key: str
+    expense_label: str
+    amount: float
+    deducted_at: str
+    balance_before: float
+    balance_after: float
 
 
 @dataclass
@@ -57,3 +70,5 @@ class BusinessProfile:
     tax_id: str = ""
     products: List[Product] = field(default_factory=list)
     expenses: List[Expense] = field(default_factory=list)
+    available_balance: float = 0.0
+    expense_deductions: List[ExpenseDeduction] = field(default_factory=list)

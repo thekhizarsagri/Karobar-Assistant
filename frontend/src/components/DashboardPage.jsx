@@ -11,6 +11,7 @@ import Sidebar from "./dashboard/Sidebar";
 import StatCards from "./dashboard/StatCards";
 import StockModal from "./dashboard/StockModal";
 import StockOverviewModal from "./dashboard/StockOverviewModal";
+import MonthlyExpensesPage from "./dashboard/MonthlyExpensesPage";
 import useStockAutomation from "./dashboard/useStockAutomation";
 import AnalyticsPage from "./analytics/AnalyticsPage";
 import AiInsightsPage from "./analytics/AiInsightsPage";
@@ -232,6 +233,24 @@ function DashboardPage({ data, onEditForm, onLogout }) {
               onRemove={handleRemoveRule}
               onSubmit={handleStockSubmit}
             />
+          ) : activeNav === "expenses" ? (
+            <MonthlyExpensesPage
+              expenses={summary?.expenses || []}
+              metrics={summary?.metrics || {}}
+              nextDeductions={summary?.next_deductions || []}
+              recentDeductions={summary?.recent_deductions || []}
+              currency={summary?.currency || "₹"}
+              onRefresh={async () => {
+                try {
+                  const res = await fetch("/api/dashboard");
+                  if (res.ok) {
+                    const updated = await res.json();
+                    setSummary(updated);
+                    if (updated.sales_summary) setSalesSummary(updated.sales_summary);
+                  }
+                } catch {}
+              }}
+            />
           ) : activeNav === "reports" ? (
             <ReportsPage />
           ) : activeNav === "settings" ? (
@@ -270,7 +289,6 @@ function DashboardPage({ data, onEditForm, onLogout }) {
                 <AlertsCard />
               </div>
 
-              {/* Smaller sales trend graph on the main dashboard */}
               <div className="chart-section" style={{ maxWidth: "820px", padding: "20px", marginTop: "10px" }}>
                 {uniqueYears.length > 0 ? (
                   <MonthlyBarChart

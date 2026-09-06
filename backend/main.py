@@ -15,11 +15,13 @@ from fastapi.staticfiles import StaticFiles
 
 from backend.persistence import init as init_persistence
 from backend.routes import router
+from backend.expense_scheduler import start_expense_scheduler
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     init_persistence()
+    start_expense_scheduler()
     yield
 
 

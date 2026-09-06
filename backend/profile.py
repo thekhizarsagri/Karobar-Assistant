@@ -33,6 +33,8 @@ def build_profile_from_form(form_data: Dict[str, Any]) -> BusinessProfile:
             label=item["label"],
             amount=_cap(float(item.get("amount", 0) or 0)),
             enabled=item.get("enabled", True),
+            deduction_day=int(item.get("deductionDay", 1) or 1),
+            deduction_time=item.get("deductionTime", "00:00") or "00:00",
         )
         for item in form_data.get("expenses", [])
     ]
@@ -51,6 +53,7 @@ def build_profile_from_form(form_data: Dict[str, Any]) -> BusinessProfile:
         tax_id=str(form_data.get("taxId", "")),
         products=products,
         expenses=expenses,
+        available_balance=0.0,
     )
     set_profile(profile)
     return profile

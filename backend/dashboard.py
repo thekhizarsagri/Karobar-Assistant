@@ -12,7 +12,15 @@ def _dashboard_payload(profile) -> Dict[str, Any]:
     # Include full product data (with stockAvailable) for the frontend
     summary["products"] = products_snapshot()
     summary["expenses"] = [
-        {"key": expense.key, "label": expense.label, "amount": expense.amount, "enabled": expense.enabled}
+        {
+            "key": expense.key,
+            "label": expense.label,
+            "amount": expense.amount,
+            "enabled": expense.enabled,
+            "deduction_day": expense.deduction_day,
+            "deduction_time": expense.deduction_time,
+            "last_deducted": expense.last_deducted,
+        }
         for expense in profile.expenses
     ]
     summary["sales_summary"] = get_sales_summary()
