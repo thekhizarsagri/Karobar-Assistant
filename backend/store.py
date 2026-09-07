@@ -37,6 +37,31 @@ def get_profile() -> Optional[BusinessProfile]:
     return _current_profile
 
 
+def update_profile(fields: Dict[str, Any]) -> Optional[BusinessProfile]:
+    """Update specific fields on the active profile without clearing sales/stock."""
+    global _current_profile
+    if _current_profile is None:
+        return None
+    field_map = {
+        "ownerName": "owner_name",
+        "username": "username",
+        "email": "email",
+        "password": "password",
+        "businessName": "business_name",
+        "businessType": "business_type",
+        "phoneNumber": "phone_number",
+        "location": "location",
+        "description": "description",
+        "currency": "currency",
+        "taxId": "tax_id",
+    }
+    for key, attr in field_map.items():
+        if key in fields:
+            setattr(_current_profile, attr, fields[key])
+    save_state()
+    return _current_profile
+
+
 def reset() -> None:
     """Clear all business data (profile, sales, stock, notifications)."""
     global _current_profile

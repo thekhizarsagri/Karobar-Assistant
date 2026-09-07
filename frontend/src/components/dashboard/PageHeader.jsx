@@ -1,14 +1,23 @@
 import { useEffect, useRef, useState } from "react";
 import NotificationBell from "./NotificationBell";
+import ModalPortal from "./ModalPortal";
 
 const MENU_ITEMS = [
+  { id: "editProfile", label: "Edit profile" },
   { id: "editForm", label: "Edit form" },
   { id: "logout", label: "Logout" },
 ];
 
-function PageHeader({ ownerName, greeting, onEditForm, onLogout, hideGreeting = false }) {
+function PageHeader({ ownerName, greeting, onEditForm, onEditProfile, onLogout, hideGreeting = false }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
+  const [now, setNow] = useState(new Date());
+  const [showEditConfirm, setShowEditConfirm] = useState(false);
+
+  useEffect(() => {
+    const timer = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   useEffect(() => {
     if (!menuOpen) return undefined;
@@ -21,8 +30,13 @@ function PageHeader({ ownerName, greeting, onEditForm, onLogout, hideGreeting = 
     return () => document.removeEventListener("mousedown", handleClick);
   }, [menuOpen]);
 
-  const today = new Date();
-  const dateLabel = today.toLocaleDateString(undefined, {
+  const timeLabel = now.toLocaleTimeString(undefined, {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false,
+  });
+  const dateLabel = now.toLocaleDateString(undefined, {
     weekday: "long",
     day: "numeric",
     month: "long",
@@ -31,7 +45,8 @@ function PageHeader({ ownerName, greeting, onEditForm, onLogout, hideGreeting = 
 
   const handleMenuClick = (id) => {
     setMenuOpen(false);
-    if (id === "editForm") onEditForm?.();
+    if (id === "editProfile") onEditProfile?.();
+    if (id === "editForm") setShowEditConfirm(true);
     if (id === "logout") onLogout?.();
   };
 
@@ -46,6 +61,7 @@ function PageHeader({ ownerName, greeting, onEditForm, onLogout, hideGreeting = 
         </div>
       )}
       <div className="header-controls">
+        <span className="header-time">{timeLabel}</span>
         <NotificationBell />
         <div className="profile-menu" ref={menuRef}>
           <button
@@ -72,6 +88,32 @@ function PageHeader({ ownerName, greeting, onEditForm, onLogout, hideGreeting = 
           )}
         </div>
       </div>
+
+      {showEditConfirm && (
+        <ModalPortal>
+          <div className="stock-modal-backdrop">
+            <div className="stock-modal confirm-modal">
+              <div className="stock-modal-header">
+                <div>
+                  <h2>Edit Form</h2>
+                  <p className="stock-modal-subtitle">This action cannot be undone.</p>
+                </div>
+                <button type="button" className="stock-modal-close" onClick={() => setShowEditConfirm(false)}>×</button>
+              </div>
+              <div className="confirm-modal-body">
+                <p>Editing the form will <strong>reset all your data</strong> including sales history, stock, analytics, and expenses. You will start fresh with a new setup form.</p>
+                <p>Are you sure you want to continue?</p>
+              </div>
+              <div className="stock-modal-actions">
+                <button type="button" className="confirm-cancel-btn" onClick={() => setShowEditConfirm(false)}>Cancel</button>
+                <button type="button" className="confirm-delete-btn" onClick={() => { setShowEditConfirm(false); onEditForm?.(); }}>
+                  Yes, Edit Form
+                </button>
+              </div>
+            </div>
+          </div>
+        </ModalPortal>
+      )}
     </div>
   );
 }

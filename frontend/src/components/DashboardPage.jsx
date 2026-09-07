@@ -2,6 +2,7 @@ import { useState } from "react";
 import HistoryTab from "./dashboard/HistoryTab";
 import AlertsCard from "./dashboard/AlertsCard";
 import AutomationPage from "./dashboard/AutomationPage";
+import EditProfilePage from "./dashboard/EditProfilePage";
 import PageHeader from "./dashboard/PageHeader";
 import SettingsPage from "./dashboard/SettingsPage";
 import ProductHistoryDetail from "./dashboard/ProductHistoryDetail";
@@ -33,7 +34,7 @@ function getGreeting() {
 function DashboardPage({ data, onEditForm, onLogout }) {
   const {
     summary, setSummary, salesSummary, setSalesSummary,
-    rules, setRules, activeYear, setActiveYear, uniqueYears,
+    rules, setRules, analytics, activeYear, setActiveYear, uniqueYears,
     notify, updateProducts, submitSale, removeSaleHandler, addStock,
   } = useDashboardState(data);
 
@@ -42,6 +43,7 @@ function DashboardPage({ data, onEditForm, onLogout }) {
   const [stockModalOpen, setStockModalOpen] = useState(false);
   const [stockOverviewOpen, setStockOverviewOpen] = useState(false);
   const [historyDetailProduct, setHistoryDetailProduct] = useState(null);
+  const [editingProfile, setEditingProfile] = useState(false);
 
   const { fireRule, handleRemoveRule } = useStockAutomation(rules, setRules, addStock, notify);
 
@@ -73,6 +75,7 @@ function DashboardPage({ data, onEditForm, onLogout }) {
   const handleNav = (nav) => {
     setActiveNav(nav);
     setHistoryDetailProduct(null);
+    setEditingProfile(false);
     const scrollable = document.querySelector(".page-transition-slide:not(.slide-hidden)");
     if (scrollable) scrollable.scrollTop = 0;
     window.scrollTo(0, 0);
@@ -80,7 +83,7 @@ function DashboardPage({ data, onEditForm, onLogout }) {
 
   const trendData = Array.from({ length: 12 }, (_, m) => {
     const monthKey = `${activeYear}-${String(m + 1).padStart(2, "0")}`;
-    const monthData = summary?.analytics?.monthly?.[monthKey] || {};
+    const monthData = analytics?.monthly?.[monthKey] || {};
     const monthTotal = Object.values(monthData).reduce((a, b) => a + b, 0);
     return { label: SHORT_MONTHS[m], value: monthTotal, details: monthData };
   });
@@ -96,7 +99,17 @@ function DashboardPage({ data, onEditForm, onLogout }) {
         />
 
         <div className="app-main">
-          {activeNav === "inventory" ? (
+          {editingProfile ? (
+            <EditProfilePage
+              profile={summary}
+              onBack={() => setEditingProfile(false)}
+              onSuccess={(updated) => {
+                setSummary(updated);
+                setEditingProfile(false);
+                notify("Profile updated successfully.", "success");
+              }}
+            />
+          ) : activeNav === "inventory" ? (
             <InventoryPage products={summary?.products || []} onSubmit={handleStockSubmit} />
           ) : activeNav === "sales" ? (
             <AnalyticsPage data={summary} onBack={() => setActiveNav("dashboard")} />
@@ -173,6 +186,7 @@ function DashboardPage({ data, onEditForm, onLogout }) {
                 ownerName={summary?.owner_name}
                 greeting={getGreeting()}
                 onEditForm={onEditForm}
+                onEditProfile={() => setEditingProfile(true)}
                 onLogout={onLogout}
               />
 
@@ -181,7 +195,7 @@ function DashboardPage({ data, onEditForm, onLogout }) {
                   totalStock={(summary?.products || []).reduce((sum, p) => sum + Number(p.stockAvailable || 0), 0)}
                   grossProfit={summary?.metrics?.gross_profit ?? 0}
                   netProfit={summary?.metrics?.net_profit ?? 0}
-                  totalExpenses={summary?.metrics?.total_expenses ?? 0}
+                  availableBalance={summary?.metrics?.available_balance ?? 0}
                   onStockOverview={async () => {
                     try {
                       const res = await fetch("/api/dashboard");

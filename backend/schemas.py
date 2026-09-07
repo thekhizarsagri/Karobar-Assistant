@@ -61,3 +61,17 @@ class NotificationRequest(BaseModel):
 
 class NotificationReadRequest(BaseModel):
     id: int | None = None
+
+
+class UpdateProfileRequest(BaseModel):
+    ownerName: str = ""
+    username: str = ""
+    email: str = ""
+    password: str = ""
+    businessName: str = ""
+    businessType: str = ""
+    phoneNumber: str = ""
+    location: str = ""
+    description: str = ""
+    currency: str = "₹"
+    taxId: str = ""

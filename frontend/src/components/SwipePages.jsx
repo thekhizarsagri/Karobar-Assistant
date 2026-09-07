@@ -77,7 +77,7 @@ export default function SwipePages({ initialPage, dashboardData, onFinish, onLog
   const getSlideClass = (page) => {
     const isCurrent = currentPage === page;
     const isTarget = slideDir === `to-${page}`;
-    if (!isCurrent && !isTarget && !slideDir) return "page-transition-slide slide-hidden";
+    if (!isCurrent && !isTarget) return "page-transition-slide slide-hidden";
     if (isCurrent && slideDir) return "page-transition-slide slide-fade-out";
     return "page-transition-slide";
   };

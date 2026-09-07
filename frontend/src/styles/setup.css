@@ -1489,3 +1489,293 @@
 [data-theme="dark"] .toggle-switch input:checked + .toggle-slider {
   background-color: #10b981;
 }
+
+/* ==========================================================================
+   Edit Profile Page
+   ========================================================================== */
+.edit-profile-root {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.edit-profile-cards {
+  max-width: 760px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.edit-profile-root .analytics-header {
+  max-width: 760px;
+  width: 100%;
+}
+
+.edit-profile-root .setup-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 24px 26px;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+  transition: box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.edit-profile-root .setup-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.07);
+}
+
+.edit-profile-root .card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.edit-profile-root .card-icon-box {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #ffffff;
+}
+
+.edit-profile-root .card-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.edit-profile-root .card-desc {
+  margin: 3px 0 0 0;
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.4;
+}
+
+.edit-profile-root .card-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px 18px;
+}
+
+.edit-profile-root .form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+  min-width: 0;
+}
+
+.edit-profile-root .form-field.full-width {
+  grid-column: 1 / -1;
+}
+
+.edit-profile-root .field-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.edit-profile-root .field-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #334155;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.edit-profile-root .req-star {
+  color: #ef4444;
+  font-weight: bold;
+}
+
+.edit-profile-root .field-counter {
+  font-size: 11px;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.edit-profile-root .input-with-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.edit-profile-root .input-icon {
+  position: absolute;
+  left: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.edit-profile-root .input-with-icon input,
+.edit-profile-root .input-with-icon select {
+  padding-left: 42px !important;
+}
+
+.edit-profile-root .form-field input,
+.edit-profile-root .form-field select,
+.edit-profile-root .form-field textarea {
+  width: 100%;
+  height: 44px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid #cbd5e1;
+  background: #f8fafc;
+  color: #0f172a;
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.edit-profile-root .form-field textarea {
+  height: auto;
+  min-height: 80px;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.edit-profile-root .form-field input:focus,
+.edit-profile-root .form-field select:focus,
+.edit-profile-root .form-field textarea:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+  background: #ffffff;
+}
+
+.edit-profile-root .pwd-toggle-btn {
+  position: absolute;
+  right: 8px;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  color: #94a3b8;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  transition: color 0.15s, background 0.15s;
+}
+
+.edit-profile-root .pwd-toggle-btn:hover {
+  color: #475569;
+  background: #f1f5f9;
+}
+
+.edit-profile-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding-bottom: 20px;
+}
+
+[data-theme="dark"] .edit-profile-root .setup-card {
+  background: #0f1a2e;
+  border-color: #1e2d45;
+}
+
+[data-theme="dark"] .edit-profile-root .setup-card:hover {
+  border-color: #2a3f5f;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .edit-profile-root .card-header {
+  border-bottom-color: #1e2d45;
+}
+
+[data-theme="dark"] .edit-profile-root .field-label {
+  color: #cbd5e1;
+}
+
+[data-theme="dark"] .edit-profile-root .form-field input,
+[data-theme="dark"] .edit-profile-root .form-field select,
+[data-theme="dark"] .edit-profile-root .form-field textarea {
+  background: #141e33;
+  border-color: #1e2d45;
+  color: #e2e8f0;
+}
+
+[data-theme="dark"] .edit-profile-root .form-field input:focus,
+[data-theme="dark"] .edit-profile-root .form-field select:focus,
+[data-theme="dark"] .edit-profile-root .form-field textarea:focus {
+  border-color: #3b82f6;
+  background: #1a2740;
+}
+
+.edit-profile-root .setup-primary-launch-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 42px;
+  padding: 0 20px;
+  border-radius: 12px;
+  border: none;
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.25);
+  transition: all 0.22s cubic-bezier(0.2, 0.8, 0.2, 1);
+  white-space: nowrap;
+}
+
+.edit-profile-root .setup-primary-launch-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(16, 185, 129, 0.35);
+  filter: brightness(1.04);
+}
+
+.edit-profile-root .setup-primary-launch-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.edit-profile-root .setup-error-alert-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 18px;
+  border-radius: 14px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #dc2626;
+  font-size: 14px;
+  font-weight: 600;
+  max-width: 760px;
+  width: 100%;
+}
+
+.edit-profile-root .setup-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+[data-theme="dark"] .edit-profile-root .setup-error-alert-banner {
+  background: rgba(220, 38, 38, 0.12);
+  border-color: rgba(220, 38, 38, 0.3);
+  color: #fca5a5;
+}

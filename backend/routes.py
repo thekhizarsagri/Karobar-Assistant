@@ -22,7 +22,7 @@ from backend.notifications import (
 )
 from backend.sales import clear_product_history, export_history, get_sales_summary, record_sale, remove_sale
 from backend.stock import add_stock
-from backend.store import reset as reset_store
+from backend.store import reset as reset_store, update_profile
 from backend.schemas import (
     DemoSetupRequest,
     NotificationReadRequest,
@@ -30,6 +30,7 @@ from backend.schemas import (
     SaleDeleteRequest,
     SaleEntryRequest,
     StockEntryRequest,
+    UpdateProfileRequest,
 )
 from backend.expense_routes import expense_router
 
@@ -46,6 +47,14 @@ def health() -> Dict[str, str]:
 def reset() -> Dict[str, str]:
     reset_store()
     return {"message": "All data cleared"}
+
+
+@router.put("/api/profile")
+def update_profile_endpoint(request: UpdateProfileRequest) -> Dict[str, Any]:
+    profile = update_profile(request.model_dump(exclude_unset=True))
+    if profile is None:
+        return {"error": "No profile found"}
+    return build_current_dashboard_payload()
 
 
 @router.post("/api/dashboard")

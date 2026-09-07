@@ -188,6 +188,14 @@ h1.dashboard-greeting {
   align-items: center;
 }
 
+.header-time {
+  font-size: 15px;
+  font-weight: 600;
+  color: #64748b;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+
 .profile-menu {
   position: relative;
 }
@@ -461,7 +469,7 @@ h1.dashboard-greeting {
 .alerts-card-header h3 {
   margin: 0;
   font-size: 17px;
-  font-weight: 800;
+  font-weight: 600;
   color: #0f172a;
 }
 

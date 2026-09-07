@@ -1,6 +1,6 @@
 import { formatStat } from "../../utils/formatNumber";
 
-function StatCards({ totalStock, grossProfit, netProfit, totalExpenses, onStockOverview, onAddStock, children }) {
+function StatCards({ totalStock, grossProfit, netProfit, availableBalance, onStockOverview, onAddStock, children }) {
   return (
     <div className="demo-summary-row">
       <div className="demo-stat">
@@ -38,8 +38,10 @@ function StatCards({ totalStock, grossProfit, netProfit, totalExpenses, onStockO
       </div>
       {children}
       <div className="demo-stat">
-        <span className="demo-stat-value">{formatStat(totalExpenses, 2)}</span>
-        <span className="demo-stat-label">Monthly Expenses</span>
+        <span className={`demo-stat-value ${availableBalance >= 0 ? "demo-stat-value--positive" : "demo-stat-value--negative"}`}>
+          {formatStat(availableBalance, 2)}
+        </span>
+        <span className="demo-stat-label">Available Balance</span>
       </div>
       <div className="demo-stat">
         <span className={`demo-stat-value ${netProfit >= 0 ? "demo-stat-value--positive" : "demo-stat-value--negative"}`}>
