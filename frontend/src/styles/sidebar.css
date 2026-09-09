@@ -2,11 +2,8 @@
   display: flex;
   min-height: 100vh;
   width: 100%;
-  background:
-    var(--gradient-bg),
-    linear-gradient(135deg, #d4f5e4, #e4effc, #dce8f8);
-  background-size: 200% 200%;
-  animation: dashboardRadiantVibrant 8s ease-in-out infinite alternate;
+  background: var(--gradient-bg);
+  animation: var(--bg-anim);
 }
 
 .demo-page--dashboard {

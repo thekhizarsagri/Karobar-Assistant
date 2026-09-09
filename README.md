@@ -47,8 +47,8 @@ I commit less because I only push when the work is tested, verified, and genuine
 ### Data & Storage
 | Approach | Detail |
 |---|---|
-| **In-Memory Store** | Primary mode — data lives in Python dicts/lists during runtime |
-| **Optional JSON Persistence** | Set `KAROBAR_PERSIST=1` to save to disk — atomic writes with `.tmp` + rename |
+| **JSON Persistence (default)** | Business data auto-saves to disk and survives server restarts — atomic writes with `.tmp` + rename |
+| **In-Memory Mode (opt-in)** | Set `KAROBAR_PERSIST=0` to keep everything in Python dicts/lists with a fresh start on every launch |
 | **No SQL Database** | Deliberately lightweight — no SQLite, PostgreSQL, or ORM |
 
 ---
@@ -204,7 +204,7 @@ Karobar-Assistant/
 │   ├── schemas.py              # Pydantic request models
 │   ├── models.py               # Dataclasses (Product, Expense, SaleEntry, etc.)
 │   ├── store.py                # In-memory data store
-│   ├── persistence.py          # Optional JSON file persistence
+│   ├── persistence.py          # JSON file persistence (on by default)
 │   ├── profile.py              # Business profile builder
 │   ├── dashboard.py            # Dashboard payload assembler
 │   ├── metrics.py              # Profitability calculations

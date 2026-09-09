@@ -6,6 +6,8 @@ function MonthlyExpensesPage({ expenses, metrics, nextDeductions, recentDeductio
   const [scheduleOpen, setScheduleOpen] = useState(false);
   const [formOpen, setFormOpen] = useState(false);
   const [editingExpense, setEditingExpense] = useState(null);
+  const [pageError, setPageError] = useState("");
+  const [needsRecovery, setNeedsRecovery] = useState(false);
 
   const activeExpenses = expenses.filter((e) => e.enabled);
 
@@ -14,22 +16,51 @@ function MonthlyExpensesPage({ expenses, metrics, nextDeductions, recentDeductio
 
   const availableBalance = metrics?.available_balance ?? 0;
 
+  const handleServerError = (data, fallback) => {
+    if (data && data.error === "no_profile") {
+      setNeedsRecovery(true);
+      return "Business data not found on the server. It may have been lost — try reloading below.";
+    }
+    return (data && data.message) || fallback;
+  };
+
+  const handleReload = async () => {
+    setPageError("");
+    try {
+      await onRefresh?.();
+      setNeedsRecovery(false);
+    } catch {
+      setPageError("Could not reload data. Please try again.");
+    }
+  };
+
   const handleAdd = () => {
     setEditingExpense(null);
+    setPageError("");
+    setNeedsRecovery(false);
     setFormOpen(true);
   };
 
   const handleEdit = (expense) => {
     setEditingExpense(expense);
+    setPageError("");
     setFormOpen(true);
   };
 
   const handleDelete = async (expense) => {
     if (!confirm(`Delete "${expense.label}"? This cannot be undone.`)) return;
+    setPageError("");
     try {
       const res = await fetch(`/api/expenses/${expense.key}`, { method: "DELETE" });
-      if (res.ok) onRefresh?.();
-    } catch {}
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || data.error) {
+        setPageError(handleServerError(data, "Could not delete expense."));
+        return;
+      }
+      onRefresh?.();
+    } catch {
+      setPageError("Could not delete expense. Please try again.");
+    }
   };
 
   return (
@@ -60,7 +91,7 @@ function MonthlyExpensesPage({ expenses, metrics, nextDeductions, recentDeductio
       <div className="expenses-page-stats">
         <div className="expenses-stat-card">
           <span className="expenses-stat-label">Total Monthly Expenses</span>
-          <span className="expenses-stat-value">{currency}{totalExpenses.toLocaleString()}</span>
+          <span className="expenses-stat-value">{currency}{totalExpenses.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
         </div>
         <div className="expenses-stat-card">
           <span className="expenses-stat-label">Available Balance</span>
@@ -73,6 +104,20 @@ function MonthlyExpensesPage({ expenses, metrics, nextDeductions, recentDeductio
           <span className="expenses-stat-value">{activeExpenses.length}</span>
         </div>
       </div>
+
+      {(pageError || needsRecovery) && (
+        <div className="expenses-page-banner" role="alert">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="8" x2="12" y2="12" />
+            <line x1="12" y1="16" x2="12.01" y2="16" />
+          </svg>
+          <p>{pageError || "Business data not found on the server."}</p>
+          {needsRecovery && (
+            <button type="button" onClick={handleReload}>Reload data</button>
+          )}
+        </div>
+      )}
 
       <div className="expenses-page-section">
         <div className="expenses-section-header">
@@ -203,6 +248,8 @@ function MonthlyExpensesPage({ expenses, metrics, nextDeductions, recentDeductio
         isOpen={formOpen}
         onClose={() => { setFormOpen(false); setEditingExpense(null); }}
         onSuccess={onRefresh}
+        existingKeys={expenses.map((e) => e.key)}
+        currency={currency}
       />
     </div>
   );

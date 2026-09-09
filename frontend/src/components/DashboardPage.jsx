@@ -239,7 +239,6 @@ function AlertsCardProper() {
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
           </span>
           Alerts
-          {items.length > 0 && <span style={{ background:'#fef3c7', color:'#92400e', fontSize:10, fontWeight:800, padding:'2px 7px', borderRadius:999, marginLeft:6 }}>{items.length}</span>}
         </div>
         {items.length > 0 && <button onClick={handleClear} disabled={clearing} style={{ fontSize:11, fontWeight:700, color:'#2563eb', background:'transparent', border:'none', cursor:'pointer' }}>{clearing ? 'Clearing...' : 'Clear all'}</button>}
       </div>

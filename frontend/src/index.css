@@ -12,11 +12,11 @@
   --sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --heading: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --gradient-bg:
-    radial-gradient(circle at 15% 20%, rgba(16, 185, 129, 0.42), transparent 38%),
-    radial-gradient(circle at 88% 72%, rgba(59, 130, 246, 0.4), transparent 36%),
-    radial-gradient(circle at 50% 10%, rgba(14, 165, 233, 0.3), transparent 30%),
-    radial-gradient(circle at 70% 45%, rgba(16, 185, 129, 0.15), transparent 42%),
-    radial-gradient(circle at 25% 80%, rgba(59, 130, 246, 0.12), transparent 38%);
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='200' viewBox='0 0 1200 200' preserveAspectRatio='none'%3E%3Cpath d='M0,140 Q300,40 600,140 T1200,140 L1200,200 L0,200 Z' fill='%235eead4' fill-opacity='0.45'/%3E%3C/svg%3E") left bottom / 1200px 200px repeat-x,
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='160' viewBox='0 0 900 160' preserveAspectRatio='none'%3E%3Cpath d='M0,110 Q225,30 450,110 T900,110 L900,160 L0,160 Z' fill='%2367e8f9' fill-opacity='0.5'/%3E%3C/svg%3E") left bottom / 900px 160px repeat-x,
+    radial-gradient(700px 380px at 50% -8%, rgba(186, 247, 253, 0.85), transparent 70%),
+    linear-gradient(180deg, #f8fcfe 0%, #edf6fd 55%, #e2eef9 100%);
+  --bg-anim: bgAlive 12s linear infinite;
   font: 14px/145% var(--sans);
   letter-spacing: 0.15px;
   color-scheme: light;
@@ -26,6 +26,43 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Live background themes (switch with body[data-bg]) ── */
+body[data-bg="waves"] {
+  --gradient-bg:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='200' viewBox='0 0 1200 200' preserveAspectRatio='none'%3E%3Cpath d='M0,140 Q300,40 600,140 T1200,140 L1200,200 L0,200 Z' fill='%235eead4' fill-opacity='0.45'/%3E%3C/svg%3E") left bottom / 1200px 200px repeat-x,
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='160' viewBox='0 0 900 160' preserveAspectRatio='none'%3E%3Cpath d='M0,110 Q225,30 450,110 T900,110 L900,160 L0,160 Z' fill='%2367e8f9' fill-opacity='0.5'/%3E%3C/svg%3E") left bottom / 900px 160px repeat-x,
+    radial-gradient(700px 380px at 50% -8%, rgba(186, 247, 253, 0.85), transparent 70%),
+    linear-gradient(180deg, #f8fcfe 0%, #edf6fd 55%, #e2eef9 100%);
+  --bg-anim: bgAlive 12s linear infinite;
+}
+
+body[data-bg="bubbles"] {
+  --gradient-bg:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='240' viewBox='0 0 160 240'%3E%3Cg fill='none'%3E%3Ccircle cx='36' cy='52' r='9' fill='%23ffffff' fill-opacity='0.85'/%3E%3Ccircle cx='112' cy='128' r='6' fill='%23ffffff' fill-opacity='0.55'/%3E%3Ccircle cx='70' cy='196' r='4' fill='%23cffafe' fill-opacity='0.7'/%3E%3Ccircle cx='140' cy='220' r='3' fill='%23ffffff' fill-opacity='0.4'/%3E%3C/g%3E%3C/svg%3E") left top / 160px 240px repeat,
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='360' viewBox='0 0 220 360'%3E%3Cg fill='none'%3E%3Ccircle cx='60' cy='70' r='13' fill='%23ffffff' fill-opacity='0.7'/%3E%3Ccircle cx='170' cy='200' r='8' fill='%23ffffff' fill-opacity='0.45'/%3E%3Ccircle cx='100' cy='300' r='5' fill='%23cffafe' fill-opacity='0.6'/%3E%3C/g%3E%3C/svg%3E") left top / 220px 360px repeat,
+    radial-gradient(760px 480px at 50% 0%, rgba(186, 247, 253, 0.7), transparent 70%),
+    linear-gradient(180deg, #e4f6fd 0%, #cfebf9 55%, #bcdcf5 100%);
+  --bg-anim: bgBubbles 9s linear infinite;
+}
+
+body[data-bg="ribbons"] {
+  --gradient-bg:
+    repeating-linear-gradient(115deg, transparent 0 90px, rgba(45, 212, 191, 0.3) 90px 170px, transparent 170px 300px, rgba(59, 130, 246, 0.26) 300px 380px) left top / 520px 520px repeat,
+    repeating-linear-gradient(65deg, transparent 0 120px, rgba(34, 211, 238, 0.22) 120px 200px, transparent 200px 340px) left top / 440px 440px repeat,
+    radial-gradient(700px 420px at 50% 0%, rgba(224, 242, 254, 0.9), transparent 70%),
+    linear-gradient(180deg, #f5f9fe 0%, #e9f1fb 55%, #dde7f6 100%);
+  --bg-anim: bgRibbons 10s linear infinite;
+}
+
+body[data-bg="dots"] {
+  --gradient-bg:
+    radial-gradient(circle, rgba(13, 71, 94, 0.16) 0 1.6px, transparent 2.2px) left top / 26px 26px repeat,
+    radial-gradient(circle, rgba(59, 130, 246, 0.13) 0 2.5px, transparent 3.2px) left top / 52px 52px repeat,
+    radial-gradient(380px 380px at 80% 20%, rgba(34, 211, 238, 0.5), transparent 70%),
+    linear-gradient(180deg, #f2f7fd 0%, #e4edf8 60%, #dbe5f3 100%);
+  --bg-anim: bgDots 8s linear infinite;
 }
 
 * { box-sizing: border-box; }
@@ -57,3 +94,129 @@ h1, h2 {
 h1 { font-size: 28px; letter-spacing: -0.5px; margin: 0; }
 h2 { font-size: 20px; line-height: 120%; letter-spacing: -0.2px; margin: 0 0 6px; }
 p { margin: 0; }
+
+/* Shared seamless wave drift for the light-mode background (all pages). */
+@keyframes bgAlive {
+  from {
+    background-position: 0 100%, 0 100%, 50% 0%, 0% 0%;
+  }
+  to {
+    background-position: 1200px 100%, -900px 100%, 50% 0%, 0% 0%;
+  }
+}
+
+/* Rising bubbles drift. */
+@keyframes bgBubbles {
+  from {
+    background-position: 0 0, 0 0, 50% 0%, 0% 0%;
+  }
+  to {
+    background-position: 0 -240px, 0 -360px, 50% 0%, 0% 0%;
+  }
+}
+
+/* Flowing neon ribbons drift. */
+@keyframes bgRibbons {
+  from {
+    background-position: 0 0, 0 0, 50% 0%, 0% 0%;
+  }
+  to {
+    background-position: 520px 520px, -440px -440px, 50% 0%, 0% 0%;
+  }
+}
+
+/* Tech dot-matrix drift. */
+@keyframes bgDots {
+  from {
+    background-position: 0 0, 0 0, 80% 20%, 0% 0%;
+  }
+  to {
+    background-position: 26px 26px, -52px -52px, 80% 20%, 0% 0%;
+  }
+}
+
+/* ── Floating background theme switcher ── */
+.bg-switcher {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 2000;
+}
+
+.bg-switcher-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: 1px solid #dbe7f5;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(8px);
+  color: #0e7490;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+  transition: transform 0.2s ease;
+}
+
+.bg-switcher-btn:hover {
+  transform: scale(1.06);
+}
+
+.bg-switcher-pop {
+  position: absolute;
+  right: 0;
+  bottom: 54px;
+  background: rgba(255, 255, 255, 0.97);
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.14);
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 196px;
+}
+
+.bg-switcher-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 6px 10px 4px;
+}
+
+.bg-switcher-opt {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: none;
+  background: transparent;
+  padding: 8px 10px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  color: #334155;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s ease;
+}
+
+.bg-switcher-opt:hover {
+  background: #f1f5f9;
+}
+
+.bg-switcher-opt.active {
+  background: #ecfeff;
+  color: #0e7490;
+}
+
+.bg-switcher-dot {
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  flex-shrink: 0;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+}

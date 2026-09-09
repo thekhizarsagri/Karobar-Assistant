@@ -2,6 +2,7 @@
 from typing import Any, Dict
 
 from fastapi import APIRouter
+from fastapi.responses import JSONResponse
 
 from backend.models import Expense
 from backend.store import get_profile, save_state
@@ -9,14 +10,21 @@ from backend.store import get_profile, save_state
 expense_router = APIRouter()
 
 
+def _error(code: str, message: str, status: int) -> JSONResponse:
+    return JSONResponse(status_code=status, content={"error": code, "message": message})
+
+
 @expense_router.post("/api/expenses/schedule")
 def update_expense_schedule(request: Dict[str, Any]) -> Dict[str, Any]:
     profile = get_profile()
     if profile is None:
-        return {"error": "no_profile", "message": "No business profile found."}
+        return _error("no_profile", "No business profile found.", 404)
 
     schedules = request.get("schedules", [])
-    schedule_map = {s["key"]: s for s in schedules}
+    schedule_map = {}
+    for s in schedules:
+        if isinstance(s, dict) and s.get("key"):
+            schedule_map[s["key"]] = s
 
     for expense in profile.expenses:
         if expense.key in schedule_map:
@@ -35,17 +43,17 @@ def update_expense_schedule(request: Dict[str, Any]) -> Dict[str, Any]:
 def add_expense(request: Dict[str, Any]) -> Dict[str, Any]:
     profile = get_profile()
     if profile is None:
-        return {"error": "no_profile", "message": "No business profile found."}
+        return _error("no_profile", "No business profile found.", 404)
 
     key = request.get("key", "").strip()
     label = request.get("label", "").strip()
     amount = float(request.get("amount", 0) or 0)
 
     if not key or not label:
-        return {"error": "invalid", "message": "Key and label are required."}
+        return _error("invalid", "Key and label are required.", 400)
 
     if any(e.key == key for e in profile.expenses):
-        return {"error": "duplicate", "message": f"Expense with key '{key}' already exists."}
+        return _error("duplicate", f"Expense with key '{key}' already exists.", 409)
 
     expense = Expense(
         key=key,
@@ -64,11 +72,11 @@ def add_expense(request: Dict[str, Any]) -> Dict[str, Any]:
 def update_expense(key: str, request: Dict[str, Any]) -> Dict[str, Any]:
     profile = get_profile()
     if profile is None:
-        return {"error": "no_profile", "message": "No business profile found."}
+        return _error("no_profile", "No business profile found.", 404)
 
     expense = next((e for e in profile.expenses if e.key == key), None)
     if expense is None:
-        return {"error": "not_found", "message": f"Expense '{key}' not found."}
+        return _error("not_found", f"Expense '{key}' not found.", 404)
 
     if "label" in request:
         expense.label = request["label"].strip()
@@ -89,12 +97,12 @@ def update_expense(key: str, request: Dict[str, Any]) -> Dict[str, Any]:
 def delete_expense(key: str) -> Dict[str, Any]:
     profile = get_profile()
     if profile is None:
-        return {"error": "no_profile", "message": "No business profile found."}
+        return _error("no_profile", "No business profile found.", 404)
 
     before = len(profile.expenses)
     profile.expenses = [e for e in profile.expenses if e.key != key]
     if len(profile.expenses) == before:
-        return {"error": "not_found", "message": f"Expense '{key}' not found."}
+        return _error("not_found", f"Expense '{key}' not found.", 404)
 
     save_state()
     return {"message": "Expense deleted"}

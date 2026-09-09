@@ -16,6 +16,7 @@ function ExpenseScheduleModal({ expenses, isOpen, onClose, onSuccess }) {
     return init;
   });
   const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
 
   const enabledExpenses = expenses.filter((e) => e.enabled);
 
@@ -45,6 +46,7 @@ function ExpenseScheduleModal({ expenses, isOpen, onClose, onSuccess }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSaving(true);
+    setError("");
     try {
       const payload = {
         schedules: Object.entries(schedules)
@@ -60,12 +62,19 @@ function ExpenseScheduleModal({ expenses, isOpen, onClose, onSuccess }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-      if (res.ok) {
-        onSuccess?.();
-        onClose();
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || data.error) {
+        setError(
+          data.error === "no_profile"
+            ? "Business data not found on the server. Reload the page — if this persists, please complete setup again."
+            : data.message || "Could not save schedule."
+        );
+        return;
       }
+      onSuccess?.();
+      onClose();
     } catch (err) {
-      console.error("Failed to save schedule:", err);
+      setError("Could not save schedule. Please try again.");
     } finally {
       setSaving(false);
     }
@@ -194,6 +203,16 @@ function ExpenseScheduleModal({ expenses, isOpen, onClose, onSuccess }) {
                 {saving ? "Saving..." : "Save Schedule"}
               </button>
             </div>
+            {error && (
+              <div className="expense-form-error" style={{ margin: "0 0 4px" }}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="12" y1="8" x2="12" y2="12" />
+                  <line x1="12" y1="16" x2="12.01" y2="16" />
+                </svg>
+                {error}
+              </div>
+            )}
           </form>
         </div>
       </div>

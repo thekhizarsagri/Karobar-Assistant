@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import ModalPortal from "./ModalPortal";
 
-function ExpenseFormModal({ expense, isOpen, onClose, onSuccess }) {
+function ExpenseFormModal({ expense, isOpen, onClose, onSuccess, existingKeys = [], currency = "₹" }) {
   const isEdit = !!expense;
 
   const [form, setForm] = useState({
@@ -34,10 +34,15 @@ function ExpenseFormModal({ expense, isOpen, onClose, onSuccess }) {
   const set = (field, value) => setForm((prev) => ({ ...prev, [field]: value }));
 
   const generateKey = (label) => {
-    return label
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "_")
-      .replace(/^_|_$/g, "");
+    const base =
+      label
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "_")
+        .replace(/^_|_$/g, "") || "expense";
+    if (!existingKeys.includes(base)) return base;
+    let suffix = 2;
+    while (existingKeys.includes(`${base}_${suffix}`)) suffix += 1;
+    return `${base}_${suffix}`;
   };
 
   const handleSubmit = async (e) => {
@@ -45,7 +50,7 @@ function ExpenseFormModal({ expense, isOpen, onClose, onSuccess }) {
     setError("");
 
     const label = form.label.trim();
-    const amount = parseFloat(form.amount) || 0;
+    const amount = Math.round((parseFloat(form.amount) || 0) * 100) / 100;
 
     if (!label) {
       setError("Expense name is required.");
@@ -74,8 +79,12 @@ function ExpenseFormModal({ expense, isOpen, onClose, onSuccess }) {
       });
 
       const data = await res.json();
-      if (!res.ok) {
-        setError(data.message || "Something went wrong.");
+      if (!res.ok || data.error) {
+        setError(
+          data.error === "no_profile"
+            ? "Business data not found on the server. Reload the page — if this persists, please complete setup again."
+            : data.message || "Something went wrong."
+        );
         return;
       }
 
@@ -150,13 +159,13 @@ function ExpenseFormModal({ expense, isOpen, onClose, onSuccess }) {
               <div className="expense-form-field">
                 <label className="expense-form-label">Monthly Amount</label>
                 <div className="expense-form-amount-wrap">
-                  <span className="expense-form-currency">₹</span>
+                  <span className="expense-form-currency">{currency}</span>
                   <input
                     type="number"
                     className="expense-form-input expense-form-input--amount"
-                    placeholder="0"
+                    placeholder="0.00"
                     min="0"
-                    step="100"
+                    step="any"
                     value={form.amount}
                     onChange={(e) => set("amount", e.target.value)}
                   />

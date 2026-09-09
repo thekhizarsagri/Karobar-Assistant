@@ -1,12 +1,12 @@
-"""Optional file-based persistence.
+"""File-based persistence (enabled by default).
 
-Demo mode runs in-memory by default: every time the server starts the
-data is fresh, while refreshes during a session keep everything (the
-backend process stays alive).
+State is saved to disk automatically so a server restart never loses
+business data. Data is written to `KAROBAR_DATA_DIR` if set, otherwise
+`%APPDATA%/KarobarAssistant` (PyInstaller build) or `<repo>/.karobar-data`
+(local dev).
 
-Set `KAROBAR_PERSIST=1` to save state to disk instead. Data is written
-to `KAROBAR_DATA_DIR` if set, otherwise `%APPDATA%/KarobarAssistant`
-(PyInstaller build) or `<repo>/.karobar-data` (local dev).
+Set `KAROBAR_PERSIST=0` to run fully in-memory instead (every server
+start begins with fresh data).
 
 `init()` must be called once at app startup (see backend/main.py) before
 any data is written. Writes happen automatically from the mutation points
@@ -44,7 +44,7 @@ def _data_file() -> Path:
 
 
 def init() -> None:
-    if os.environ.get("KAROBAR_PERSIST", "0") != "1":
+    if os.environ.get("KAROBAR_PERSIST", "1") == "0":
         return
     global _ACTIVE
     _ACTIVE = True

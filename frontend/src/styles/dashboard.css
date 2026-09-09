@@ -22,29 +22,6 @@
 .dash-greeting-row { animation: cardIn 0.35s cubic-bezier(0.16,1,0.3,1) both; }
 
 /* Radiant background for dashboard - matches welcome/setup vibrant mesh */
-.app-main::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: -1;
-  opacity: 0.55;
-  background: var(--gradient-bg);
-  animation: radiantDrift 8s ease-in-out infinite alternate;
-}
-@keyframes radiantDrift {
-  0% { transform: translate(0,0) scale(1); opacity: 0.55; }
-  50% { transform: translate(10px,-8px) scale(1.02); opacity: 0.62; }
-  100% { transform: translate(-6px,6px) scale(1.01); opacity: 0.55; }
-}
-[data-theme="dark"] .app-main::before {
-  opacity: 0.9;
-  background:
-    radial-gradient(circle at 10% 15%, rgba(6, 95, 70, 0.35), transparent 35%),
-    radial-gradient(circle at 85% 75%, rgba(30, 64, 175, 0.3), transparent 32%),
-    radial-gradient(circle at 50% 5%, rgba(14, 165, 233, 0.15), transparent 28%),
-    radial-gradient(circle at 65% 40%, rgba(16, 185, 129, 0.1), transparent 35%);
-}
 
 /* Greeting row - clean 2-col */
 .dash-greeting-row {
@@ -1441,6 +1418,38 @@
   color: #dc2626;
   font-size: 13px;
   font-weight: 500;
+}
+.expenses-page-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 12px;
+  color: #b91c1c;
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 16px;
+}
+.expenses-page-banner p {
+  margin: 0;
+  flex: 1;
+}
+.expenses-page-banner button {
+  flex-shrink: 0;
+  border: 1px solid #fecaca;
+  background: #fff;
+  color: #b91c1c;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.expenses-page-banner button:hover {
+  background: #fee2e2;
 }
 .expense-form-fields {
   display: flex;
