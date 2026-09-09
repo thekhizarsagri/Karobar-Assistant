@@ -33,6 +33,22 @@ html, body {
     radial-gradient(circle at 70% 45%, rgba(16, 185, 129, 0.15), transparent 42%),
     radial-gradient(circle at 25% 80%, rgba(59, 130, 246, 0.12), transparent 38%),
     linear-gradient(135deg, #d4f5e4, #e4effc, #dce8f8);
+  background-size: 200% 200%;
+  animation: dashboardRadiant 8s ease-in-out infinite alternate;
+}
+@keyframes dashboardRadiant {
+  0% { background-position: 0% 0%; }
+  25% { background-position: 100% 50%; }
+  50% { background-position: 50% 100%; }
+  75% { background-position: 0% 50%; }
+  100% { background-position: 100% 0%; }
+}
+@keyframes dashboardRadiantVibrant {
+  0% { background-position: 0% 0%; }
+  25% { background-position: 100% 50%; }
+  50% { background-position: 50% 100%; }
+  75% { background-position: 0% 50%; }
+  100% { background-position: 100% 0%; }
 }
 
 /* Page Transition Animations */
@@ -190,3 +206,38 @@ html, body {
   transform: translateY(-2px) !important;
   box-shadow: 0 18px 35px rgba(37, 99, 235, 0.22) !important;
 }
+
+/* New dashboard dark mode - top bar removed, icons only */
+[data-theme="dark"] .topbar { background: transparent; border: none; box-shadow: none; }
+[data-theme="dark"] .sidebar { background: rgba(14,22,40,0.92) !important; border-right-color: rgba(30,45,70,0.6) !important; }
+[data-theme="dark"] .topbar-search input { background: #0f1728; border-color: #1e2d45; color: #e2e8f0; }
+[data-theme="dark"] .topbar-search input::placeholder { color: #64748b; }
+[data-theme="dark"] .topbar-search input:focus { background: #0c1222; border-color: #2a3a55; }
+[data-theme="dark"] .topbar-kbd { background: #0f1728; border-color: #1e2d45; color: #64748b; }
+[data-theme="dark"] .notification-bell-btn { background: #0f1728; border-color: #1e2d45; color: #94a3b8; }
+[data-theme="dark"] .notification-panel { background: #141e33; border-color: #1e2d45; }
+[data-theme="dark"] .profile-dropdown { background: #141e33; border-color: #1e2d45; }
+[data-theme="dark"] .stat-card, [data-theme="dark"] .dash-card, [data-theme="dark"] .bp-mini-card { background: #141e33; border-color: #1e2d45; box-shadow: 0 8px 24px rgba(0,0,0,0.22); }
+[data-theme="dark"] .stat-card:hover, [data-theme="dark"] .dash-card:hover { border-color: #243449; box-shadow: 0 12px 32px rgba(0,0,0,0.28); }
+[data-theme="dark"] .stat-card-value, [data-theme="dark"] .dash-card-title, [data-theme="dark"] .bp-mini-value, [data-theme="dark"] .recent-title, [data-theme="dark"] .alert-proper-title { color: #e2e8f0; }
+[data-theme="dark"] .stat-card-sub, [data-theme="dark"] .dash-card-subtitle, [data-theme="dark"] .bp-mini-label, [data-theme="dark"] .recent-desc, [data-theme="dark"] .alert-proper-msg { color: #94a3b8; }
+[data-theme="dark"] .stat-card-label { color: #94a3b8; }
+[data-theme="dark"] .stat-card-arrow { background: #0f1728; border-color: #1e2d45; color: #64748b; }
+[data-theme="dark"] .dash-date-card { background: #141e33; border-color: #1e2d45; }
+[data-theme="dark"] .ai-help-card { background: linear-gradient(135deg, rgba(16,185,129,0.14), rgba(16,185,129,0.06)); border-color: #1e3a2d; }
+[data-theme="dark"] .ai-help-desc, [data-theme="dark"] .dash-greeting-left p, [data-theme="dark"] .dash-date-label, [data-theme="dark"] .dash-date-time { color: #94a3b8; }
+[data-theme="dark"] .dash-greeting-left h1 { color: #f1f5f9; }
+[data-theme="dark"] .period-tabs, [data-theme="dark"] .add-sales-tabs { background: #0f1728; }
+[data-theme="dark"] .period-tab { color: #94a3b8; }
+[data-theme="dark"] .period-tab:hover:not(.active) { color: #e2e8f0; }
+[data-theme="dark"] .add-sales-input, [data-theme="dark"] .add-sales-select { background: #0f1728; border-color: #1e2d45; color: #e2e8f0; }
+[data-theme="dark"] .add-sales-label { color: #cbd5e1; }
+[data-theme="dark"] .recent-item, [data-theme="dark"] .alert-proper-item { border-bottom-color: #1e2d45; }
+[data-theme="dark"] .recent-item:hover, [data-theme="dark"] .alert-proper-item:hover { background: rgba(30,45,70,0.25); }
+[data-theme="dark"] .bp-mini-card { background: #0f1728; }
+[data-theme="dark"] .sales-legend-item { color: #94a3b8; }
+[data-theme="dark"] .dash-card-header { border-bottom-color: #1e2d45; }
+[data-theme="dark"] .app-layout, [data-theme="dark"] .demo-page--dashboard, [data-theme="dark"] .app-main { background: transparent; }
+[data-theme="dark"] .alerts-empty-proper { color: #94a3b8; }
+[data-theme="dark"] .alerts-empty-icon { background: linear-gradient(135deg, rgba(220,38,38,0.16), rgba(220,38,38,0.06)); border-color: #3a1414; }
+[data-theme="dark"] .dashboard-footer { color: #64748b; border-top-color: #1e2d45; }

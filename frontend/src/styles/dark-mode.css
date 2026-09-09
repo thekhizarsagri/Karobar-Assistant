@@ -71,6 +71,30 @@
   outline: none;
 }
 
+/* Dark theme: light chevron on dropdowns, dark native calendar popup. */
+[data-theme="dark"] select,
+[data-theme="dark"] select[class] {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 12px 12px;
+}
+
+[data-theme="dark"] select option {
+  background: #141e33;
+  color: #e2e8f0;
+}
+
+[data-theme="dark"] .time-select-grid select,
+[data-theme="dark"] .expense-sched-time select,
+[data-theme="dark"] .expense-sched-select--sm {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+}
+
+[data-theme="dark"] select:-moz-focusring {
+  text-shadow: 0 0 0 #e2e8f0;
+}
+
 [data-theme="dark"] .form-field span {
   color: #94a3b8;
 }
@@ -230,6 +254,88 @@
 [data-theme="dark"] .notification-bell-btn:hover {
   background: #1a2740;
   color: #e2e8f0;
+}
+
+[data-theme="dark"] .topbar-user--avatar-only {
+  background: transparent;
+  border: none;
+}
+
+[data-theme="dark"] .topbar-user--avatar-only:hover {
+  background: transparent;
+  border: none;
+}
+
+[data-theme="dark"] .dash-datetime {
+  background: #141e33;
+  border-color: #1e2d45;
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .dash-datetime strong {
+  color: #e2e8f0;
+}
+
+/* ── KPI stat cards ── */
+[data-theme="dark"] .kpi-label {
+  color: #e2e8f0;
+}
+
+[data-theme="dark"] .kpi-card {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+[data-theme="dark"] .kpi-card:hover {
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.45);
+}
+
+/* ── Sidebar: kill the light glass outline in dark ── */
+[data-theme="dark"] .sidebar {
+  outline: none;
+}
+
+/* ── Add Sales greens sit deeper in dark ── */
+[data-theme="dark"] .add-sales-plus {
+  background: #047857;
+}
+
+[data-theme="dark"] .add-sales-tab.active {
+  background: #059669;
+  box-shadow: 0 2px 8px rgba(5, 150, 105, 0.35);
+}
+
+[data-theme="dark"] .add-sales-save {
+  background: #059669;
+  box-shadow: 0 4px 14px rgba(5, 150, 105, 0.3);
+}
+
+[data-theme="dark"] .add-sales-save:hover {
+  background: #047857;
+}
+
+/* ── Alerts card (light yellow in light mode, deep amber in dark) ── */
+[data-theme="dark"] .alerts-proper-card {
+  background: #221a08;
+  border-color: #4a3807;
+}
+
+[data-theme="dark"] .alerts-proper-card:hover {
+  border-color: #6b4e0b;
+}
+
+[data-theme="dark"] .alerts-title-icon {
+  background: #3a1414;
+  color: #f87171;
+}
+
+[data-theme="dark"] .alert-proper-icon--warn { background: #3a2a0a; color: #fbbf24; }
+[data-theme="dark"] .alert-proper-icon--profit { background: #3a1414; color: #f87171; }
+[data-theme="dark"] .alert-proper-icon--info { background: #0c2a3f; color: #38bdf8; }
+
+/* Sales Overview header tile */
+[data-theme="dark"] .dash-card-title-icon {
+  background: #0b2b23;
+  color: #34d399;
 }
 
 [data-theme="dark"] .notification-badge {

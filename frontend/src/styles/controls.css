@@ -6,6 +6,79 @@ textarea {
   color-scheme: light;
 }
 
+/* ── Dropdowns (select) — premium treatment everywhere ── */
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 12px 12px;
+  padding-right: 32px;
+  text-overflow: ellipsis;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+
+/* Re-assert the custom arrow above any component background shorthand. */
+select[class] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 12px 12px;
+  padding-right: 32px;
+}
+
+/* Compact time/day selects (hour, minute, AM/PM): smaller chevron so a
+   row of them never looks crowded. Later file + equal specificity wins
+   over component background shorthands. */
+.time-select-grid select,
+.expense-sched-time select,
+.expense-sched-select--sm {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 10px 10px;
+  padding-right: 26px;
+  text-overflow: ellipsis;
+}
+
+select:hover {
+  border-color: #cbd5e1;
+}
+
+select:focus {
+  border-color: #10b981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+  outline: none;
+}
+
+select:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* Firefox: hide the dotted focus ring, keep text readable. */
+select:-moz-focusring {
+  color: transparent;
+  text-shadow: 0 0 0 #334155;
+}
+
+/* Options dropdown list readability. */
+select option {
+  background: #fff;
+  color: #0f172a;
+  font-size: 13.5px;
+  padding: 8px;
+}
+
 /* Number inputs: keep the up/down spinner arrows always visible
    and give them a pointer cursor (Chrome hides them by default). */
 input[type="number"]::-webkit-outer-spin-button,

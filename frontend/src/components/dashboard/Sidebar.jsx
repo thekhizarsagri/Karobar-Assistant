@@ -124,21 +124,11 @@ const NAV_ITEMS = [
   },
 ];
 
-function Sidebar({ active, onSelect, open, onToggle }) {
+function Sidebar({ active, onSelect }) {
   const { dark } = useTheme();
   return (
     <>
-      <button
-        type="button"
-        className={`sidebar-toggle ${open ? "" : "sidebar-toggle--closed"}`}
-        onClick={onToggle}
-        aria-label="Toggle sidebar"
-      >
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-          <polyline points={open ? "15 18 9 12 15 6" : "9 18 15 12 9 6"} />
-        </svg>
-      </button>
-      <aside className={`sidebar ${open ? "" : "sidebar-closed"}`}>
+      <aside className="sidebar">
         <div className="sidebar-brand">
           <img src={dark ? titleImgDark : titleImg} alt="Karobar Assistant" className="sidebar-logo" draggable={false} />
         </div>
