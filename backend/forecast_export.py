@@ -123,8 +123,6 @@ def export_dataset(dataset: str) -> str:
 
     data = get_advanced_analytics()
 
-    import pandas as pd
-
     if dataset == "abc":
         frame = pd.DataFrame(data["abc"])
     elif dataset == "forecasts":

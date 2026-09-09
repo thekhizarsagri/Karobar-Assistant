@@ -19,6 +19,9 @@ def _profile_to_dict(profile):
                 "cost_price": p.cost_price,
                 "stock_quantity": p.stock_quantity,
                 "reorder_point": p.reorder_point,
+                "sku": p.sku,
+                "unit": p.unit,
+                "description": p.description,
             }
             for p in profile.products
         ],
@@ -35,6 +38,11 @@ def _profile_to_dict(profile):
             for e in profile.expenses
         ],
         "available_balance": profile.available_balance,
+        "email": profile.email,
+        "username": profile.username,
+        "password": profile.password,
+        "currency": profile.currency,
+        "tax_id": profile.tax_id,
         "expense_deductions": [
             {
                 "expense_key": d.expense_key,
@@ -60,6 +68,9 @@ def _profile_from_dict(data):
             cost_price=float(p.get("cost_price", 0) or 0),
             stock_quantity=int(p.get("stock_quantity", 0) or 0),
             reorder_point=int(p.get("reorder_point", 0) or 0),
+            sku=p.get("sku", "") or "",
+            unit=p.get("unit", "pcs") or "pcs",
+            description=p.get("description", "") or "",
         )
         for p in data.get("products", [])
     ]
@@ -93,6 +104,11 @@ def _profile_from_dict(data):
         phone_number=data.get("phone_number", ""),
         location=data.get("location", ""),
         description=data.get("description", ""),
+        email=data.get("email", "") or "",
+        username=data.get("username", "") or "",
+        password=data.get("password", "") or "",
+        currency=data.get("currency", "₹") or "₹",
+        tax_id=data.get("tax_id", "") or "",
         products=products,
         expenses=expenses,
         available_balance=float(data.get("available_balance", 0) or 0),

@@ -294,6 +294,22 @@
   outline: none;
 }
 
+[data-theme="dark"] .sidebar-item {
+  color: #cbd5e1;
+}
+
+[data-theme="dark"] .sidebar-item:hover {
+  color: #e2e8f0;
+}
+
+[data-theme="dark"] .sidebar-item.active {
+  color: #e2e8f0;
+}
+
+[data-theme="dark"] .sidebar-item.active .sidebar-item-icon {
+  color: #e2e8f0;
+}
+
 /* ── Add Sales greens sit deeper in dark ── */
 [data-theme="dark"] .add-sales-plus {
   background: #047857;

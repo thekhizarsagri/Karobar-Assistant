@@ -1,4 +1,5 @@
 """In-memory data store for the demo session."""
+from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 from backend.alerts import reset_alerts
@@ -74,8 +75,6 @@ def reset() -> None:
 
 
 def _now_iso() -> str:
-    from datetime import datetime
-
     return datetime.now().isoformat(timespec="seconds")
 
 
@@ -96,9 +95,9 @@ def products_snapshot() -> List[Dict[str, Any]]:
             "sellingPrice": product.selling_price,
             "costPrice": product.cost_price,
             "stockAvailable": product.stock_quantity,
-            "sku": getattr(product, "sku", ""),
-            "unit": getattr(product, "unit", "pcs"),
-            "description": getattr(product, "description", ""),
+            "sku": product.sku,
+            "unit": product.unit,
+            "description": product.description,
         }
         for product in _current_profile.products
     ]

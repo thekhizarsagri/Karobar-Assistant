@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import { getProductColor } from "../analytics/constants";
 import { buildProductColorMap } from "../analytics/selectors";
 import ModalPortal from "./ModalPortal";
@@ -21,8 +21,8 @@ function ProductHistoryDetail({ productName, salesSummary, products, onBack, onC
   const sales = productHistory[productName]?.entries || [];
   const stockEntries = stockHistory[productName] || [];
 
-  const [clearing, setClearing] = React.useState(false);
-  const [showConfirmModal, setShowConfirmModal] = React.useState(false);
+  const [clearing, setClearing] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
 
   const handleClearHistory = async () => {
     setClearing(true);

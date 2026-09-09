@@ -50,3 +50,24 @@ export function formatStat(value, decimals = 0) {
     maximumFractionDigits: decimals,
   });
 }
+
+export function formatNumber(value, fractionDigits = 0) {
+  const num = Number(value || 0);
+  if (Math.abs(num) >= 1_000_000) {
+    return formatCompact(num, fractionDigits > 0 ? 1 : 0);
+  }
+  return num.toLocaleString(undefined, {
+    minimumFractionDigits: fractionDigits,
+    maximumFractionDigits: fractionDigits,
+  });
+}
+
+export function calculateMargin(sell, cost) {
+  const s = Number(sell) || 0;
+  const c = Number(cost) || 0;
+  if (s <= 0) return { profit: 0, marginPercent: 0, status: "neutral" };
+  const profit = s - c;
+  const marginPercent = ((profit / s) * 100).toFixed(1);
+  const status = profit > 0 ? (marginPercent >= 25 ? "good" : "fair") : "loss";
+  return { profit, marginPercent, status };
+}

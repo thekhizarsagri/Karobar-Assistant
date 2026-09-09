@@ -1,18 +1,5 @@
-import { SUPPLY_TARGET_DAYS } from "./inventoryConstants";
-
-const STATUS_META = {
-  out: { label: "Out of stock", className: "inv-status--out" },
-  reorder: { label: "Reorder", className: "inv-status--reorder" },
-  ok: { label: "In stock", className: "inv-status--ok" },
-};
-
-function fmt(value, fractionDigits = 0) {
-  const num = Number(value || 0);
-  return num.toLocaleString(undefined, {
-    minimumFractionDigits: fractionDigits,
-    maximumFractionDigits: fractionDigits,
-  });
-}
+import { SUPPLY_TARGET_DAYS, STATUS_META } from "./inventoryConstants";
+import { formatNumber as fmt } from "../../utils/formatNumber";
 
 function supplyPct(item) {
   if (item.days_of_supply == null) return null;

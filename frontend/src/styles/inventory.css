@@ -1,11 +1,4 @@
 :root {
-  --radius: 12px;
-  --font-family: "Inter", system-ui, sans-serif;
-  --text-color: #0f172a;
-  --muted-color: #64748b;
-  --accent: #1d4ed8;
-  --accent-hover: #1e40af;
-  --card-bg: #fff;
   --chip-ok-bg: #ecfdf5;
   --chip-reorder-bg: #fffbeb;
   --chip-out-bg: #fef2f2;

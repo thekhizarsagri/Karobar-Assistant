@@ -1,13 +1,3 @@
-:root {
-  --radius: 12px;
-  --font-family: "Inter", system-ui, sans-serif;
-  --text-color: #0f172a;
-  --muted-color: #64748b;
-  --accent: #1d4ed8;
-  --accent-hover: #1e40af;
-  --card-bg: #fff;
-}
-
 .stock-modal-backdrop {
   position: fixed;
   inset: 0;

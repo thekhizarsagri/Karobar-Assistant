@@ -1,9 +1,22 @@
 :root {
   --text: #475569;
   --text-h: #0f172a;
+  --text-color: #0f172a;
+  --muted-color: #64748b;
+  --accent: #1d4ed8;
+  --accent-hover: #1e40af;
+  --card-bg: #fff;
+  --radius: 12px;
+  --font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --bg: #f0f6ff;
   --sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --heading: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --gradient-bg:
+    radial-gradient(circle at 15% 20%, rgba(16, 185, 129, 0.42), transparent 38%),
+    radial-gradient(circle at 88% 72%, rgba(59, 130, 246, 0.4), transparent 36%),
+    radial-gradient(circle at 50% 10%, rgba(14, 165, 233, 0.3), transparent 30%),
+    radial-gradient(circle at 70% 45%, rgba(16, 185, 129, 0.15), transparent 42%),
+    radial-gradient(circle at 25% 80%, rgba(59, 130, 246, 0.12), transparent 38%);
   font: 14px/145% var(--sans);
   letter-spacing: 0.15px;
   color-scheme: light;

@@ -15,6 +15,9 @@ from typing import Any, Dict
 
 import pandas as pd
 
+from backend.abc_analysis import abc_analysis, empty_payload as empty_analytics_payload
+from backend.forecast_export import export_dataset, forecast_products
+from backend.product_velocity import product_velocity
 from backend.store import get_profile, sales_log
 from backend.utils import parse_ts
 
@@ -46,18 +49,6 @@ def _summary_stats(df: pd.DataFrame, profile) -> Dict[str, Any]:
         "active_products": int(df["product_name"].nunique()),
         "days_with_data": int(df["entry_date"].dt.normalize().nunique()),
     }
-
-
-# ABC (Pareto) analysis
-from .abc_analysis import abc_analysis  # type: ignore  # noqa: E402
-from .abc_analysis import empty_payload as empty_analytics_payload  # type: ignore  # noqa: E402
-
-# Product velocity
-from .product_velocity import product_velocity  # type: ignore  # noqa: E402
-
-# Demand forecast and CSV export
-from .forecast_export import forecast_products  # type: ignore  # noqa: E402
-from .forecast_export import export_dataset  # type: ignore  # noqa: E402
 
 
 def get_advanced_analytics() -> Dict[str, Any]:

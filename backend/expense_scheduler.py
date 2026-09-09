@@ -89,7 +89,8 @@ def _scheduler_loop():
         try:
             process_due_expenses()
         except Exception:
-            pass
+            import logging
+            logging.exception("expense scheduler error")
         time.sleep(30)
 
 
@@ -101,9 +102,3 @@ def start_expense_scheduler():
     _scheduler_running = True
     _scheduler_thread = threading.Thread(target=_scheduler_loop, daemon=True)
     _scheduler_thread.start()
-
-
-def stop_expense_scheduler():
-    """Stop the background expense scheduler thread."""
-    global _scheduler_running
-    _scheduler_running = False

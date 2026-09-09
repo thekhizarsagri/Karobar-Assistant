@@ -1,20 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import StockModal from "../dashboard/StockModal";
-import { formatCompact } from "../../utils/formatNumber";
+import { formatNumber as fmt } from "../../utils/formatNumber";
 import InventoryTable from "./InventoryTable";
 import InventoryMovements from "./InventoryMovements";
 import { STATUS_META } from "./inventoryConstants";
-
-function fmt(value, fractionDigits = 0) {
-  const num = Number(value || 0);
-  if (Math.abs(num) >= 1_000_000) {
-    return formatCompact(num, fractionDigits > 0 ? 1 : 0);
-  }
-  return num.toLocaleString(undefined, {
-    minimumFractionDigits: fractionDigits,
-    maximumFractionDigits: fractionDigits,
-  });
-}
 
 function InventoryPage({ products, onSubmit }) {
   const [data, setData] = useState(null);

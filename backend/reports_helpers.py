@@ -3,6 +3,7 @@ from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 from backend.store import sales_log, stock_log
+from backend.utils import parse_date
 
 ORDERING_COST = 50.0
 HOLDING_RATE = 0.20
@@ -17,12 +18,8 @@ MONTH_NAMES = [
 def _parse_day(date_str: Any) -> Optional[Any]:
     if not date_str:
         return None
-    for fmt in ("%Y-%m-%d", "%Y-%m", "%Y"):
-        try:
-            return datetime.strptime(str(date_str), fmt).date()
-        except (ValueError, TypeError):
-            continue
-    return None
+    result = parse_date(str(date_str))
+    return result.date() if result else None
 
 
 def _sales_rows(profile) -> List[Dict[str, Any]]:

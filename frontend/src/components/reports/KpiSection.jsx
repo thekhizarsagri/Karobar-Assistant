@@ -1,4 +1,4 @@
-import { formatCompact } from "../../utils/formatNumber";
+import { formatNumber as fmt } from "../../utils/formatNumber";
 
 const SCORE_COLORS = {
   Excellent: "#10b981",
@@ -6,17 +6,6 @@ const SCORE_COLORS = {
   Fair: "#f59e0b",
   "Needs attention": "#ef4444",
 };
-
-function fmt(value, fractionDigits = 0) {
-  const num = Number(value || 0);
-  if (Math.abs(num) >= 1_000_000) {
-    return formatCompact(num, fractionDigits > 0 ? 1 : 0);
-  }
-  return num.toLocaleString(undefined, {
-    minimumFractionDigits: fractionDigits,
-    maximumFractionDigits: fractionDigits,
-  });
-}
 
 function ScoreRing({ score, label }) {
   const size = 170;

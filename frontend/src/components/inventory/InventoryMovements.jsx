@@ -1,16 +1,5 @@
-import { formatCompact } from "../../utils/formatNumber";
+import { formatNumber as fmt } from "../../utils/formatNumber";
 import { SOURCE_LABELS } from "./inventoryConstants";
-
-function fmt(value, fractionDigits = 0) {
-  const num = Number(value || 0);
-  if (Math.abs(num) >= 1_000_000) {
-    return formatCompact(num, fractionDigits > 0 ? 1 : 0);
-  }
-  return num.toLocaleString(undefined, {
-    minimumFractionDigits: fractionDigits,
-    maximumFractionDigits: fractionDigits,
-  });
-}
 
 function formatDate(iso) {
   const date = new Date(iso);

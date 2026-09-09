@@ -265,13 +265,13 @@ export default function StatCards({
   // Themes sampled from cards.png — muted deep-tinted variants after dark.
   const MINT = dark
     ? {
-        cardBg: "#0d201a",
-        border: "#1c3a30",
+        cardBg: "#141e33",
+        border: "#1e4a3a",
         iconBg: "#14352a",
-        iconColor: "#34d399",
-        chart: "#34d399",
+        iconColor: "#9ccfb4",
+        chart: "#83c5a1",
         value: "#f1f5f9",
-        trend: "#34d399",
+        trend: "#83c5a1",
       }
     : {
         cardBg: "#effaf6",
@@ -284,22 +284,22 @@ export default function StatCards({
       };
   const RED = dark
     ? {
-        cardBg: "#211114",
-        border: "#472027",
-        iconBg: "#371a20",
-        iconColor: "#fb7185",
-        chart: "#fb7185",
-        value: "#fda4af",
-        trend: "#fb7185",
+        cardBg: "#141e33",
+        border: "#55232b",
+        iconBg: "#3c232a",
+        iconColor: "#e2a3ad",
+        chart: "#d696a0",
+        value: "#f1f5f9",
+        trend: "#d696a0",
       }
     : {
-        cardBg: "#fef2f3",
-        border: "#fecdd3",
-        iconBg: "#fecdd3",
-        iconColor: "#e11d48",
-        chart: "#f43f5e",
-        value: "#e11d48",
-        trend: "#f43f5e",
+        cardBg: "#fef2f2",
+        border: "#fecaca",
+        iconBg: "#fecaca",
+        iconColor: "#dc2626",
+        chart: "#ef4444",
+        value: "#0f172a",
+        trend: "#ef4444",
       };
   const LAVENDER = dark
     ? {
@@ -342,7 +342,7 @@ export default function StatCards({
 
   const grossTheme = isGrossPositive ? MINT : RED;
   const netTheme = isNetPositive ? MINT : RED;
-  const downColor = dark ? "#fb7185" : "#f43f5e";
+  const downColor = dark ? "#d696a0" : "#f43f5e";
 
   // ---- Real percentages from live data ----
   const stockT = stockTrend(salesSummary, stockNum);

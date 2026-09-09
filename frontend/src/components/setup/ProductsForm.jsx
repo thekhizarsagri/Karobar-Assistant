@@ -2,6 +2,7 @@ import { useState } from "react";
 import { productCategories } from "./constants";
 import ProductDraftForm from "./ProductDraftForm";
 import ProductCatalogList from "./ProductCatalogList";
+import { calculateMargin } from "../../utils/formatNumber";
 
 function ProductsForm({
   products,
@@ -48,16 +49,6 @@ function ProductsForm({
     setFormError("");
   };
 
-  const calculateMargin = (sell, cost) => {
-    const s = Number(sell) || 0;
-    const c = Number(cost) || 0;
-    if (s <= 0) return { profit: 0, marginPercent: 0, status: "neutral" };
-    const profit = s - c;
-    const marginPercent = ((profit / s) * 100).toFixed(1);
-    const status = profit > 0 ? (marginPercent >= 25 ? "good" : "fair") : "loss";
-    return { profit, marginPercent, status };
-  };
-
   const totalStockUnits = products.reduce(
     (acc, p) => acc + (Number(p.stockAvailable) || 0),
     0
@@ -86,10 +77,6 @@ function ProductsForm({
         <p className="column-subtitle">
           Add items, configure unit pricing, track profit margins, and manage initial inventory.
         </p>
-      </div>
-
-      {/* Live Metrics Row */}
-      <div className="metrics-strip">
       </div>
 
       {/* Card 1: Add New Product Form */}

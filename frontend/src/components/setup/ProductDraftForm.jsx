@@ -1,16 +1,7 @@
 import { productCategories, productUnits } from "./constants";
+import { calculateMargin } from "../../utils/formatNumber";
 
 const MAX_VALUE = 1_000_000_000_000;
-
-function calculateMargin(sell, cost) {
-  const s = Number(sell) || 0;
-  const c = Number(cost) || 0;
-  if (s <= 0) return { profit: 0, marginPercent: 0, status: "neutral" };
-  const profit = s - c;
-  const marginPercent = ((profit / s) * 100).toFixed(1);
-  const status = profit > 0 ? (marginPercent >= 25 ? "good" : "fair") : "loss";
-  return { profit, marginPercent, status };
-}
 
 function ProductDraftForm({ draftProduct, onDraftChange, onAdd, currency, formError }) {
   const draftMargin = calculateMargin(draftProduct.sellingPrice, draftProduct.costPrice);
