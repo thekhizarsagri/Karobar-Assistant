@@ -16,6 +16,18 @@ I commit less because I only push when the work is tested, verified, and genuine
 
 ---
 
+## Development Status
+
+> 🚧 **This program is currently in the development phase.**
+
+My focus right now is on the **core logic and backend** of the application — designing the data models, business rules, analytics engine, and API layer that everything else is built on. A large number of features have already been implemented (sales tracking, inventory analytics, AI insights, demand forecasting, business reports, expense automation, and more), and many additional features are still planned and on the way.
+
+The frontend is deliberately kept **basic for now**. Since the backend is still evolving, I am intentionally holding off on a full UI overhaul — once the logic layer is complete and stable, the interface will be redesigned and improved to a far higher standard.
+
+In short: solid backend first, polished frontend next. The best is yet to come.
+
+---
+
 ## Tech Stack
 
 ### Backend
