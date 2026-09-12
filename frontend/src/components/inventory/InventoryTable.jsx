@@ -165,13 +165,17 @@ export default function InventoryTable({
               <th className="inv-th-actions">Actions</th>
             </tr>
           </thead>
-          <tbody>
-            {filtered.map((item) => {
+          <tbody key={`${query}-${statusFilter}-${categoryFilter}-${sortDir}`}>
+            {filtered.map((item, index) => {
               const meta = STATUS_META[item.status] || STATUS_META.ok;
               const rop = item.reorder_point || item.reorder_point_recommended;
               const marginNeg = Number(item.unit_margin) < 0;
               return (
-                <tr key={item.name}>
+                <tr
+                  key={item.name}
+                  className="inv-row-animated"
+                  style={{ animationDelay: `${Math.min(index, 11) * 35}ms` }}
+                >
                   <td>
                     <div className="inv-product-cell">
                       <span className="inv-product-text">

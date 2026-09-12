@@ -1,43 +1,71 @@
+/* ==========================================================================
+   Analytics month / year cards — modern theme
+   ========================================================================== */
 .yearly-breakdown {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 16px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
 }
 
 .year-month-card {
   background: #fff;
-  border: 1px solid #e2e8f0;
-  border-radius: 14px;
+  border: 1px solid #e6eef7;
+  border-radius: 16px;
   padding: 16px;
   min-width: 0;
   overflow: hidden;
-  transition: transform 0.18s, box-shadow 0.18s;
+  box-shadow: 0 6px 18px rgba(30, 60, 120, 0.05);
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s ease, border-color 0.22s ease;
 }
 
 .year-month-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+  transform: translateY(-3px);
+  box-shadow: 0 14px 30px rgba(30, 60, 120, 0.1);
+  border-color: #c9e9dc;
+}
+
+.analytics-card-animated {
+  animation: analyticsCardIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .year-month-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid #e2e8f0;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 10px;
 }
 
 .year-month-name {
-  font-weight: 700;
-  color: var(--text-color, #0f172a);
+  font-weight: 800;
+  color: #14365a;
   font-size: 15px;
+  letter-spacing: -0.01em;
 }
 
 .year-month-total {
-  font-weight: 700;
-  color: #10b981;
-  font-size: 14px;
+  font-weight: 800;
+  color: #0a9e78;
+  font-size: 13.5px;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.year-month-bar,
+.year-card-bar {
+  height: 6px;
+  border-radius: 999px;
+  background: #eef3f9;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+.year-month-bar span,
+.year-card-bar span {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #0cc290, #0a9e78);
+  transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .year-month-products {
@@ -45,69 +73,172 @@
   flex-wrap: wrap;
   gap: 6px;
 }
-
-.year-month-product {
+.year-month-none {
   font-size: 12px;
+  color: #a3b2c7;
   font-weight: 600;
-  color: #fff;
-  padding: 4px 10px;
+}
+
+/* Soft product pills with color dot (modern) */
+.year-month-product {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #3e5a76;
+  background: #f4f8fc;
+  border: 1px solid #e6eef7;
+  padding: 5px 10px;
   border-radius: 999px;
   max-width: 100%;
-  overflow-wrap: anywhere;
-  word-break: break-word;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+.year-month-product:hover {
+  transform: scale(1.04);
+  border-color: var(--product-color, #cbd5e1);
+}
+.year-month-product-dot {
+  width: 7px;
+  height: 7px;
+  flex-shrink: 0;
+  border-radius: 999px;
+  background: var(--product-color, #94a3b8);
+}
+.year-month-product-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 110px;
+}
+.year-month-product-qty {
+  color: #0a9e78;
+  font-variant-numeric: tabular-nums;
 }
 
 /* ── Years Grid ── */
 .years-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 14px;
 }
 
 .year-card {
   background: #fff;
-  border: 1px solid #e2e8f0;
-  border-radius: 14px;
+  border: 1px solid #e6eef7;
+  border-radius: 16px;
   padding: 18px;
   min-width: 0;
   overflow: hidden;
   cursor: pointer;
-  transition: transform 0.18s, box-shadow 0.18s, border-color 0.18s;
+  box-shadow: 0 6px 18px rgba(30, 60, 120, 0.05);
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s ease, border-color 0.22s ease;
 }
 
 .year-card:hover,
 .year-card:focus-visible {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
-  border-color: #cbd5e1;
+  transform: translateY(-3px);
+  box-shadow: 0 14px 30px rgba(30, 60, 120, 0.1);
+  border-color: #c9b8f5;
   outline: none;
 }
 
 .year-card-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: baseline;
   gap: 12px;
-  margin-bottom: 12px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid #e2e8f0;
+  margin-bottom: 10px;
 }
 
 .year-card-name {
-  font-weight: 700;
-  color: var(--text-color, #0f172a);
-  font-size: 16px;
+  font-weight: 800;
+  color: #14365a;
+  font-size: 18px;
+  letter-spacing: -0.02em;
 }
 
 .year-card-total {
-  font-weight: 700;
-  color: #10b981;
-  font-size: 15px;
+  font-weight: 800;
+  color: #0a9e78;
+  font-size: 14px;
   white-space: nowrap;
+  font-variant-numeric: tabular-nums;
 }
 
 .year-card-products {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
+}
+
+.year-card-cta {
+  display: inline-block;
+  margin-top: 12px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #2f80ed;
+  transition: transform 0.15s ease;
+}
+.year-card:hover .year-card-cta {
+  transform: translateX(3px);
+}
+
+/* ── Responsive ── */
+@media (max-width: 1100px) {
+  .yearly-breakdown {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (max-width: 860px) {
+  .yearly-breakdown {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 560px) {
+  .yearly-breakdown {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Dark mode ── */
+[data-theme="dark"] .year-month-card,
+[data-theme="dark"] .year-card {
+  background: #0f1728;
+  border-color: #1e2d45;
+}
+[data-theme="dark"] .year-month-card:hover {
+  border-color: #1e3a2d;
+}
+[data-theme="dark"] .year-card:hover,
+[data-theme="dark"] .year-card:focus-visible {
+  border-color: #3b2d5e;
+}
+[data-theme="dark"] .year-month-name,
+[data-theme="dark"] .year-card-name {
+  color: #e2e8f0;
+}
+[data-theme="dark"] .year-month-bar,
+[data-theme="dark"] .year-card-bar {
+  background: #1e2d45;
+}
+[data-theme="dark"] .year-month-product {
+  background: #141e33;
+  border-color: #1e2d45;
+  color: #cbd5e1;
+}
+[data-theme="dark"] .year-month-none {
+  color: #64748b;
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .analytics-card-animated {
+    animation: none;
+  }
+  .year-month-card,
+  .year-card,
+  .year-month-product {
+    transition: none;
+  }
 }

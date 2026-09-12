@@ -12,6 +12,37 @@
   flex-direction: column;
   gap: 18px;
   font-family: var(--font-family);
+  animation: invPageFade 0.3s ease both;
+}
+
+/* ── Entrance + micro-interaction animations ── */
+@keyframes invPageFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes invCardIn {
+  from { opacity: 0; transform: translateY(12px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes invPopIn {
+  from { opacity: 0; transform: scale(0.85) translateY(4px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+@keyframes invRowIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes invMenuPop {
+  from { opacity: 0; transform: translateY(-4px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes invShimmer {
+  0% { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+@keyframes invPulseDot {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.25); opacity: 0.75; }
 }
 
 /* ── Header ── */
@@ -21,6 +52,7 @@
   align-items: flex-start;
   gap: 16px;
   flex-wrap: wrap;
+  animation: invCardIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 .inv-head-left {
   display: flex;
@@ -39,6 +71,11 @@
   background: linear-gradient(135deg, #c9f3e3, #e9fbf3);
   border: 1px solid #b6e9d3;
   box-shadow: 0 6px 16px rgba(13, 157, 122, 0.12);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
+}
+.inv-head-icon:hover {
+  transform: translateY(-2px) rotate(-3deg) scale(1.03);
+  box-shadow: 0 10px 22px rgba(13, 157, 122, 0.2);
 }
 .inv-head-text {
   min-width: 0;
@@ -96,12 +133,16 @@
   padding: 12px 22px;
   border-radius: 999px;
   box-shadow: 0 10px 22px rgba(11, 173, 127, 0.28);
-  transition: transform 0.15s ease, background 0.15s ease;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background 0.15s ease, box-shadow 0.2s ease;
   white-space: nowrap;
 }
 .inv-add-btn:hover {
   background: #099a70;
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: 0 14px 28px rgba(11, 173, 127, 0.32);
+}
+.inv-add-btn:active {
+  transform: translateY(0) scale(0.97);
 }
 .inv-add-btn span[aria-hidden="true"] {
   font-size: 18px;
@@ -124,6 +165,23 @@
   display: flex;
   gap: 12px;
   align-items: flex-start;
+  animation: invCardIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s ease, border-color 0.22s ease;
+}
+.inv-stat:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 32px rgba(30, 60, 120, 0.1);
+  border-color: #d3e5f5;
+}
+.inv-stats .inv-stat:nth-child(1) { animation-delay: 0.05s; }
+.inv-stats .inv-stat:nth-child(2) { animation-delay: 0.12s; }
+.inv-stats .inv-stat:nth-child(3) { animation-delay: 0.19s; }
+.inv-stats .inv-stat:nth-child(4) { animation-delay: 0.26s; }
+.inv-stat-icon {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.inv-stat:hover .inv-stat-icon {
+  transform: scale(1.08) rotate(-4deg);
 }
 .inv-stat-icon {
   width: 40px;
@@ -206,6 +264,15 @@
   font-weight: 700;
   border: 1px solid transparent;
   white-space: nowrap;
+  animation: invPopIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
+}
+.inv-health-strip .inv-health-chip:nth-child(1) { animation-delay: 0.3s; }
+.inv-health-strip .inv-health-chip:nth-child(2) { animation-delay: 0.36s; }
+.inv-health-strip .inv-health-chip:nth-child(3) { animation-delay: 0.42s; }
+.inv-health-chip:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.1);
 }
 .inv-health-chip--ok {
   background: #d9f7e7;
@@ -231,6 +298,17 @@
   padding: 20px 22px;
   box-shadow: 0 8px 24px rgba(30, 60, 120, 0.05);
   min-width: 0;
+  animation: invCardIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+  transition: box-shadow 0.25s ease, border-color 0.25s ease;
+}
+.inv-attention-section {
+  animation-delay: 0.35s;
+}
+.inv-stock-section {
+  animation-delay: 0.42s;
+}
+.inv-section:hover {
+  border-color: #dbe7f5;
 }
 .inv-section-head {
   display: flex;
@@ -303,6 +381,19 @@
   gap: 10px;
   min-width: 0;
   max-width: 380px;
+  animation: invCardIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s ease, border-color 0.22s ease;
+}
+.inv-attention-grid .inv-attention-card:nth-child(1) { animation-delay: 0.4s; }
+.inv-attention-grid .inv-attention-card:nth-child(2) { animation-delay: 0.47s; }
+.inv-attention-grid .inv-attention-card:nth-child(3) { animation-delay: 0.54s; }
+.inv-attention-grid .inv-attention-card:nth-child(4) { animation-delay: 0.61s; }
+.inv-attention-grid .inv-attention-card:nth-child(5) { animation-delay: 0.68s; }
+.inv-attention-grid .inv-attention-card:nth-child(n+6) { animation-delay: 0.75s; }
+.inv-attention-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 26px rgba(220, 38, 38, 0.1);
+  border-color: #ffc2c9;
 }
 .inv-attention-top {
   display: flex;
@@ -345,6 +436,14 @@
   font-weight: 700;
   white-space: nowrap;
   border: 1px solid transparent;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
+}
+.inv-pill:hover {
+  transform: scale(1.05);
+}
+.inv-status--out svg,
+.inv-health-chip--out svg {
+  animation: invPulseDot 1.8s ease-in-out infinite;
 }
 .inv-status--ok {
   background: #d9f7e7;
@@ -398,7 +497,7 @@
   cursor: pointer;
   padding: 11px 16px;
   box-shadow: 0 8px 18px rgba(12, 194, 144, 0.28);
-  transition: transform 0.15s ease, filter 0.15s ease;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), filter 0.15s ease, box-shadow 0.2s ease;
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -406,7 +505,17 @@
 }
 .inv-restock-btn:hover {
   filter: brightness(0.96);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(12, 194, 144, 0.34);
+}
+.inv-restock-btn:active {
+  transform: translateY(0) scale(0.97);
+}
+.inv-restock-btn svg {
+  transition: transform 0.2s ease;
+}
+.inv-restock-btn:hover svg {
+  transform: rotate(-8deg) scale(1.1);
 }
 .inv-dots-btn {
   width: 46px;
@@ -489,9 +598,14 @@
   background: #fff;
   color: #64748b;
   cursor: pointer;
+  transition: background 0.15s ease, transform 0.15s ease, border-color 0.15s ease, color 0.15s ease;
 }
 .inv-density-btn:hover {
   background: #f1f5f9;
+  transform: translateY(-1px);
+}
+.inv-density-btn:active {
+  transform: scale(0.92);
 }
 .inv-density-btn.active {
   background: #e8f1ff;
@@ -558,6 +672,12 @@
 }
 .inv-stock-section--compact .inv-table td {
   padding: 9px 14px;
+}
+.inv-table tbody tr {
+  transition: background 0.15s ease, transform 0.2s ease;
+}
+.inv-table tbody tr.inv-row-animated {
+  animation: invRowIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 .inv-table tbody tr:hover {
   background: #f8fbff;
@@ -636,11 +756,15 @@
   border-radius: 999px;
   box-shadow: 0 6px 14px rgba(47, 128, 237, 0.28);
   white-space: nowrap;
-  transition: background 0.15s ease, transform 0.15s ease;
+  transition: background 0.15s ease, transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
 }
 .inv-stock-btn:hover {
   background: #2569c7;
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(47, 128, 237, 0.34);
+}
+.inv-stock-btn:active {
+  transform: translateY(0) scale(0.95);
 }
 
 /* kebab + menus */
@@ -663,10 +787,15 @@
   justify-content: center;
   line-height: 1;
   letter-spacing: 1px;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
 }
 .inv-icon-btn:hover {
   background: #eef2f7;
   color: #475569;
+  transform: scale(1.08);
+}
+.inv-icon-btn:active {
+  transform: scale(0.92);
 }
 .inv-icon-btn--row {
   width: 30px;
@@ -685,6 +814,11 @@
   display: flex;
   flex-direction: column;
   gap: 2px;
+  animation: invMenuPop 0.18s cubic-bezier(0.16, 1, 0.3, 1) both;
+  transform-origin: top left;
+}
+.inv-menu--right {
+  transform-origin: top right;
 }
 .inv-menu--right {
   left: auto;
@@ -715,10 +849,22 @@
   border: 1px solid #e6eef7;
   border-radius: 18px;
   box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
+  animation: invCardIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 .inv-loading {
   color: #8296b0;
   font-size: 14px;
+  position: relative;
+  overflow: hidden;
+}
+.inv-loading::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(47, 128, 237, 0.08), transparent);
+  background-size: 400px 100%;
+  animation: invShimmer 1.4s linear infinite;
+  pointer-events: none;
 }
 .inv-empty-title {
   margin: 0;
@@ -878,4 +1024,77 @@
 }
 [data-theme="dark"] .inv-menu button:hover {
   background: rgba(30, 45, 70, 0.6);
+}
+
+/* ── Toolbar + table micro-interactions ── */
+.inv-search,
+.inv-filter {
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+}
+.inv-search:hover,
+.inv-filter:hover {
+  border-color: #cbd5e1;
+}
+.inv-filter {
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+.inv-sort-btn {
+  transition: color 0.15s ease, transform 0.15s ease;
+}
+.inv-sort-btn:hover {
+  color: #2f80ed;
+}
+.inv-sort-arrow {
+  display: inline-block;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.inv-sort-btn:hover .inv-sort-arrow {
+  transform: translateY(-1px) scale(1.15);
+}
+.inv-viewall {
+  transition: color 0.15s ease, transform 0.15s ease;
+}
+.inv-viewall:hover {
+  text-decoration: underline;
+  transform: translateX(2px);
+}
+.inv-section-icon {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.inv-section:hover .inv-section-icon {
+  transform: scale(1.06) rotate(-3deg);
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .inventory-page,
+  .inv-page-head,
+  .inv-stat,
+  .inv-health-chip,
+  .inv-section,
+  .inv-attention-card,
+  .inv-table tbody tr.inv-row-animated,
+  .inv-menu,
+  .inv-loading,
+  .inv-empty {
+    animation: none;
+  }
+  .inv-loading::after {
+    animation: none;
+    display: none;
+  }
+  .inv-status--out svg,
+  .inv-health-chip--out svg {
+    animation: none;
+  }
+  .inv-stat,
+  .inv-attention-card,
+  .inv-add-btn,
+  .inv-restock-btn,
+  .inv-stock-btn,
+  .inv-health-chip,
+  .inv-icon-btn,
+  .inv-density-btn {
+    transition: none;
+  }
 }

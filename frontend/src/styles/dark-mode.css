@@ -805,20 +805,21 @@
 }
 
 [data-theme="dark"] .frequency-pill {
-  background: #141e33;
-  border-color: #1e2d45;
+  background: transparent;
+  border-color: transparent;
   color: #94a3b8;
 }
 
 [data-theme="dark"] .frequency-pill:hover:not(.active) {
-  background: #1a2740;
+  background: rgba(30, 45, 70, 0.5);
+  color: #e2e8f0;
 }
 
 [data-theme="dark"] .frequency-pill.active {
-  background: #10b981;
+  background: linear-gradient(135deg, #0cc290, #0a9e78);
   color: #fff;
   border-color: transparent;
-  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2);
+  box-shadow: 0 6px 14px rgba(12, 194, 144, 0.32);
 }
 
 /* ── Sales mode toggle ── */
@@ -841,7 +842,7 @@
 
 /* ── Edit sales calendar ── */
 [data-theme="dark"] .edit-sales-calendar {
-  background: #141e33;
+  background: #0f1728;
   border-color: #1e2d45;
 }
 
@@ -850,14 +851,14 @@
 }
 
 [data-theme="dark"] .edit-cal-nav {
-  background: #1a2740;
+  background: #0f1728;
   border-color: #1e2d45;
-  color: #e2e8f0;
+  color: #cbd5e1;
 }
 
 [data-theme="dark"] .edit-cal-nav:hover {
-  background: #1e2d45;
-  border-color: #2a3a55;
+  background: rgba(16, 185, 129, 0.12);
+  border-color: #1e3a2d;
 }
 
 [data-theme="dark"] .edit-cal-title-btn {
@@ -865,7 +866,7 @@
 }
 
 [data-theme="dark"] .edit-cal-title-btn:hover {
-  background: #1a2740;
+  background: rgba(16, 185, 129, 0.12);
 }
 
 [data-theme="dark"] .edit-cal-dropdown {
@@ -874,60 +875,66 @@
 }
 
 [data-theme="dark"] .edit-cal-dropdown-item {
-  color: #e2e8f0;
+  color: #cbd5e1;
 }
 
 [data-theme="dark"] .edit-cal-dropdown-item:hover {
-  background: #1a2740;
+  background: rgba(30, 45, 70, 0.6);
 }
 
 [data-theme="dark"] .edit-cal-dropdown-item--active {
-  background: #10b981;
+  background: linear-gradient(135deg, #0cc290, #0a9e78);
   color: #fff;
 }
 
 [data-theme="dark"] .edit-cal-day {
-  color: #e2e8f0;
+  color: #cbd5e1;
 }
 
 [data-theme="dark"] .edit-cal-day:hover:not(.edit-cal-day--empty):not(.edit-cal-day--selected) {
-  background: #1a2740;
+  background: rgba(16, 185, 129, 0.12);
+  color: #34d399;
 }
 
 [data-theme="dark"] .edit-cal-day--today {
-  background: rgba(59, 130, 246, 0.15);
-  color: #60a5fa;
+  background: rgba(16, 185, 129, 0.12);
+  color: #34d399;
+  border-color: #1e3a2d;
 }
 
 [data-theme="dark"] .edit-cal-day--selected {
-  background: #10b981;
+  background: linear-gradient(135deg, #0cc290, #0a9e78);
   color: #fff;
-  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2);
+  box-shadow: 0 6px 14px rgba(12, 194, 144, 0.35);
 }
 
 /* ── Month grid ── */
 [data-theme="dark"] .edit-sales-month-btn {
-  background: #141e33;
+  background: #0f1728;
   border-color: #1e2d45;
-  color: #e2e8f0;
+  color: #cbd5e1;
 }
 
 [data-theme="dark"] .edit-sales-month-btn:hover:not(.edit-sales-month-btn--selected) {
-  background: #1a2740;
-  border-color: #2a3a55;
+  background: rgba(16, 185, 129, 0.1);
+  border-color: #1e3a2d;
 }
 
 [data-theme="dark"] .edit-sales-month-btn--selected {
-  background: #10b981;
+  background: linear-gradient(135deg, #0cc290, #0a9e78);
   color: #fff;
   border-color: transparent;
-  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2);
+  box-shadow: 0 8px 18px rgba(12, 194, 144, 0.32);
 }
 
 /* ── Product cards ── */
 [data-theme="dark"] .edit-sales-product-card {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.12), rgba(59, 130, 246, 0.05));
-  border-color: rgba(59, 130, 246, 0.25);
+  background: #0f1728;
+  border-color: #1e2d45;
+}
+
+[data-theme="dark"] .edit-sales-product-card:hover {
+  border-color: #1e3a2d;
 }
 
 [data-theme="dark"] .edit-sales-product-name {
@@ -939,8 +946,8 @@
 }
 
 [data-theme="dark"] .edit-sales-btn--minus {
-  background: #1a2740;
-  border-color: rgba(239, 68, 68, 0.2);
+  background: transparent;
+  border-color: #3a1d22;
   color: #f87171;
 }
 
@@ -949,12 +956,12 @@
 }
 
 [data-theme="dark"] .edit-sales-btn--plus {
-  background: #10b981;
+  background: linear-gradient(135deg, #0cc290, #0a9e78);
   color: #fff;
 }
 
 [data-theme="dark"] .edit-sales-btn--plus:hover {
-  background: #059669;
+  filter: brightness(0.96);
 }
 
 /* ==========================================================================
@@ -985,19 +992,20 @@
 }
 
 [data-theme="dark"] .analytics-tab-btn {
-  background: #141e33;
-  border-color: #1e2d45;
+  background: transparent;
+  border-color: transparent;
   color: #94a3b8;
 }
 
-[data-theme="dark"] .analytics-tab-btn:hover {
-  background: #1a2740;
+[data-theme="dark"] .analytics-tab-btn:hover:not(.active) {
+  background: rgba(30, 45, 70, 0.5);
+  color: #e2e8f0;
 }
 
 [data-theme="dark"] .analytics-tab-btn.active {
-  background: #1d4ed8;
+  background: linear-gradient(135deg, #0cc290, #0a9e78);
   color: #fff;
-  border-color: #1d4ed8;
+  border-color: transparent;
 }
 
 [data-theme="dark"] .forecast-search-box {
@@ -1125,21 +1133,41 @@
 
 /* ── Analytics views ── */
 [data-theme="dark"] .year-month-card {
-  background: #141e33;
+  background: #0f1728;
   border-color: #1e2d45;
+}
+
+[data-theme="dark"] .year-month-card:hover {
+  border-color: #1e3a2d;
 }
 
 [data-theme="dark"] .year-month-name {
   color: #e2e8f0;
 }
 
-[data-theme="dark"] .year-card {
+[data-theme="dark"] .year-month-bar,
+[data-theme="dark"] .year-card-bar {
+  background: #1e2d45;
+}
+
+[data-theme="dark"] .year-month-product {
   background: #141e33;
+  border-color: #1e2d45;
+  color: #cbd5e1;
+}
+
+[data-theme="dark"] .year-month-none {
+  color: #64748b;
+}
+
+[data-theme="dark"] .year-card {
+  background: #0f1728;
   border-color: #1e2d45;
 }
 
-[data-theme="dark"] .year-card:hover {
-  border-color: #2a3a55;
+[data-theme="dark"] .year-card:hover,
+[data-theme="dark"] .year-card:focus-visible {
+  border-color: #3b2d5e;
 }
 
 [data-theme="dark"] .year-card-name {
@@ -1181,7 +1209,13 @@
 }
 
 [data-theme="dark"] .product-trend-total {
+  background: rgba(16, 185, 129, 0.08);
+  border-color: #1e3a2d;
   color: #94a3b8;
+}
+
+[data-theme="dark"] .product-trend-total strong {
+  color: #34d399;
 }
 
 [data-theme="dark"] .chart-year-select {
