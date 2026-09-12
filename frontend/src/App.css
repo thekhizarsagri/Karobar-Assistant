@@ -132,9 +132,17 @@ html, body {
 
 /* ── Sidebar ── */
 [data-theme="dark"] .sidebar {
-  background: rgba(14, 22, 40, 0.92) !important;
-  border-right-color: rgba(30, 45, 70, 0.6) !important;
-  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.3);
+  background: rgba(20, 30, 51, 0.9) !important;
+  border-color: rgba(30, 45, 70, 0.7) !important;
+  box-shadow: 0 16px 44px rgba(0, 0, 0, 0.35);
+}
+
+[data-theme="dark"] .sidebar-brand {
+  border-bottom-color: rgba(30, 45, 70, 0.7);
+}
+
+[data-theme="dark"] .sidebar-group-label {
+  color: #54678a;
 }
 
 [data-theme="dark"] .sidebar-item {
@@ -143,12 +151,29 @@ html, body {
 
 [data-theme="dark"] .sidebar-item:hover {
   background: rgba(16, 185, 129, 0.1);
-  color: #10b981;
+  color: #34d399;
 }
 
 [data-theme="dark"] .sidebar-item.active {
-  background: linear-gradient(135deg, #10b981, #059669 60%);
+  background: linear-gradient(135deg, #0cc290, #0a9e78);
   color: #fff;
+  box-shadow: 0 10px 24px rgba(12, 194, 144, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="dark"] .sidebar-footer {
+  border-top-color: rgba(30, 45, 70, 0.7);
+}
+
+[data-theme="dark"] .sidebar-collapse-btn {
+  background: #0f1728;
+  border-color: #1e2d45;
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .sidebar-collapse-btn:hover {
+  background: rgba(16, 185, 129, 0.12);
+  color: #34d399;
+  border-color: #1e3a2d;
 }
 
 [data-theme="dark"] .sidebar-toggle {
@@ -193,7 +218,7 @@ html, body {
 
 /* New dashboard dark mode - top bar removed, icons only */
 [data-theme="dark"] .topbar { background: transparent; border: none; box-shadow: none; }
-[data-theme="dark"] .sidebar { background: rgba(14,22,40,0.92) !important; border-right-color: rgba(30,45,70,0.6) !important; }
+[data-theme="dark"] .sidebar { background: rgba(20,30,51,0.9) !important; border-color: rgba(30,45,70,0.7) !important; }
 [data-theme="dark"] .topbar-search input { background: #0f1728; border-color: #1e2d45; color: #e2e8f0; }
 [data-theme="dark"] .topbar-search input::placeholder { color: #64748b; }
 [data-theme="dark"] .topbar-search input:focus { background: #0c1222; border-color: #2a3a55; }

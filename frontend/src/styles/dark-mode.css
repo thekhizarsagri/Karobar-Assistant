@@ -7,15 +7,6 @@
 }
 
 /* ── Emoji icon containers — remove background squares ── */
-[data-theme="dark"] .rep-section-icon,
-[data-theme="dark"] .rep-section-icon--green,
-[data-theme="dark"] .rep-section-icon--blue,
-[data-theme="dark"] .rep-section-icon--amber,
-[data-theme="dark"] .rep-section-icon--purple,
-[data-theme="dark"] .rep-section-icon--red,
-[data-theme="dark"] .rep-section-icon--teal,
-[data-theme="dark"] .rep-section-icon--velocity,
-[data-theme="dark"] .rep-section-icon--abc,
 [data-theme="dark"] .settings-item-icon {
   background: transparent !important;
 }
@@ -1404,11 +1395,11 @@
 }
 
 [data-theme="dark"] .rep-score-label {
-  fill: #94a3b8;
+  fill: #64748b;
 }
 
 [data-theme="dark"] .rep-subscore-head {
-  color: #94a3b8;
+  color: #cbd5e1;
 }
 
 [data-theme="dark"] .rep-subscore-head strong {
@@ -1420,11 +1411,13 @@
 }
 
 [data-theme="dark"] .rep-metric {
-  background: #141e33;
+  background: #0f1728;
   border-color: #1e2d45;
 }
 
 [data-theme="dark"] .rep-metric:hover {
+  background: #141e33;
+  border-color: #2a3a55;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
 }
 
@@ -1441,11 +1434,7 @@
 }
 
 [data-theme="dark"] .rep-note strong {
-  color: #e2e8f0;
-}
-
-[data-theme="dark"] .rep-section-header h2 {
-  color: #e2e8f0;
+  color: #cbd5e1;
 }
 
 [data-theme="dark"] .rep-pareto-label {
@@ -1453,7 +1442,7 @@
 }
 
 [data-theme="dark"] .rep-pareto-val {
-  color: #94a3b8;
+  color: #34d399;
 }
 
 [data-theme="dark"] .rep-pareto-track {
