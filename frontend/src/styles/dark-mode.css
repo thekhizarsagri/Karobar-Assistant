@@ -2101,11 +2101,6 @@
   color: #34d399;
 }
 
-/* ── Background theme switcher is light-mode only ── */
-[data-theme="dark"] .bg-switcher {
-  display: none;
-}
-
 /* ── Welcome theme toggle (layout in welcome.css; only colors here) ── */
 [data-theme="dark"] .welcome-theme-toggle {
   background: #141e33;
