@@ -1010,6 +1010,23 @@
   background: #141e33;
   border-color: #1e2d45;
 }
+/* Section icon tiles: tone down bright gradients in dark mode */
+[data-theme="dark"] .sales-section-icon--calendar {
+  background: rgba(16, 185, 129, 0.16);
+  border: 1px solid #1e3a2d;
+  box-shadow: none;
+}
+[data-theme="dark"] .sales-section-icon--calendar svg {
+  stroke: #34d399;
+}
+[data-theme="dark"] .sales-section-icon--stock {
+  background: rgba(47, 128, 237, 0.18);
+  border: 1px solid #243a5e;
+  box-shadow: none;
+}
+[data-theme="dark"] .sales-section-icon--stock svg {
+  stroke: #7aa7f5;
+}
 
 /* ── Reduced motion ── */
 @media (prefers-reduced-motion: reduce) {

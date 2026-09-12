@@ -1295,11 +1295,47 @@
 /* ==========================================================================
    Settings Page - List Layout & Toggle Switches
    ========================================================================== */
+.settings-page {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  font-family: var(--font-family);
+  animation: dashFade 0.3s ease both;
+}
+.analytics-head-icon--settings {
+  background: linear-gradient(135deg, #eef3f9, #f8fbff);
+  border-color: #d5e3f2;
+  box-shadow: 0 6px 16px rgba(30, 60, 120, 0.1);
+}
+.analytics-head-icon--settings:hover {
+  box-shadow: 0 10px 22px rgba(30, 60, 120, 0.16);
+}
+.analytics-section-icon--settings {
+  background: linear-gradient(135deg, #64748b, #475569);
+  box-shadow: 0 6px 14px rgba(71, 85, 105, 0.3);
+}
+.settings-section-card {
+  animation-delay: 0.22s;
+}
+.settings-status-dot {
+  width: 10px;
+  height: 10px;
+  flex-shrink: 0;
+  border-radius: 999px;
+  background: #0cc290;
+  box-shadow: 0 0 0 4px rgba(12, 194, 144, 0.15);
+  align-self: center;
+}
+.settings-status-dot--dark {
+  background: #8b5cf6;
+  box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.18);
+}
 .settings-list {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  margin-top: 8px;
+  margin-top: 0;
 }
 
 .settings-item {
@@ -1307,17 +1343,19 @@
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding: 16px 20px;
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 16px;
-  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
-  transition: all 0.25s ease;
+  padding: 16px 18px;
+  background: #f8fbff;
+  border: 1px solid #e6eef7;
+  border-radius: 14px;
+  box-shadow: none;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
 
 .settings-item:hover {
-  border-color: #cbd5e1;
-  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.07);
+  border-color: #c9d9f5;
+  box-shadow: 0 8px 20px rgba(30, 60, 120, 0.07);
+  transform: translateY(-1px);
+  background: #fff;
 }
 
 
@@ -1336,16 +1374,27 @@
 }
 
 .settings-item-icon {
-  font-size: 22px;
-  line-height: 1;
   flex-shrink: 0;
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f1f5f9;
+  background: #eef3f9;
+  border: 1px solid #e6eef7;
   border-radius: 12px;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.settings-item:hover .settings-item-icon {
+  transform: scale(1.06) rotate(-3deg);
+}
+.settings-item-icon--moon {
+  background: #ede9fe;
+  border-color: #d8cbf7;
+}
+.settings-item-icon--bell {
+  background: #fef3d1;
+  border-color: #ffdf9e;
 }
 
 .settings-item-info > div {
@@ -1355,16 +1404,66 @@
 }
 
 .settings-item-label {
-  font-size: 14px;
+  font-size: 14.5px;
   font-weight: 700;
-  color: #0f172a;
+  color: #1d3557;
   line-height: 1.3;
 }
 
 .settings-item-desc {
-  font-size: 12px;
-  color: #94a3b8;
+  font-size: 12.5px;
+  color: #7b8da6;
   line-height: 1.4;
+}
+
+/* ── Settings loading skeleton ── */
+.settings-item--loading {
+  pointer-events: none;
+}
+.settings-skeleton-icon,
+.settings-skeleton-line,
+.settings-skeleton-toggle {
+  position: relative;
+  overflow: hidden;
+  background: #eef3f9;
+  border-radius: 8px;
+}
+.settings-skeleton-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+.settings-skeleton-line {
+  display: block;
+  height: 12px;
+}
+.settings-skeleton-line--title {
+  width: 130px;
+}
+.settings-skeleton-line--desc {
+  width: 200px;
+  margin-top: 8px;
+}
+.settings-skeleton-toggle {
+  width: 46px;
+  height: 26px;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+.settings-skeleton-icon::after,
+.settings-skeleton-line::after,
+.settings-skeleton-toggle::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.7), transparent);
+  background-size: 200px 100%;
+  animation: settingsShimmer 1.3s linear infinite;
+}
+@keyframes settingsShimmer {
+  0% { background-position: -200px 0; }
+  100% { background-position: 200px 0; }
 }
 
 /* Toggle Switch */
@@ -1427,19 +1526,42 @@
 /* ==========================================================================
    Dark Mode Overrides for Settings
    ========================================================================== */
+[data-theme="dark"] .analytics-head-icon--settings {
+  background: rgba(100, 116, 139, 0.16);
+  border-color: #2a3a55;
+}
 [data-theme="dark"] .settings-item {
-  background: #1e293b;
-  border-color: #334155;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+  background: #0f1728;
+  border-color: #1e2d45;
+  box-shadow: none;
 }
 
 [data-theme="dark"] .settings-item:hover {
-  border-color: #475569;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  border-color: #2a3a55;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  background: #141e33;
 }
 
 [data-theme="dark"] .settings-item-icon {
-  background: #334155;
+  background: #141e33;
+  border-color: #1e2d45;
+}
+[data-theme="dark"] .settings-item-icon--moon {
+  background: rgba(139, 92, 246, 0.16);
+  border-color: #3b2d5e;
+}
+[data-theme="dark"] .settings-item-icon--bell {
+  background: rgba(217, 119, 6, 0.14);
+  border-color: #45300a;
+}
+/* Section icon tile: tone down bright gradient in dark mode */
+[data-theme="dark"] .analytics-section-icon--settings {
+  background: rgba(100, 116, 139, 0.18);
+  border: 1px solid #2a3a55;
+  box-shadow: none;
+}
+[data-theme="dark"] .analytics-section-icon--settings svg {
+  stroke: #94a3b8;
 }
 
 [data-theme="dark"] .settings-item-label {

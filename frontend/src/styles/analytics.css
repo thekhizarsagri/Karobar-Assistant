@@ -750,6 +750,31 @@
   background: #0f1728;
   border-color: #1e2d45;
 }
+/* Section icon tiles: tone down bright gradients in dark mode */
+[data-theme="dark"] .analytics-section-icon--products {
+  background: rgba(47, 128, 237, 0.18);
+  border: 1px solid #243a5e;
+  box-shadow: none;
+}
+[data-theme="dark"] .analytics-section-icon--products svg {
+  stroke: #7aa7f5;
+}
+[data-theme="dark"] .analytics-section-icon--calendar {
+  background: rgba(16, 185, 129, 0.16);
+  border: 1px solid #1e3a2d;
+  box-shadow: none;
+}
+[data-theme="dark"] .analytics-section-icon--calendar svg {
+  stroke: #34d399;
+}
+[data-theme="dark"] .analytics-section-icon--years {
+  background: rgba(139, 92, 246, 0.16);
+  border: 1px solid #3b2d5e;
+  box-shadow: none;
+}
+[data-theme="dark"] .analytics-section-icon--years svg {
+  stroke: #b79cff;
+}
 
 /* ── Reduced motion ── */
 @media (prefers-reduced-motion: reduce) {

@@ -10,6 +10,16 @@ const EXPORT_DATASETS = [
   ["stock", "Stock history"],
 ];
 
+function initialsOf(name) {
+  return String(name || "?")
+    .trim()
+    .split(/\s+/)
+    .map((w) => w[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+}
+
 function ProductHistoryDetail({ productName, salesSummary, products, onBack, onClearHistory }) {
   const productHistory = salesSummary?.product_history || {};
   const stockHistory = salesSummary?.stock_history || {};
@@ -20,6 +30,7 @@ function ProductHistoryDetail({ productName, salesSummary, products, onBack, onC
   const color = colorMap[productName] || getProductColor(0);
   const sales = productHistory[productName]?.entries || [];
   const stockEntries = stockHistory[productName] || [];
+  const totalSold = productHistory[productName]?.total_quantity ?? 0;
 
   const [clearing, setClearing] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -68,15 +79,31 @@ function ProductHistoryDetail({ productName, salesSummary, products, onBack, onC
 
   return (
     <div className="history-detail-page">
-      <div className="history-detail-header">
-        <div className="history-detail-title-block">
-          <h1 style={{ color }}>{productName}</h1>
-          <p className="history-detail-subtitle">
-            Total sold: {formatStat(productHistory[productName]?.total_quantity ?? 0)} units
-          </p>
+      {/* ── Header ── */}
+      <div className="analytics-header">
+        <div className="analytics-head-left">
+          <button type="button" className="history-back-btn" onClick={onBack} aria-label="Back to history">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <polyline points="15 18 9 12 15 6" />
+            </svg>
+          </button>
+          <span className="history-detail-avatar" style={{ "--product-color": color }} aria-hidden="true">
+            {initialsOf(productName)}
+          </span>
+          <span className="analytics-head-text">
+            <h1 className="analytics-title history-detail-title" title={productName}>{productName}</h1>
+            <p className="analytics-subtitle">
+              Total sold: <strong>{formatStat(totalSold)} units</strong> · {sales.length} sale{sales.length === 1 ? "" : "s"} · {stockEntries.length} stock {stockEntries.length === 1 ? "entry" : "entries"}
+            </p>
+          </span>
         </div>
-        <div className="history-detail-actions">
+        <div className="analytics-head-right">
           <div className="export-menu">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0d9d7a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
             <span className="export-label">Export CSV</span>
             {EXPORT_DATASETS.map(([ds, label]) => (
               <a
@@ -96,45 +123,74 @@ function ProductHistoryDetail({ productName, salesSummary, products, onBack, onC
           >
             Clear History
           </button>
-          <button type="button" className="history-detail-back-btn" onClick={onBack}>Back to history</button>
         </div>
       </div>
 
-      <div className="history-detail-section">
-        <h4>Sales</h4>
+      {/* ── Sales timeline ── */}
+      <section className="analytics-section history-timeline-section">
+        <div className="analytics-section-head">
+          <span className="analytics-section-icon analytics-section-icon--sales" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M3 9l1.7-5h14.6L21 9" />
+              <path d="M3 9v11a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V9" />
+              <path d="M3 9h18" />
+            </svg>
+          </span>
+          <span className="analytics-section-titles">
+            <h2 className="analytics-section-title">Sales</h2>
+            <p className="analytics-section-sub">{sales.length === 0 ? "No sales recorded yet." : `${sales.length} sale${sales.length === 1 ? "" : "s"} recorded`}</p>
+          </span>
+        </div>
         {sales.length === 0 ? (
-          <p className="history-empty">No sales recorded yet.</p>
+          <p className="history-inline-empty">No sales recorded yet.</p>
         ) : (
-          <ul className="history-entry-list">
+          <ul className="history-timeline">
             {sales.map((entry, index) => (
-              <li key={`${productName}-sale-${index}`}>
-                <strong>{entry.quantity}</strong> units • {entry.period} •{" "}
-                {entry.entry_date || "No date"}
-                {entry.created_at ? (
-                  <span className="history-entry-meta">
-                    {" "}recorded on {formatDateTime(entry.created_at)}
+              <li key={`${productName}-sale-${index}`} className="history-timeline-item analytics-card-animated" style={{ animationDelay: `${Math.min(index, 11) * 35}ms` }}>
+                <span className="history-timeline-dot history-timeline-dot--sale" aria-hidden="true" />
+                <span className="history-timeline-body">
+                  <span className="history-timeline-main">
+                    <strong>{formatStat(entry.quantity)}</strong> units · {entry.period || "day"} · {entry.entry_date || "No date"}
                   </span>
-                ) : null}
+                  {entry.created_at ? (
+                    <span className="history-entry-meta">recorded on {formatDateTime(entry.created_at)}</span>
+                  ) : null}
+                </span>
               </li>
             ))}
           </ul>
         )}
-      </div>
+      </section>
 
-      <div className="history-detail-section">
-        <h4>Stock added</h4>
+      {/* ── Stock timeline ── */}
+      <section className="analytics-section history-timeline-section">
+        <div className="analytics-section-head">
+          <span className="analytics-section-icon analytics-section-icon--stock" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 8 12 3 3 8v8l9 5 9-5V8z" />
+              <path d="M3 8l9 5 9-5M12 13v8" />
+            </svg>
+          </span>
+          <span className="analytics-section-titles">
+            <h2 className="analytics-section-title">Stock added</h2>
+            <p className="analytics-section-sub">{stockEntries.length === 0 ? "No stock entries recorded yet." : `${stockEntries.length} stock ${stockEntries.length === 1 ? "entry" : "entries"}`}</p>
+          </span>
+        </div>
         {stockEntries.length === 0 ? (
-          <p className="history-empty">No stock entries recorded yet.</p>
+          <p className="history-inline-empty">No stock entries recorded yet.</p>
         ) : (
-          <ul className="history-entry-list">
+          <ul className="history-timeline">
             {stockEntries.map((entry, index) => (
-              <li key={`${productName}-stock-${index}`}>
-                <strong>{stockLabel(entry)}</strong>
+              <li key={`${productName}-stock-${index}`} className="history-timeline-item analytics-card-animated" style={{ animationDelay: `${Math.min(index, 11) * 35}ms` }}>
+                <span className="history-timeline-dot history-timeline-dot--stock" aria-hidden="true" />
+                <span className="history-timeline-body">
+                  <span className="history-timeline-main"><strong>{stockLabel(entry)}</strong></span>
+                </span>
               </li>
             ))}
           </ul>
         )}
-      </div>
+      </section>
 
       {showConfirmModal && (
         <ModalPortal>

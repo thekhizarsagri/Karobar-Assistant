@@ -28,13 +28,9 @@ html, body {
   overflow-x: hidden;
   background: var(--gradient-bg);
   background-size: 140% 140%, 140% 140%, 140% 140%, 140% 140%, 140% 140%, 140% 140%, 100% 100%;
-  animation: var(--bg-anim);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  #root {
-    animation: none;
-  }
+  /* Static gradient (same look, no motion): the animated aurora caused
+     scroll jank in light mode. Dark mode already uses a static background. */
+  animation: none;
 }
 
 /* Page Transition Animations */

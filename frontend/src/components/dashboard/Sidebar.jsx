@@ -51,7 +51,7 @@ const NAV_ITEMS = [
   },
   {
     id: "ai",
-    label: "AI Analytics",
+    label: "Analytics",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M9 18h6" />
