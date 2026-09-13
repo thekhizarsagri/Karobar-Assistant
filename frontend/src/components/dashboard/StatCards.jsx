@@ -1,4 +1,5 @@
 import { useTheme } from "../../ThemeContext";
+import { resolveCurrencySymbol } from "../../utils/currency";
 
 function SolidHead({ color, tip, prev }) {
   // Perfect equilateral-style triangle head, aligned with the line's
@@ -95,11 +96,13 @@ function TrendArrow({ up, color }) {
   );
 }
 
-function formatMoney(value) {
-  // Exactly like cards.png: 200.00 / 1,000.00 / -800.00 (2 decimals, commas)
+function formatMoney(currency, value) {
+  // Exactly like cards.png: 200.00 / 1,000.00 / -800.00 (2 decimals, commas),
+  // prefixed with the selected currency symbol.
+  const symbol = resolveCurrencySymbol(currency);
   const num = Number(value || 0);
-  if (Number.isNaN(num)) return "0.00";
-  return num.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  if (Number.isNaN(num)) return `${symbol}0.00`;
+  return `${symbol}${num.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 }
 
 function formatInt(value) {
@@ -246,6 +249,7 @@ export default function StatCards({
   grossProfit,
   monthlyExpenses,
   netProfit,
+  currency,
   salesSummary,
   analytics,
   products,
@@ -428,7 +432,7 @@ export default function StatCards({
     {
       key: "gross",
       label: "Gross Profit",
-      value: formatMoney(grossNum),
+      value: formatMoney(currency, grossNum),
       valueColor: grossTheme.value,
       theme: grossTheme,
       pct: grossT.pct,
@@ -450,7 +454,7 @@ export default function StatCards({
     {
       key: "expenses",
       label: "Monthly Expenses",
-      value: formatMoney(expNum),
+      value: formatMoney(currency, expNum),
       valueColor: LAVENDER.value,
       theme: LAVENDER,
       pct: expT.pct,
@@ -468,7 +472,7 @@ export default function StatCards({
     {
       key: "netProfit",
       label: "Net Profit",
-      value: formatMoney(netNum),
+      value: formatMoney(currency, netNum),
       valueColor: netTheme.value,
       theme: netTheme,
       pct: netT.pct,

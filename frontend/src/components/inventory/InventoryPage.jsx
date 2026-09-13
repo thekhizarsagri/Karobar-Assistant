@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import StockModal from "../dashboard/StockModal";
 import { formatFull, formatNumber as fmt } from "../../utils/formatNumber";
+import { resolveCurrencySymbol } from "../../utils/currency";
 import InventoryTable from "./InventoryTable";
 import { STATUS_META } from "./inventoryConstants";
 
@@ -73,7 +74,7 @@ function AttentionCard({ item, onRestock }) {
   );
 }
 
-function InventoryPage({ products, onSubmit }) {
+function InventoryPage({ products, currency, onSubmit }) {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState("");
@@ -148,9 +149,10 @@ function InventoryPage({ products, onSubmit }) {
   const outOfStock = Number(summary.out_of_stock || 0);
 
   const unitsText = formatFull(summary.total_units ?? 0);
-  const costText = `₹${formatFull(summary.total_cost_value ?? 0, 2)}`;
-  const retailText = `₹${formatFull(summary.total_retail_value ?? 0, 2)}`;
-  const profitText = `₹${formatFull(summary.potential_profit ?? 0, 2)}`;
+  const sym = resolveCurrencySymbol(currency);
+  const costText = `${sym}${formatFull(summary.total_cost_value ?? 0, 2)}`;
+  const retailText = `${sym}${formatFull(summary.total_retail_value ?? 0, 2)}`;
+  const profitText = `${sym}${formatFull(summary.potential_profit ?? 0, 2)}`;
 
   return (
     <div className="inventory-page">

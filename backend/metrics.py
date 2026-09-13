@@ -61,6 +61,7 @@ def get_dashboard_summary(profile: BusinessProfile) -> Dict[str, object]:
     return {
         "business_name": profile.business_name,
         "owner_name": profile.owner_name,
+        "currency": profile.currency,
         "status": "Healthy" if metrics["net_profit"] >= 0 else "Needs attention",
         "metrics": metrics,
         "total_monthly_expenses": round(total_monthly, 2),

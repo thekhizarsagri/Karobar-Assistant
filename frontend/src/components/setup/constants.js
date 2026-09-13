@@ -29,16 +29,7 @@ export const productUnits = [
   { value: "pair", label: "Pairs (pr)" },
 ];
 
-export const currencies = [
-  { code: "INR", symbol: "₹", name: "Indian Rupee (₹)" },
-  { code: "USD", symbol: "$", name: "US Dollar ($)" },
-  { code: "EUR", symbol: "€", name: "Euro (€)" },
-  { code: "GBP", symbol: "£", name: "British Pound (£)" },
-  { code: "AED", symbol: "AED ", name: "UAE Dirham (AED)" },
-  { code: "PKR", symbol: "Rs ", name: "Pakistani Rupee (Rs)" },
-  { code: "CAD", symbol: "CA$ ", name: "Canadian Dollar (CA$)" },
-  { code: "SAR", symbol: "SAR ", name: "Saudi Riyal (SAR)" },
-];
+export { CURRENCIES, CURRENCIES as currencies } from "../../utils/currency";
 
 export const businessTypes = [
   "Manufacturing",

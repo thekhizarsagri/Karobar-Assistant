@@ -21,6 +21,7 @@ import ReportsPage from "./reports/ReportsPage";
 import NotificationBell from "./dashboard/NotificationBell";
 import ModalPortal from "./dashboard/ModalPortal";
 import { useTheme } from "../ThemeContext";
+import { resolveCurrencySymbol } from "../utils/currency";
 
 function getGreeting() {
   const hour = new Date().getHours();
@@ -116,7 +117,7 @@ function TopBar({ onEditForm, onEditProfile, onLogout, ownerName }) {
 
 
 
-function SalesOverviewCard({ analytics }) {
+function SalesOverviewCard({ analytics, currency }) {
   // Jan - Dec only, like sales analytics graphs
   const chartData = useMemo(() => {
     const monthly = analytics?.monthly || {};
@@ -137,6 +138,7 @@ function SalesOverviewCard({ analytics }) {
   const { dark } = useTheme();
   const axisLine = dark ? "#1e2d45" : "#f1f5f9";
   const emptyBar = dark ? "#1e2d45" : "#d1fae5";
+  const sym = resolveCurrencySymbol(currency);
 
   return (
     <div className="dash-card sales-overview-card" style={{ flex: 1 }}>
@@ -157,7 +159,7 @@ function SalesOverviewCard({ analytics }) {
           <div style={{ display: 'flex', flex: 1, gap: 0 }}>
             {/* Y axis */}
             <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: '8px 8px 28px 0', fontSize: 11, color: '#94a3b8', fontWeight: 600 }}>
-              <span>₹100k</span><span>₹75k</span><span>₹50k</span><span>₹25k</span><span>₹0</span>
+              <span>{sym}100k</span><span>{sym}75k</span><span>{sym}50k</span><span>{sym}25k</span><span>{sym}0</span>
             </div>
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 6 }}>
               <div style={{ flex: 1, borderLeft: `1px solid ${axisLine}`, borderBottom: `1px solid ${axisLine}`, display: 'flex', alignItems: 'end', gap: 10, padding: '10px 8px 0 8px', position: 'relative' }}>
@@ -338,7 +340,7 @@ function DashboardPage({ data, onEditForm, onLogout }) {
   const grossProfit = summary?.metrics?.gross_profit ?? 0;
   const monthlyExpenses = summary?.metrics?.total_expenses ?? summary?.metrics?.monthly_expenses ?? 0;
   const netProfit = summary?.metrics?.net_profit ?? 0;
-  const currency = summary?.currency || "₹";
+  const currency = resolveCurrencySymbol(summary?.currency);
 
   // For non-dashboard pages, we render them below topbar but without dashboard grid
   const renderMainContent = () => {
@@ -355,7 +357,7 @@ function DashboardPage({ data, onEditForm, onLogout }) {
         />
       );
     }
-    if (activeNav === "inventory") return <InventoryPage products={summary?.products || []} onSubmit={handleStockSubmit} />;
+    if (activeNav === "inventory") return <InventoryPage products={summary?.products || []} currency={currency} onSubmit={handleStockSubmit} />;
     if (activeNav === "sales") return <AnalyticsPage data={summary} onBack={() => setActiveNav("dashboard")} />;
     if (activeNav === "editSales") return <AdjustSalesTab products={summary?.products || []} submitSale={submitSale} removeSale={removeSaleHandler} />;
     if (activeNav === "ai") return <AiInsightsPage data={summary} onBack={() => setActiveNav("dashboard")} />;
@@ -458,7 +460,7 @@ function DashboardPage({ data, onEditForm, onLogout }) {
 
               {/* Bottom — Sales Overview full width */}
               <div className="dash-bottom-row">
-                <SalesOverviewCard analytics={analytics} />
+                <SalesOverviewCard analytics={analytics} currency={currency} />
               </div>
             </div>
           ) : (

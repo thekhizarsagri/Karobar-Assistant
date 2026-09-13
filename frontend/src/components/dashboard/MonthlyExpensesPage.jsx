@@ -1,10 +1,7 @@
 import { useState } from "react";
 import ExpenseScheduleModal from "./ExpenseScheduleModal";
 import ExpenseFormModal from "./ExpenseFormModal";
-
-function formatMoney(currency, value) {
-  return `${currency}${Number(value || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-}
+import { formatMoney, resolveCurrencySymbol } from "../../utils/currency";
 
 function initialOf(label) {
   return String(label || "?").trim().charAt(0).toUpperCase();
@@ -24,6 +21,8 @@ function MonthlyExpensesPage({ expenses, metrics, nextDeductions, recentDeductio
 
   const totalExpenses = activeExpenses
     .reduce((sum, e) => sum + Number(e.amount || 0), 0);
+
+  const sym = resolveCurrencySymbol(currency);
 
   const availableBalance = metrics?.available_balance ?? 0;
 
@@ -208,7 +207,7 @@ function MonthlyExpensesPage({ expenses, metrics, nextDeductions, recentDeductio
               </div>
               <div className="expenses-page-item-right">
                 <span className="expenses-page-item-amount">
-                  {currency}{Number(expense.amount || 0).toLocaleString()}
+                  {sym}{Number(expense.amount || 0).toLocaleString()}
                 </span>
                 <div className="expenses-page-item-actions">
                   <button
@@ -270,7 +269,7 @@ function MonthlyExpensesPage({ expenses, metrics, nextDeductions, recentDeductio
                 </div>
                 <div className="expenses-page-item-right">
                   <span className="expenses-page-item-amount negative">
-                    -{currency}{Number(d.amount || 0).toLocaleString()}
+                    -{sym}{Number(d.amount || 0).toLocaleString()}
                   </span>
                   <span className="expenses-page-item-schedule">
                     Day {d.deduction_day} at {d.deduction_time}
@@ -313,10 +312,10 @@ function MonthlyExpensesPage({ expenses, metrics, nextDeductions, recentDeductio
                 </div>
                 <div className="expenses-page-item-right">
                   <span className="expenses-page-item-amount negative">
-                    -{currency}{Number(d.amount || 0).toLocaleString()}
+                    -{sym}{Number(d.amount || 0).toLocaleString()}
                   </span>
                   <span className="expenses-page-item-schedule">
-                    {currency}{Number(d.balance_before || 0).toLocaleString()} → {currency}{Number(d.balance_after || 0).toLocaleString()}
+                    {sym}{Number(d.balance_before || 0).toLocaleString()} → {sym}{Number(d.balance_after || 0).toLocaleString()}
                   </span>
                 </div>
               </div>
@@ -338,7 +337,7 @@ function MonthlyExpensesPage({ expenses, metrics, nextDeductions, recentDeductio
         onClose={() => { setFormOpen(false); setEditingExpense(null); }}
         onSuccess={onRefresh}
         existingKeys={safeExpenses.map((e) => e.key)}
-        currency={currency}
+        currency={sym}
       />
     </div>
   );
