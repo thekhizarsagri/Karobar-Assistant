@@ -152,19 +152,6 @@ function Welcome({ onDemoClick }) {
         {/* right column — login card */}
         <div className="welcome-right">
           <div className="welcome-login-card">
-            <div className="welcome-login-head">
-              <span className="welcome-lang-pill">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                  <circle cx="12" cy="12" r="9" />
-                  <path d="M3 12h18M12 3c2.5 2.6 3.8 5.7 3.8 9S14.5 18.4 12 21c-2.5-2.6-3.8-5.7-3.8-9S9.5 5.6 12 3z" />
-                </svg>
-                EN
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="6 9 12 15 18 9" />
-                </svg>
-              </span>
-            </div>
-
             <h2 className="welcome-login-title">Welcome Back</h2>
             <p className="welcome-login-sub">Log in to your account to continue</p>
 

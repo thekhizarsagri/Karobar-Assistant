@@ -139,7 +139,7 @@ function SalesOverviewCard({ analytics }) {
   const emptyBar = dark ? "#1e2d45" : "#d1fae5";
 
   return (
-    <div className="dash-card" style={{ flex: 1 }}>
+    <div className="dash-card sales-overview-card" style={{ flex: 1 }}>
       <div className="dash-card-header">
         <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
           <div className="dash-card-title-icon">
@@ -402,7 +402,7 @@ function DashboardPage({ data, onEditForm, onLogout }) {
               {/* Greeting row - notification + profile moved from topbar to replace date card */}
               <div className="dash-greeting-row dash-greeting-row--clean">
                 <div className="dash-greeting-left">
-                  <h1>{getGreeting()}, {summary?.owner_name || "Alex Harrison"}! <span style={{ fontSize: 20 }}>👋</span></h1>
+                  <h1>{getGreeting()}, {summary?.owner_name || "Alex Harrison"}!</h1>
                   <p>Here's what's happening with your business today.</p>
                 </div>
                 <div className="dash-greeting-actions">

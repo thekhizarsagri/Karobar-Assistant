@@ -129,11 +129,11 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  background: #fff;
-  border: 1px solid #e6eef7;
+  background: transparent;
+  border: none;
   border-radius: 999px;
-  padding: 8px 16px 8px 12px;
-  box-shadow: 0 6px 16px rgba(30, 60, 120, 0.06);
+  padding: 8px 4px 8px 12px;
+  box-shadow: none;
 }
 .sales-date-chip > span:last-child {
   display: flex;
@@ -886,10 +886,14 @@
   background: rgba(217, 119, 6, 0.18);
 }
 [data-theme="dark"] .sales-stat,
-[data-theme="dark"] .sales-section,
-[data-theme="dark"] .sales-date-chip {
+[data-theme="dark"] .sales-section {
   background: #141e33;
   border-color: #1e2d45;
+}
+[data-theme="dark"] .sales-date-chip {
+  background: transparent;
+  border: none;
+  box-shadow: none;
 }
 [data-theme="dark"] .sales-subtitle,
 [data-theme="dark"] .sales-stat-label,

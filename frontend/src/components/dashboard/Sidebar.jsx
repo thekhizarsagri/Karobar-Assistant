@@ -183,11 +183,7 @@ function Sidebar({ active, onSelect }) {
       <div className="sidebar-brand">
         <img src={dark ? titleImgDark : titleImg} alt="Karobar Assistant" className="sidebar-logo" draggable={false} />
         <span className="sidebar-mark" aria-hidden="true">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M21 8l-9-5-9 5v8l9 5 9-5V8z" />
-            <path d="M3 8l9 5 9-5" />
-            <path d="M12 13v8" />
-          </svg>
+          <span className="sidebar-mark-k">K</span><span className="sidebar-mark-a">A</span>
         </span>
       </div>
       <nav className="sidebar-nav" aria-label="Primary">

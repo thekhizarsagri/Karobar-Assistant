@@ -275,7 +275,7 @@ export default function StatCards({
       }
     : {
         cardBg: "#effaf6",
-        border: "#c9ecdf",
+        border: "#3fa67c",
         iconBg: "#b9efda",
         iconColor: "#0b9b6c",
         chart: "#10b981",
@@ -294,7 +294,7 @@ export default function StatCards({
       }
     : {
         cardBg: "#fef2f2",
-        border: "#fecaca",
+        border: "#ef6b6b",
         iconBg: "#fecaca",
         iconColor: "#dc2626",
         chart: "#ef4444",
@@ -304,7 +304,7 @@ export default function StatCards({
   const LAVENDER = dark
     ? {
         cardBg: "#161a2e",
-        border: "#2c2f5e",
+        border: "#4c3f86",
         iconBg: "#262a52",
         iconColor: "#a78bfa",
         chart: "#a78bfa",
@@ -313,7 +313,7 @@ export default function StatCards({
       }
     : {
         cardBg: "#f7f5ff",
-        border: "#ddd0fa",
+        border: "#a78bfa",
         iconBg: "#e3dcfd",
         iconColor: "#7c3aed",
         chart: "#8b5cf6",
@@ -323,7 +323,7 @@ export default function StatCards({
   const AMBER = dark
     ? {
         cardBg: "#0e1c33",
-        border: "#22385e",
+        border: "#2e4f86",
         iconBg: "#182c4e",
         iconColor: "#60a5fa",
         chart: "#60a5fa",
@@ -332,7 +332,7 @@ export default function StatCards({
       }
     : {
         cardBg: "#f2f7ff",
-        border: "#cfe0fb",
+        border: "#5b9cf6",
         iconBg: "#dbeafe",
         iconColor: "#2563eb",
         chart: "#60a5fa",

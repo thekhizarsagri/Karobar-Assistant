@@ -2,6 +2,7 @@ import { useState } from "react";
 import BusinessInfoForm from "./setup/BusinessInfoForm";
 import ProductsForm from "./setup/ProductsForm";
 import { defaultProduct, fixedExpenseItems } from "./setup/constants";
+import { validateEmail, validatePassword, validateUsername } from "../utils/validation";
 import titleImg from "../assets/title-image.png";
 import titleImgDark from "../assets/title-image-dark.png";
 import { useTheme } from "../ThemeContext";
@@ -57,6 +58,7 @@ function SetupPage({ initialData, onBack, onFinish }) {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submissionFeedback, setSubmissionFeedback] = useState("");
+  const [submitAttempted, setSubmitAttempted] = useState(false);
 
   const setBusiness = (name, value) =>
     setBusinessInfo((prev) => ({ ...prev, [name]: value }));
@@ -89,8 +91,31 @@ function SetupPage({ initialData, onBack, onFinish }) {
     }));
 
   const handleFinishSetup = async () => {
+    setSubmitAttempted(true);
     if (!businessInfo.businessName?.trim()) {
       setSubmissionFeedback("Please provide a Business Name in the company profile section.");
+      return;
+    }
+
+    const emailCheck = validateEmail(businessInfo.email);
+    if (!emailCheck.valid) {
+      setSubmissionFeedback(
+        `Business Email is invalid: ${emailCheck.error}`
+      );
+      return;
+    }
+
+    const usernameCheck = validateUsername(businessInfo.username);
+    if (!usernameCheck.valid) {
+      setSubmissionFeedback(`Username is invalid: ${usernameCheck.error}`);
+      return;
+    }
+
+    const passwordCheck = validatePassword(businessInfo.password);
+    if (!passwordCheck.valid) {
+      setSubmissionFeedback(
+        `Setup Password is too weak: ${passwordCheck.error} Password must reach at least Medium strength.`
+      );
       return;
     }
 
@@ -254,6 +279,7 @@ function SetupPage({ initialData, onBack, onFinish }) {
             expenses={expenses}
             onToggleExpense={toggleExpense}
             onChangeExpense={setExpense}
+            submitAttempted={submitAttempted}
           />
 
           {/* Invisible / Subtle Centre Divider */}

@@ -274,6 +274,7 @@
 }
 
 [data-theme="dark"] .kpi-card {
+  border-color: #2c4a73;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
 }
 
@@ -321,14 +322,25 @@
   background: #047857;
 }
 
+/* ── Green cards keep their theme outline in dark ── */
+[data-theme="dark"] .add-sales-card,
+[data-theme="dark"] .sales-overview-card {
+  border-color: #059669;
+}
+
+[data-theme="dark"] .add-sales-card:hover,
+[data-theme="dark"] .sales-overview-card:hover {
+  border-color: #10b981;
+}
+
 /* ── Alerts card (light yellow in light mode, deep amber in dark) ── */
 [data-theme="dark"] .alerts-proper-card {
   background: #221a08;
-  border-color: #4a3807;
+  border-color: #9a6a0a;
 }
 
 [data-theme="dark"] .alerts-proper-card:hover {
-  border-color: #6b4e0b;
+  border-color: #c08a12;
 }
 
 [data-theme="dark"] .alerts-title-icon {
@@ -1871,8 +1883,47 @@
   color: #f87171;
 }
 
+[data-theme="dark"] .setup-fullscreen-root .form-error-banner {
+  background: rgba(239, 68, 68, 0.12);
+  border-color: rgba(239, 68, 68, 0.25);
+  color: #fca5a5;
+}
+
 [data-theme="dark"] .setup-fullscreen-root .pwd-toggle-btn:hover {
   background: #1e2d45;
+}
+
+[data-theme="dark"] .setup-fullscreen-root .form-field input.input-invalid,
+[data-theme="dark"] .edit-profile-root .form-field input.input-invalid {
+  border-color: rgba(239, 68, 68, 0.6) !important;
+  background: rgba(239, 68, 68, 0.08) !important;
+}
+
+[data-theme="dark"] .setup-fullscreen-root .field-error,
+[data-theme="dark"] .edit-profile-root .field-error {
+  color: #f87171;
+}
+
+[data-theme="dark"] .setup-fullscreen-root .field-hint,
+[data-theme="dark"] .edit-profile-root .field-hint,
+[data-theme="dark"] .setup-fullscreen-root .pwd-required-note,
+[data-theme="dark"] .edit-profile-root .pwd-required-note {
+  color: #64748b;
+}
+
+[data-theme="dark"] .setup-fullscreen-root .pwd-strength-track,
+[data-theme="dark"] .edit-profile-root .pwd-strength-track {
+  background: #1e2d45;
+}
+
+[data-theme="dark"] .setup-fullscreen-root .pwd-checks,
+[data-theme="dark"] .edit-profile-root .pwd-checks {
+  color: #64748b;
+}
+
+[data-theme="dark"] .setup-fullscreen-root .pwd-checks li.met,
+[data-theme="dark"] .edit-profile-root .pwd-checks li.met {
+  color: #34d399;
 }
 
 [data-theme="dark"] .setup-fullscreen-root .metric-chip {

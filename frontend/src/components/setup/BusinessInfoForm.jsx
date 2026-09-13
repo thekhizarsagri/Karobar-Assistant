@@ -3,6 +3,7 @@ import { currencies, fixedExpenseItems } from "./constants";
 import CredentialsCard from "./CredentialsCard";
 import BusinessProfileCard from "./BusinessProfileCard";
 import ExpensesCard from "./ExpensesCard";
+import { validateEmail, validatePassword, validateUsername } from "../../utils/validation";
 
 function BusinessInfoForm({
   value,
@@ -10,13 +11,22 @@ function BusinessInfoForm({
   expenses,
   onToggleExpense,
   onChangeExpense,
+  submitAttempted = false,
 }) {
   const [showPassword, setShowPassword] = useState(false);
+  const [touched, setTouched] = useState({});
 
   const handleInput = (event) => {
     const { name, value: raw } = event.target;
-    const next = name === "phoneNumber" ? raw.replace(/[^0-9+\s-]/g, "") : raw;
+    let next = raw;
+    if (name === "phoneNumber") next = raw.replace(/[^0-9+\s-]/g, "");
+    if (name === "username") next = raw.replace(/\s/g, "");
     onChange(name, next);
+  };
+
+  const handleBlur = (event) => {
+    const { name } = event.target;
+    if (name) setTouched((prev) => ({ ...prev, [name]: true }));
   };
 
   const totalMonthlyExpenses = fixedExpenseItems.reduce((acc, item) => {
@@ -34,6 +44,22 @@ function BusinessInfoForm({
     currencies.find((c) => c.symbol === value.currency || c.code === value.currency) ||
     currencies[0];
 
+  const emailResult = validateEmail(value.email);
+  const passwordResult = validatePassword(value.password);
+  const usernameResult = validateUsername(value.username);
+  const showEmailError = submitAttempted || touched.email || Boolean(value.email);
+  const showPasswordError =
+    submitAttempted || touched.password || Boolean(value.password);
+  const showUsernameError =
+    submitAttempted || touched.username || Boolean(value.username);
+  const errors = {
+    email: !emailResult.valid && showEmailError ? emailResult.error : "",
+    password:
+      !passwordResult.valid && showPasswordError ? passwordResult.error : "",
+    username:
+      !usernameResult.valid && showUsernameError ? usernameResult.error : "",
+  };
+
   return (
     <div className="setup-left-column">
       <div className="column-header">
@@ -46,6 +72,8 @@ function BusinessInfoForm({
       <CredentialsCard
         value={value}
         onInput={handleInput}
+        onBlur={handleBlur}
+        errors={errors}
         showPassword={showPassword}
         onTogglePassword={() => setShowPassword(!showPassword)}
       />

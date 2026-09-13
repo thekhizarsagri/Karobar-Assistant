@@ -12,14 +12,14 @@
   --sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --heading: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --gradient-bg:
-    radial-gradient(820px 520px at 12% 0%, rgba(45, 212, 191, 0.5), transparent 62%),
-    radial-gradient(920px 560px at 88% 4%, rgba(167, 139, 250, 0.48), transparent 63%),
-    radial-gradient(720px 520px at 50% 32%, rgba(96, 165, 250, 0.38), transparent 65%),
-    radial-gradient(760px 560px at 86% 88%, rgba(52, 211, 153, 0.38), transparent 62%),
-    radial-gradient(680px 480px at 8% 92%, rgba(249, 168, 212, 0.36), transparent 61%),
-    radial-gradient(620px 420px at 50% 102%, rgba(190, 242, 100, 0.32), transparent 65%),
-    linear-gradient(180deg, #ecfdf5 0%, #eef4ff 48%, #f5f0ff 100%);
-  --bg-anim: auroraFlow 18s ease-in-out infinite alternate;
+    radial-gradient(880px 560px at 10% 0%, rgba(52, 211, 153, 0.55), transparent 62%),
+    radial-gradient(940px 580px at 90% 2%, rgba(59, 130, 246, 0.55), transparent 62%),
+    radial-gradient(760px 540px at 50% 30%, rgba(34, 211, 238, 0.42), transparent 64%),
+    radial-gradient(820px 600px at 88% 88%, rgba(16, 185, 129, 0.45), transparent 62%),
+    radial-gradient(760px 560px at 8% 90%, rgba(96, 165, 250, 0.42), transparent 62%),
+    radial-gradient(640px 440px at 50% 102%, rgba(45, 212, 191, 0.4), transparent 64%),
+    linear-gradient(180deg, #d9f9e9 0%, #dbeafe 48%, #e0f7ec 100%);
+  --bg-anim: none;
   font: 14px/145% var(--sans);
   letter-spacing: 0.15px;
   color-scheme: light;
@@ -39,7 +39,15 @@
 body {
   margin: 0;
   min-height: 100vh;
-  background: #eaf3ff;
+  background: #f8fbff;
+}
+
+/* Blue-green radiant background: glows stretch to fill */
+.app-layout,
+.setup-fullscreen-root,
+.demo-page,
+.welcome-container {
+  background-size: 140% 140%, 140% 140%, 140% 140%, 140% 140%, 140% 140%, 140% 140%, 100% 100% !important;
 }
 
 #root {

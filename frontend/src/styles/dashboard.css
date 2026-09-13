@@ -90,9 +90,9 @@
   background: rgba(255, 255, 255, 0.90);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255,255,255,0.7);
+  border: 1.5px solid #bccfee;
   border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(15,23,42,0.06);
+  box-shadow: 0 14px 34px rgba(15,23,42,0.12), 0 6px 16px rgba(15,23,42,0.07);
   min-width: 190px;
 }
 .dash-date-label {
@@ -107,7 +107,7 @@
 /* AI Help Card - kept for reuse but hidden when not used */
 .ai-help-card {
   background: linear-gradient(135deg, #d1f0e3 0%, #e8f8ee 45%, #d4f0e8 100%);
-  border: 1px solid #b6e8cc;
+  border: 1px solid #4cb782;
   border-radius: 14px;
   padding: 14px 16px;
   display: flex;
@@ -163,7 +163,8 @@
 .dash-alerts-side {
   display: flex;
   min-width: 0;
-  overflow: hidden;
+  overflow: visible;
+  border-radius: 18px;
 }
 .dash-add-sales-side .dash-card,
 .dash-alerts-side .dash-card {
@@ -204,17 +205,17 @@
   background: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255,255,255,0.7);
+  border: 1.5px solid #bccfee;
   border-radius: 16px;
   padding: 20px 20px 16px;
-  box-shadow: 0 8px 24px rgba(15,23,42,0.06), 0 4px 12px rgba(15,23,42,0.03);
+  box-shadow: 0 14px 34px rgba(15,23,42,0.12), 0 6px 16px rgba(15,23,42,0.08), 0 2px 6px rgba(15,23,42,0.05);
   display: flex;
   flex-direction: column;
   gap: 0;
   min-width: 0;
   transition: box-shadow 0.24s cubic-bezier(0.16,1,0.3,1), border-color 0.24s, transform 0.24s, background-color 0.3s ease;
 }
-.stat-card:hover { box-shadow: 0 12px 28px rgba(15,23,42,0.08); border-color: #dbeafe; transform: translateY(-2px); }
+.stat-card:hover { box-shadow: 0 18px 40px rgba(15,23,42,0.15), 0 8px 20px rgba(15,23,42,0.09); border-color: #a9c2e8; transform: translateY(-2px); }
 .stat-card-top {
   display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
 }
@@ -230,9 +231,9 @@
 .stat-card-icon--teal { background: #ddf5ec; color: #0e9b7d; }
 .stat-card-icon--purple { background: #ede9fe; color: #7c3aed; }
 .stat-card-icon svg { width: 20px; height: 20px; }
-.stat-card--teal { border-color: #c8ede6; }
+.stat-card--teal { border-color: #3fa67c; }
 .stat-card--purple { border-color: #ddd6f5; }
-.stat-card--pink { border-color: #fecdd3; }
+.stat-card--pink { border-color: #ef6b6b; }
 .card-menu-btn {
   width: 26px; height: 26px;
   display: flex; align-items: center; justify-content: center;
@@ -281,17 +282,17 @@
 .dash-stats-square { display: flex; min-width: 0; }
 .stat-cards-grid--brandnew { display: none; }
 .kpi-card {
-  border: 1.5px solid #e2e8f0;
+  border: 1.5px solid #bccfee;
   border-radius: 18px;
   padding: 18px 18px 16px;
   min-height: 196px;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 2px 10px rgba(15,23,42,0.04);
+  box-shadow: 0 10px 26px rgba(15,23,42,0.1), 0 4px 12px rgba(15,23,42,0.06);
   min-width: 0;
   transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease, border-color 0.3s ease;
 }
-.kpi-card:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(15,23,42,0.08); }
+.kpi-card:hover { transform: translateY(-2px); box-shadow: 0 16px 34px rgba(15,23,42,0.14), 0 6px 16px rgba(15,23,42,0.08); border-color: #a9c2e8; }
 .kpi-card { animation: cardIn 0.35s cubic-bezier(0.16,1,0.3,1) both; }
 .kpi-grid .kpi-card:nth-child(1) { animation-delay: 0ms; }
 .kpi-grid .kpi-card:nth-child(2) { animation-delay: 70ms; }
@@ -346,9 +347,9 @@
   background: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255,255,255,0.7);
+  border: 1.5px solid #bccfee;
   border-radius: 16px;
-  box-shadow: 0 8px 24px rgba(15,23,42,0.06), 0 4px 12px rgba(15,23,42,0.03);
+  box-shadow: 0 14px 34px rgba(15,23,42,0.12), 0 6px 16px rgba(15,23,42,0.08), 0 2px 6px rgba(15,23,42,0.05);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -356,7 +357,9 @@
   transition: box-shadow 0.24s, border-color 0.24s, transform 0.24s, background-color 0.3s ease;
   animation: cardIn 0.35s cubic-bezier(0.16,1,0.3,1) both;
 }
-.dash-card:hover { box-shadow: 0 10px 28px rgba(15,23,42,0.07); border-color: #dbeafe; }
+.dash-card:hover { box-shadow: 0 18px 40px rgba(15,23,42,0.15), 0 8px 20px rgba(15,23,42,0.09); border-color: #a9c2e8; }
+.sales-overview-card { border: 1.5px solid #10b981; }
+.sales-overview-card:hover { border-color: #059669; }
 .dash-card:nth-child(2) { animation-delay: 80ms; }
 .dash-card:nth-child(3) { animation-delay: 160ms; }
 .dash-card-header {
@@ -429,8 +432,10 @@
 .add-sales-input-wrap input[type="month"]::-webkit-calendar-picker-indicator { opacity: 0; position: absolute; right: 0; top: 0; width: 36px; height: 100%; cursor: pointer; z-index: 1; }
 
 /* Alerts Proper Card - replaces Recent Activity — enlarged */
-.alerts-proper-card { min-height: 360px; overflow: hidden; background: #fffdf5; border-color: #fef3c7; }
-.alerts-proper-card:hover { border-color: #fde68a; }
+.alerts-proper-card { min-height: 360px; overflow: hidden; background: #fffdf5; border: 1.5px solid #eab308; border-radius: 18px; }
+.alerts-proper-card:hover { border-color: #ca8a04; }
+.add-sales-card { border: 1.5px solid #10b981; border-radius: 18px; }
+.add-sales-card:hover { border-color: #059669; }
 .alerts-title-icon {
   width: 22px; height: 22px; border-radius: 7px;
   background: #fee2e2; color: #dc2626;
@@ -506,15 +511,16 @@
   background: rgba(248, 251, 255, 0.92);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255,255,255,0.6);
-  border-radius: 12px;
+  border: 1.5px solid #bccfee;
+  border-radius: 14px;
   padding: 16px;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  box-shadow: 0 10px 26px rgba(15,23,42,0.1), 0 4px 12px rgba(15,23,42,0.06);
   transition: transform 0.18s, box-shadow 0.18s, border-color 0.18s;
 }
-.bp-mini-card:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(15,23,42,0.05); border-color: #dbeafe; }
+.bp-mini-card:hover { transform: translateY(-1px); box-shadow: 0 16px 34px rgba(15,23,42,0.14), 0 6px 16px rgba(15,23,42,0.08); border-color: #a9c2e8; }
 .bp-mini-top { display: flex; align-items: center; gap: 8px; }
 .bp-mini-icon {
   width: 34px; height: 34px; border-radius: 9px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 13px;

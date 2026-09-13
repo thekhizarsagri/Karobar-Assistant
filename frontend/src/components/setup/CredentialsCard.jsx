@@ -1,4 +1,27 @@
-function CredentialsCard({ value, onInput, showPassword, onTogglePassword }) {
+import { getPasswordStrength } from "../../utils/validation";
+
+function CredentialsCard({
+  value,
+  onInput,
+  onBlur,
+  errors = {},
+  showPassword,
+  onTogglePassword,
+}) {
+  const emailInvalid = Boolean(errors.email);
+  const passwordInvalid = Boolean(errors.password);
+  const usernameInvalid = Boolean(errors.username);
+  const strength = getPasswordStrength(value.password || "");
+  const strengthWidth =
+    strength.level === "empty"
+      ? "0%"
+      : strength.level === "weak"
+        ? "25%"
+        : strength.level === "medium"
+          ? "55%"
+          : strength.level === "strong"
+            ? "80%"
+            : "100%";
   return (
     <div className="setup-card">
       <div className="card-header">
@@ -50,9 +73,20 @@ function CredentialsCard({ value, onInput, showPassword, onTogglePassword }) {
               name="username"
               value={value.username || ""}
               onChange={onInput}
+              onBlur={onBlur}
               placeholder="e.g. alex_harrison"
+              autoComplete="username"
+              aria-invalid={usernameInvalid}
+              className={usernameInvalid ? "input-invalid" : ""}
             />
           </div>
+          {usernameInvalid ? (
+            <p className="field-error" role="alert">
+              {errors.username}
+            </p>
+          ) : (
+            <p className="field-hint">No spaces allowed, e.g. alex_harrison</p>
+          )}
         </label>
 
         <label className="form-field">
@@ -71,10 +105,25 @@ function CredentialsCard({ value, onInput, showPassword, onTogglePassword }) {
               name="email"
               value={value.email || ""}
               onChange={onInput}
+              onBlur={onBlur}
               placeholder="e.g. alex@bottlefactory.com"
               required
+              inputMode="email"
+              autoComplete="email"
+              aria-invalid={emailInvalid}
+              aria-describedby={emailInvalid ? "email-error" : "email-hint"}
+              className={emailInvalid ? "input-invalid" : ""}
             />
           </div>
+          {emailInvalid ? (
+            <p className="field-error" id="email-error" role="alert">
+              {errors.email}
+            </p>
+          ) : (
+            <p className="field-hint" id="email-hint">
+              Must end with a valid domain, e.g. you@company.com
+            </p>
+          )}
         </label>
 
         <label className="form-field">
@@ -93,7 +142,12 @@ function CredentialsCard({ value, onInput, showPassword, onTogglePassword }) {
               name="password"
               value={value.password || ""}
               onChange={onInput}
+              onBlur={onBlur}
               placeholder="Create master password"
+              autoComplete="new-password"
+              aria-invalid={passwordInvalid}
+              aria-describedby="password-strength-text"
+              className={passwordInvalid ? "input-invalid" : ""}
             />
             <button
               type="button"
@@ -114,6 +168,42 @@ function CredentialsCard({ value, onInput, showPassword, onTogglePassword }) {
                 </svg>
               )}
             </button>
+          </div>
+          <div className="pwd-strength" aria-live="polite">
+            <div className="pwd-strength-track" aria-hidden="true">
+              <div
+                className={`pwd-strength-fill pwd-${strength.level}`}
+                style={{ width: strengthWidth }}
+              />
+            </div>
+            <div className="pwd-strength-row">
+              <span
+                id="password-strength-text"
+                className={`pwd-level pwd-${strength.level}`}
+              >
+                {strength.label}
+              </span>
+              <span className="pwd-required-note">At least Medium required</span>
+            </div>
+            {passwordInvalid ? (
+              <p className="field-error" role="alert">
+                {errors.password}
+              </p>
+            ) : null}
+            <ul className="pwd-checks">
+              <li className={strength.checks.length8 ? "met" : ""}>
+                {strength.checks.length8 ? "✓" : "○"} 8+ characters
+              </li>
+              <li className={strength.checks.mixedCase ? "met" : ""}>
+                {strength.checks.mixedCase ? "✓" : "○"} Upper + lower case
+              </li>
+              <li className={strength.checks.digit ? "met" : ""}>
+                {strength.checks.digit ? "✓" : "○"} Number
+              </li>
+              <li className={strength.checks.special ? "met" : ""}>
+                {strength.checks.special ? "✓" : "○"} Symbol
+              </li>
+            </ul>
           </div>
         </label>
       </div>

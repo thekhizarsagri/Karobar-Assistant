@@ -1,6 +1,7 @@
 import { useState } from "react";
 import CredentialsCard from "../setup/CredentialsCard";
 import BusinessProfileCard from "../setup/BusinessProfileCard";
+import { validateEmail, validatePassword, validateUsername } from "../../utils/validation";
 
 function EditProfilePage({ profile, onBack, onSuccess }) {
   const [form, setForm] = useState({
@@ -20,10 +21,35 @@ function EditProfilePage({ profile, onBack, onSuccess }) {
   const [showPassword, setShowPassword] = useState(false);
   const [saving, setSaving] = useState(false);
   const [feedback, setFeedback] = useState("");
+  const [touched, setTouched] = useState({});
 
   const handleInput = (e) => {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    const next = name === "username" ? String(value).replace(/\s/g, "") : value;
+    setForm((prev) => ({ ...prev, [name]: next }));
+  };
+
+  const handleBlur = (e) => {
+    const { name } = e.target;
+    if (name) setTouched((prev) => ({ ...prev, [name]: true }));
+  };
+
+  const emailCheck = validateEmail(form.email);
+  const passwordCheck = form.password ? validatePassword(form.password) : { valid: true, error: "" };
+  const usernameCheck = validateUsername(form.username);
+  const errors = {
+    email:
+      !emailCheck.valid && (touched.email || feedback || form.email)
+        ? emailCheck.error
+        : "",
+    password:
+      !passwordCheck.valid && (touched.password || feedback || form.password)
+        ? passwordCheck.error
+        : "",
+    username:
+      !usernameCheck.valid && (touched.username || feedback || form.username)
+        ? usernameCheck.error
+        : "",
   };
 
   const currencyObj = { symbol: form.currency || "₹" };
@@ -35,6 +61,20 @@ function EditProfilePage({ profile, onBack, onSuccess }) {
     }
     if (!form.ownerName?.trim()) {
       setFeedback("Owner Name is required.");
+      return;
+    }
+    if (!emailCheck.valid) {
+      setFeedback(`Business Email is invalid: ${emailCheck.error}`);
+      return;
+    }
+    if (!usernameCheck.valid) {
+      setFeedback(`Username is invalid: ${usernameCheck.error}`);
+      return;
+    }
+    if (form.password && !passwordCheck.valid) {
+      setFeedback(
+        `Setup Password is too weak: ${passwordCheck.error} Password must reach at least Medium strength.`
+      );
       return;
     }
     setSaving(true);
@@ -87,6 +127,8 @@ function EditProfilePage({ profile, onBack, onSuccess }) {
         <CredentialsCard
           value={form}
           onInput={handleInput}
+          onBlur={handleBlur}
+          errors={errors}
           showPassword={showPassword}
           onTogglePassword={() => setShowPassword((v) => !v)}
         />
