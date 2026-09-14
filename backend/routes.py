@@ -5,6 +5,7 @@ from fastapi import APIRouter
 from fastapi.responses import PlainTextResponse
 
 from backend.aggregation import get_analytics_data
+from backend.chat import handle_chat_message, reset_chat
 from backend.data_analytics import export_dataset, get_advanced_analytics
 from backend.inventory import get_inventory_data
 from backend.reports import get_reports
@@ -25,6 +26,7 @@ from backend.stock import add_stock
 from backend.store import add_product, reset as reset_store, update_profile
 from backend.schemas import (
     DemoSetupRequest,
+    ChatRequest,
     NotificationReadRequest,
     NotificationRequest,
     ProductAddRequest,
@@ -47,6 +49,7 @@ def health() -> Dict[str, str]:
 @router.post("/api/reset")
 def reset() -> Dict[str, str]:
     reset_store()
+    reset_chat()
     return {"message": "All data cleared"}
 
 
@@ -60,6 +63,7 @@ def update_profile_endpoint(request: UpdateProfileRequest) -> Dict[str, Any]:
 
 @router.post("/api/dashboard")
 def dashboard(request: DemoSetupRequest) -> Dict[str, Any]:
+    reset_chat()
     return build_dashboard_payload(request.model_dump())
 
 
@@ -91,6 +95,11 @@ def add_product_endpoint(request: ProductAddRequest) -> Dict[str, Any]:
     if result.get("error"):
         return result
     return build_current_dashboard_payload()
+
+
+@router.post("/api/chat")
+def chat_endpoint(request: ChatRequest) -> Dict[str, Any]:
+    return handle_chat_message(request.session_id or "default", request.message or "")
 
 
 @router.get("/api/alerts")

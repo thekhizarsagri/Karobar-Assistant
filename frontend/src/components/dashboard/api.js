@@ -106,3 +106,13 @@ export async function clearProductHistory(productName) {
   if (!res.ok) throw new Error("Unable to clear product history");
   return res.json();
 }
+
+export async function postChat(sessionId, message) {
+  const res = await fetch("/api/chat", {
+    method: "POST",
+    headers: jsonHeaders,
+    body: JSON.stringify({ session_id: sessionId, message }),
+  });
+  if (!res.ok) throw new Error("Unable to reach the assistant");
+  return res.json();
+}

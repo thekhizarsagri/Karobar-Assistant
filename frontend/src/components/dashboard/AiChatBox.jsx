@@ -1,89 +1,76 @@
 import { useEffect, useRef, useState } from "react";
+import { postChat } from "./api";
 
 /**
- * AI chat panel (UI preview — no backend yet).
- * Answers are generated on-device from the live dashboard context so the
- * panel already feels real. Swap `mockReply` for an API call later.
+ * AI chat panel — fully live via POST /api/chat.
+ * The backend holds the conversation (slot-filling tasks, confirmations)
+ * keyed by a per-browser session id; this component only renders.
  */
-function fmtMoney(sym, value) {
-  const num = Number(value || 0);
-  if (Number.isNaN(num)) return `${sym}0.00`;
-  return `${sym}${num.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-}
+const SESSION_KEY = "karobar-chat-session";
+const DEFAULT_SUGGESTIONS = ["Stock status", "Add stock", "Record a sale", "Any alerts?"];
 
-function mockReply(text, ctx) {
-  const q = String(text || "").toLowerCase().trim();
-  const has = (...words) => words.some((w) => q.includes(w));
-  const list = (arr) => (arr.length ? arr.slice(0, 3).join(", ") : "none right now");
-
-  if (!q) return "Ask me anything about your stock, sales, profit or expenses.";
-  if (has("hello", "hi", "hey", "salam", "aoa")) {
-    return `Hello! ${ctx.businessName ? `Here's the pulse of ${ctx.businessName}: ` : ""}you hold ${ctx.totalStock} units across ${ctx.productCount} products with a net profit of ${fmtMoney(ctx.currency, ctx.netProfit)}. What should we dig into?`;
-  }
-  if (has("stock", "inventory", "unit")) {
-    if (ctx.outOfStock.length) {
-      return `You hold ${ctx.totalStock} units in total. Out of stock: ${list(ctx.outOfStock)}. Running low: ${list(ctx.lowStock)}. Want me to flag what to restock first?`;
+function getSessionId() {
+  try {
+    let id = window.localStorage?.getItem(SESSION_KEY);
+    if (!id) {
+      id = `s-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+      window.localStorage?.setItem(SESSION_KEY, id);
     }
-    return `You hold ${ctx.totalStock} units across ${ctx.productCount} products. Running low: ${list(ctx.lowStock)}. Stock health looks ${ctx.lowStock.length ? "okay — keep an eye on the low ones" : "great"}.`;
+    return id;
+  } catch {
+    return "default";
   }
-  if (has("gross")) return `Gross profit stands at ${fmtMoney(ctx.currency, ctx.grossProfit)} on ${ctx.unitsSold} units sold. Open Sales Analytics for the month-by-month breakup.`;
-  if (has("net", "profit", "earn")) {
-    const tone = Number(ctx.netProfit) >= 0 ? "in profit" : "in loss";
-    return `Net profit is ${fmtMoney(ctx.currency, ctx.netProfit)} — you're ${tone} after ${fmtMoney(ctx.currency, ctx.monthlyExpenses)} of monthly expenses.`;
-  }
-  if (has("expense", "cost", "spend", "khar")) {
-    return `Monthly expenses total ${fmtMoney(ctx.currency, ctx.monthlyExpenses)}. The Monthly Expenses page shows every recurring cost and its auto-deduction schedule.`;
-  }
-  if (has("sale", "sell", "revenue", "best", "top")) {
-    return `You've sold ${ctx.unitsSold} units in total. The Sales Overview chart and Analytics page break it down by month and product.`;
-  }
-  if (has("alert", "warn", "attention", "restock")) {
-    if (!ctx.outOfStock.length && !ctx.lowStock.length) return "No urgent alerts — everything is stocked and healthy. Nice work.";
-    return `Heads up: out of stock — ${list(ctx.outOfStock)}; running low — ${list(ctx.lowStock)}. Restocking these first protects your best sellers.`;
-  }
-  if (has("report", "forecast", "predict", "future")) {
-    return "Demand Forecasting projects next month's needs per product, and Business Reports grades your KPI health, break-even and replenishment. Both live in the sidebar.";
-  }
-  if (has("help", "what can you", "who are you", "?")) {
-    return "I'm your business copilot. Try: stock status, profit summary, expense total, sales recap, or any alerts.";
-  }
-  if (has("thank", "shukriya")) return "Anytime! I'll be right here when you need a second brain for the business.";
-  return `Got it — "${String(text).slice(0, 80)}". Full AI reasoning connects later; for now try asking about stock, profit, expenses, sales or alerts.`;
 }
 
-const SUGGESTIONS = ["Stock status", "Profit summary", "Any alerts?", "Expense total"];
-
-function AiChatBox({ context }) {
+function AiChatBox({ context, onNavigate, onRefresh }) {
   const ctx = context || {};
+  const [sessionId] = useState(getSessionId);
   const [messages, setMessages] = useState([
     {
       id: "welcome",
       from: "bot",
-      text: `Hi${ctx.ownerName ? `, ${ctx.ownerName}` : ""}! I'm your AI copilot — ask me about stock, profit, expenses or sales.`,
+      text: `Hi${ctx.ownerName ? `, ${ctx.ownerName}` : ""}! I'm your AI copilot — ask me anything, or tell me to do things like "add stock" or "record a sale".`,
     },
   ]);
+  const [suggestions, setSuggestions] = useState(DEFAULT_SUGGESTIONS);
   const [input, setInput] = useState("");
   const [typing, setTyping] = useState(false);
   const listRef = useRef(null);
-  const timerRef = useRef(null);
+  const waitingRef = useRef(false);
 
   useEffect(() => {
     const el = listRef.current;
     if (el) el.scrollTop = el.scrollHeight;
   }, [messages, typing]);
 
-  useEffect(() => () => clearTimeout(timerRef.current), []);
-
-  const send = (raw) => {
+  const send = async (raw) => {
     const text = String(raw ?? input).trim();
-    if (!text || typing) return;
+    if (!text || waitingRef.current) return;
+    waitingRef.current = true;
+    setTyping(true);
     setMessages((prev) => [...prev, { id: `u-${Date.now()}`, from: "user", text }]);
     setInput("");
-    setTyping(true);
-    timerRef.current = setTimeout(() => {
-      setMessages((prev) => [...prev, { id: `b-${Date.now()}`, from: "bot", text: mockReply(text, ctx) }]);
+    try {
+      const data = await postChat(sessionId, text);
+      setMessages((prev) => [...prev, { id: `b-${Date.now()}`, from: "bot", text: data.reply || "…" }]);
+      if (Array.isArray(data.suggestions) && data.suggestions.length) {
+        setSuggestions(data.suggestions.slice(0, 6));
+      }
+      if (data.navigate) onNavigate?.(data.navigate);
+      if (data.refresh) {
+        onRefresh?.();
+        window.dispatchEvent(new CustomEvent("alerts:updated"));
+      }
+    } catch {
+      setMessages((prev) => [...prev, {
+        id: `b-${Date.now()}`,
+        from: "bot",
+        text: "I lost connection to the server for a moment — your data is safe. Try again.",
+      }]);
+    } finally {
+      waitingRef.current = false;
       setTyping(false);
-    }, 900);
+    }
   };
 
   return (
@@ -100,7 +87,7 @@ function AiChatBox({ context }) {
           <strong className="ai-chat-title">AI Assistant</strong>
           <span className="ai-chat-status">
             <span className="ai-chat-dot" aria-hidden="true" />
-            Online — answers from live data
+            Online — ask anything, order tasks
           </span>
         </span>
       </header>
@@ -129,7 +116,7 @@ function AiChatBox({ context }) {
       </div>
 
       <div className="ai-chat-chips">
-        {SUGGESTIONS.map((s) => (
+        {suggestions.map((s) => (
           <button key={s} type="button" className="ai-chat-chip" onClick={() => send(s)} disabled={typing}>
             {s}
           </button>

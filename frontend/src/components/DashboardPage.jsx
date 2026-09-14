@@ -484,7 +484,7 @@ function DashboardPage({ data, onEditForm, onLogout }) {
               {/* Bottom — Sales Overview + AI chat side by side */}
               <div className="dash-bottom-row">
                 <SalesOverviewCard analytics={analytics} currency={currency} />
-                <AiChatBox context={aiContext} />
+                <AiChatBox context={aiContext} onNavigate={handleNav} onRefresh={async () => { try { const res = await fetch("/api/dashboard"); if (res.ok) { const updated = await res.json(); setSummary(updated); if (updated.sales_summary) setSalesSummary(updated.sales_summary); } } catch (err) { console.error(err); } }} />
               </div>
             </div>
           ) : (

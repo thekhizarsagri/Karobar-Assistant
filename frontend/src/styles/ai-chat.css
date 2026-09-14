@@ -137,6 +137,7 @@
   line-height: 1.5;
   font-weight: 500;
   overflow-wrap: anywhere;
+  white-space: pre-line;
 }
 .ai-chat-bubble--bot {
   color: #233448;

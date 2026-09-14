@@ -118,6 +118,11 @@ class NotificationReadRequest(BaseModel):
     id: int | None = None
 
 
+class ChatRequest(BaseModel):
+    session_id: str = "default"
+    message: str = ""
+
+
 class UpdateProfileRequest(BaseModel):
     ownerName: str = ""
     username: str = ""
