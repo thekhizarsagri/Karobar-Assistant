@@ -1,36 +1,14 @@
 import titleImg from "../assets/title-image.png";
 import titleImgDark from "../assets/title-image-dark.png";
 import { useTheme } from "../ThemeContext";
+import { NAV_ACCENTS } from "./dashboard/navTheme";
 
 const FEATURES = [
   {
-    title: "Track Performance",
-    text: "Monitor sales, profit, expenses & more",
-    tileClass: "welcome-feature-icon--green",
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round">
-        <line x1="5" y1="20" x2="5" y2="14" />
-        <line x1="12" y1="20" x2="12" y2="8" />
-        <line x1="19" y1="20" x2="19" y2="4" />
-      </svg>
-    ),
-  },
-  {
-    title: "AI Insights",
-    text: "Get smart suggestions to improve your business",
-    tileClass: "welcome-feature-icon--blue",
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M9 18h6" />
-        <path d="M10 21h4" />
-        <path d="M12 3a6 6 0 0 0-3.5 10.9c.8.6 1.5 1.5 1.5 2.6V17h4v-.5c0-1.1.7-2 1.5-2.6A6 6 0 0 0 12 3z" />
-      </svg>
-    ),
-  },
-  {
-    title: "Manage Inventory",
-    text: "Keep track of your stock in real-time",
-    tileClass: "welcome-feature-icon--purple",
+    title: "Inventory",
+    text: "Live stock levels, valuation & reorder alerts",
+    accent: NAV_ACCENTS.inventory,
+    tileClass: "welcome-feature-icon--inventory",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M21 8l-9-5-9 5v8l9 5 9-5V8z" />
@@ -40,14 +18,45 @@ const FEATURES = [
     ),
   },
   {
-    title: "Grow Faster",
-    text: "Make data-driven decisions with confidence",
-    tileClass: "welcome-feature-icon--teal",
+    title: "Monthly Expenses",
+    text: "Recurring costs with auto-deduction",
+    accent: NAV_ACCENTS.expenses,
+    tileClass: "welcome-feature-icon--expenses",
     icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-        <circle cx="12" cy="12" r="9" />
-        <circle cx="12" cy="12" r="5" />
-        <circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none" />
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <ellipse cx="12" cy="6.5" rx="7" ry="3" />
+        <path d="M5 6.5v6c0 1.66 3.13 3 7 3s7-1.34 7-3v-6" />
+        <path d="M5 12.5v6c0 1.66 3.13 3 7 3s7-1.34 7-3v-6" />
+      </svg>
+    ),
+  },
+  {
+    title: "Sales Analytics",
+    text: "Trends, best sellers & yearly insights",
+    accent: NAV_ACCENTS.sales,
+    tileClass: "welcome-feature-icon--sales",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M3 22h18" />
+        <path d="M5 18V8" />
+        <path d="M9 18V4" />
+        <path d="M13 18V10" />
+        <path d="M17 18V6" />
+      </svg>
+    ),
+  },
+  {
+    title: "Business Reports",
+    text: "KPI health, break-even & stock planning",
+    accent: NAV_ACCENTS.reports,
+    tileClass: "welcome-feature-icon--reports",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+        <path d="M14 2v6h6" />
+        <path d="M8 17v-3" />
+        <path d="M12 17v-6" />
+        <path d="M16 17v-4" />
       </svg>
     ),
   },

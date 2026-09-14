@@ -2128,24 +2128,24 @@
   color: #e2e8f0;
 }
 
-[data-theme="dark"] .welcome-feature-icon--green {
-  background: rgba(22, 163, 74, 0.16);
-  color: #4ade80;
-}
-
-[data-theme="dark"] .welcome-feature-icon--blue {
+[data-theme="dark"] .welcome-feature-icon--inventory {
   background: rgba(37, 99, 235, 0.2);
-  color: #60a5fa;
+  color: #7aa7f5;
 }
 
-[data-theme="dark"] .welcome-feature-icon--purple {
+[data-theme="dark"] .welcome-feature-icon--expenses {
   background: rgba(124, 58, 237, 0.2);
   color: #a78bfa;
 }
 
-[data-theme="dark"] .welcome-feature-icon--teal {
-  background: rgba(16, 185, 129, 0.16);
-  color: #34d399;
+[data-theme="dark"] .welcome-feature-icon--sales {
+  background: rgba(47, 128, 237, 0.2);
+  color: #60a5fa;
+}
+
+[data-theme="dark"] .welcome-feature-icon--reports {
+  background: rgba(244, 63, 94, 0.16);
+  color: #fb7185;
 }
 
 [data-theme="dark"] .welcome-feature-text {

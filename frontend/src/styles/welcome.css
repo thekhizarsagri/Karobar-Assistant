@@ -159,6 +159,8 @@
   align-items: center;
   justify-content: center;
   margin-bottom: 10px;
+  will-change: transform;
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .welcome-feature-icon svg {
@@ -166,24 +168,28 @@
   height: 20px;
 }
 
-.welcome-feature-icon--green {
-  background: #e9faf1;
-  color: #16a34a;
+.welcome-feature:hover .welcome-feature-icon {
+  transform: scale(1.1) rotate(-4deg);
 }
 
-.welcome-feature-icon--blue {
-  background: #eaf2ff;
+.welcome-feature-icon--inventory {
+  background: #dbeafe;
   color: #2563eb;
 }
 
-.welcome-feature-icon--purple {
-  background: #f1eafe;
+.welcome-feature-icon--expenses {
+  background: #ede9fe;
   color: #7c3aed;
 }
 
-.welcome-feature-icon--teal {
-  background: #e6faf3;
-  color: #10b981;
+.welcome-feature-icon--sales {
+  background: #eaf2ff;
+  color: #2f80ed;
+}
+
+.welcome-feature-icon--reports {
+  background: #ffe4e6;
+  color: #f43f5e;
 }
 
 .welcome-feature-title {
@@ -651,5 +657,13 @@
   100% {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .welcome-feature-icon,
+  .welcome-feature:hover .welcome-feature-icon {
+    transition: none;
+    transform: none;
   }
 }

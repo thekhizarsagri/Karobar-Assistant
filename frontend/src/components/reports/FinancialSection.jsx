@@ -25,8 +25,16 @@ const ICONS = {
   ),
   cost: (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#b45309" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <line x1="12" y1="1" x2="12" y2="23" />
-      <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+      <circle cx="9" cy="21" r="1.6" />
+      <circle cx="19" cy="21" r="1.6" />
+      <path d="M2.5 3h2l2.6 12.5a1.5 1.5 0 0 0 1.5 1.2h8.9a1.5 1.5 0 0 0 1.5-1.2L21.5 7H6" />
+    </svg>
+  ),
+  expenses: (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <ellipse cx="12" cy="6.5" rx="7" ry="3" />
+      <path d="M5 6.5v6c0 1.66 3.13 3 7 3s7-1.34 7-3v-6" />
+      <path d="M5 12.5v6c0 1.66 3.13 3 7 3s7-1.34 7-3v-6" />
     </svg>
   ),
   profit: (
@@ -83,7 +91,7 @@ export default function FinancialSection({ financials, gmroi, turnover }) {
         <Metric icon={ICONS.cost} iconClass="rep-metric-icon--amber" value={fin.cogs} label="Cost of goods sold" />
         <Metric icon={ICONS.profit} iconClass="rep-metric-icon--green" value={fin.gross_profit} label="Gross profit" valueClass="rep-metric--green" />
         <Metric icon={ICONS.profit} iconClass={net >= 0 ? "rep-metric-icon--green" : "rep-metric-icon--red"} value={fin.net_profit} label="Net profit" valueClass={net >= 0 ? "rep-metric--green" : "rep-metric--red"} />
-        <Metric icon={ICONS.cost} iconClass="rep-metric-icon--amber" value={fin.total_expenses} label="Total expenses" />
+        <Metric icon={ICONS.expenses} iconClass="rep-metric-icon--purple" value={fin.total_expenses} label="Total expenses" />
         <Metric icon={ICONS.units} iconClass="rep-metric-icon--blue" value={fin.units_sold} label="Units sold" decimals={0} />
         <Metric icon={ICONS.gauge} iconClass="rep-metric-icon--blue" value={marginPct} label="Net margin" decimals={1} suffix="%" valueClass={marginPct >= 0 ? "rep-metric--green" : "rep-metric--red"} />
         <Metric icon={ICONS.gauge} iconClass="rep-metric-icon--purple" value={expenseRatio} label="Expense ratio" decimals={1} suffix="%" />

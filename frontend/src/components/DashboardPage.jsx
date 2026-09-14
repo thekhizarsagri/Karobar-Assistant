@@ -8,6 +8,7 @@ import RecordSalesTab from "./dashboard/RecordSalesTab";
 import AdjustSalesTab from "./dashboard/AdjustSalesTab";
 import Sidebar from "./dashboard/Sidebar";
 import StatCards from "./dashboard/StatCards";
+import AiChatBox from "./dashboard/AiChatBox";
 import StockModal from "./dashboard/StockModal";
 import StockOverviewModal from "./dashboard/StockOverviewModal";
 import MonthlyExpensesPage from "./dashboard/MonthlyExpensesPage";
@@ -342,6 +343,28 @@ function DashboardPage({ data, onEditForm, onLogout }) {
   const netProfit = summary?.metrics?.net_profit ?? 0;
   const currency = resolveCurrencySymbol(summary?.currency);
 
+  const aiContext = useMemo(() => {
+    const products = summary?.products || [];
+    const stockOf = (p) => Number(p.stockAvailable || 0);
+    return {
+      businessName: summary?.business_name || "",
+      ownerName: summary?.owner_name || "",
+      totalStock,
+      grossProfit,
+      netProfit,
+      monthlyExpenses,
+      currency,
+      productCount: products.length,
+      unitsSold: salesSummary?.total_units ?? 0,
+      outOfStock: products.filter((p) => stockOf(p) <= 0).map((p) => p.name),
+      lowStock: products
+        .filter((p) => stockOf(p) > 0 && stockOf(p) <= 10)
+        .sort((a, b) => stockOf(a) - stockOf(b))
+        .slice(0, 3)
+        .map((p) => p.name),
+    };
+  }, [summary, salesSummary, totalStock, grossProfit, netProfit, monthlyExpenses, currency]);
+
   // For non-dashboard pages, we render them below topbar but without dashboard grid
   const renderMainContent = () => {
     if (editingProfile) {
@@ -458,9 +481,10 @@ function DashboardPage({ data, onEditForm, onLogout }) {
                 </div>
               </div>
 
-              {/* Bottom — Sales Overview full width */}
+              {/* Bottom — Sales Overview + AI chat side by side */}
               <div className="dash-bottom-row">
                 <SalesOverviewCard analytics={analytics} currency={currency} />
+                <AiChatBox context={aiContext} />
               </div>
             </div>
           ) : (
