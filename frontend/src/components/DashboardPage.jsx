@@ -357,7 +357,7 @@ function DashboardPage({ data, onEditForm, onLogout }) {
         />
       );
     }
-    if (activeNav === "inventory") return <InventoryPage products={summary?.products || []} currency={currency} onSubmit={handleStockSubmit} />;
+    if (activeNav === "inventory") return <InventoryPage products={summary?.products || []} currency={currency} onSubmit={handleStockSubmit} onProductAdded={async (result, name) => { try { const res = await fetch("/api/dashboard"); if (res.ok) { const updated = await res.json(); setSummary(updated); if (updated.sales_summary) setSalesSummary(updated.sales_summary); } } catch (err) { console.error(err); } notify(`Added ${name} to your product catalog.`, "success"); }} />;
     if (activeNav === "sales") return <AnalyticsPage data={summary} onBack={() => setActiveNav("dashboard")} />;
     if (activeNav === "editSales") return <AdjustSalesTab products={summary?.products || []} submitSale={submitSale} removeSale={removeSaleHandler} />;
     if (activeNav === "ai") return <AiInsightsPage data={summary} onBack={() => setActiveNav("dashboard")} />;

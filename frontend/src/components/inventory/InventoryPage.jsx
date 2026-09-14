@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import StockModal from "../dashboard/StockModal";
+import AddProductModal from "../dashboard/AddProductModal";
+import { postProduct } from "../dashboard/api";
 import { formatFull, formatNumber as fmt } from "../../utils/formatNumber";
 import { resolveCurrencySymbol } from "../../utils/currency";
 import InventoryTable from "./InventoryTable";
@@ -74,7 +76,7 @@ function AttentionCard({ item, onRestock }) {
   );
 }
 
-function InventoryPage({ products, currency, onSubmit }) {
+function InventoryPage({ products, currency, onSubmit, onProductAdded }) {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState("");
@@ -82,6 +84,7 @@ function InventoryPage({ products, currency, onSubmit }) {
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [sortDir, setSortDir] = useState("asc");
   const [modalOpen, setModalOpen] = useState(false);
+  const [productModalOpen, setProductModalOpen] = useState(false);
   const [initialProduct, setInitialProduct] = useState("");
   const [refreshKey, setRefreshKey] = useState(0);
 
@@ -144,6 +147,13 @@ function InventoryPage({ products, currency, onSubmit }) {
     setRefreshKey((k) => k + 1);
   };
 
+  const handleProductSubmit = async (newProd) => {
+    const result = await postProduct(newProd);
+    setProductModalOpen(false);
+    setRefreshKey((k) => k + 1);
+    onProductAdded?.(result, newProd.name);
+  };
+
   const healthy = Number(summary.healthy || 0);
   const needReorder = Number(summary.needs_reorder || 0);
   const outOfStock = Number(summary.out_of_stock || 0);
@@ -184,6 +194,9 @@ function InventoryPage({ products, currency, onSubmit }) {
               <span className="inv-updated-value">{formatUpdated(generatedAt)}</span>
             </span>
           </span>
+          <button type="button" className="inv-add-btn inv-add-btn--product" onClick={() => setProductModalOpen(true)}>
+            <span aria-hidden="true">+</span> Add Product
+          </button>
           <button type="button" className="inv-add-btn" onClick={() => openAdd()}>
             <span aria-hidden="true">+</span> Add Stock
           </button>
@@ -276,9 +289,9 @@ function InventoryPage({ products, currency, onSubmit }) {
       ) : items.length === 0 ? (
         <div className="inv-empty">
           <p className="inv-empty-title">No products yet.</p>
-          <p className="inv-empty-sub">Add products in the setup form to start tracking your inventory.</p>
-          <button type="button" className="inv-add-btn" onClick={() => openAdd()}>
-            <span aria-hidden="true">+</span> Add Stock
+          <p className="inv-empty-sub">Add your first product to start tracking your inventory.</p>
+          <button type="button" className="inv-add-btn inv-add-btn--product" onClick={() => setProductModalOpen(true)}>
+            <span aria-hidden="true">+</span> Add Product
           </button>
         </div>
       ) : (
@@ -330,6 +343,13 @@ function InventoryPage({ products, currency, onSubmit }) {
         onClose={() => setModalOpen(false)}
         onSubmit={handleSubmit}
         initialProduct={initialProduct}
+      />
+      <AddProductModal
+        isOpen={productModalOpen}
+        currency={currency}
+        existingNames={(products || []).map((p) => p.name)}
+        onClose={() => setProductModalOpen(false)}
+        onSubmit={handleProductSubmit}
       />
     </div>
   );

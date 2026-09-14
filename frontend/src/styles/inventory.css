@@ -148,6 +148,14 @@
   font-size: 18px;
   line-height: 1;
 }
+.inv-add-btn--product {
+  background: linear-gradient(135deg, #2f80ed, #1d5fc2);
+  box-shadow: 0 10px 22px rgba(47, 128, 237, 0.28);
+}
+.inv-add-btn--product:hover {
+  background: linear-gradient(135deg, #1d5fc2, #1a56b8);
+  box-shadow: 0 14px 28px rgba(47, 128, 237, 0.32);
+}
 
 /* ── Stats ── */
 .inv-stats {

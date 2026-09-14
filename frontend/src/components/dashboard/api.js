@@ -30,6 +30,21 @@ export async function postStock(productName, quantity, date) {
   return res.json();
 }
 
+export async function postProduct(product) {
+  const res = await fetch("/api/products", {
+    method: "POST",
+    headers: jsonHeaders,
+    body: JSON.stringify(product),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok || data.error) {
+    const err = new Error(data.message || "Unable to add product");
+    err.code = data.error || "request_failed";
+    throw err;
+  }
+  return data;
+}
+
 export async function getNotifications() {
   const res = await fetch("/api/notifications");
   if (!res.ok) throw new Error("Unable to load notifications");

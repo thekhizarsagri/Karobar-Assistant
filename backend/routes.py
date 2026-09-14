@@ -22,11 +22,12 @@ from backend.notifications import (
 )
 from backend.sales import clear_product_history, export_history, get_sales_summary, record_sale, remove_sale
 from backend.stock import add_stock
-from backend.store import reset as reset_store, update_profile
+from backend.store import add_product, reset as reset_store, update_profile
 from backend.schemas import (
     DemoSetupRequest,
     NotificationReadRequest,
     NotificationRequest,
+    ProductAddRequest,
     SaleDeleteRequest,
     SaleEntryRequest,
     StockEntryRequest,
@@ -82,6 +83,14 @@ def stock_endpoint(request: StockEntryRequest) -> Dict[str, Any]:
     result = add_stock(request.productName, request.quantity, mode=request.mode, date=request.date)
     result["sales_summary"] = get_sales_summary()
     return result
+
+
+@router.post("/api/products")
+def add_product_endpoint(request: ProductAddRequest) -> Dict[str, Any]:
+    result = add_product(request.model_dump())
+    if result.get("error"):
+        return result
+    return build_current_dashboard_payload()
 
 
 @router.get("/api/alerts")

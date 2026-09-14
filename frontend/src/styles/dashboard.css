@@ -1380,6 +1380,7 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  animation: modalPop 0.32s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 .expense-sched-header {
   display: flex;
@@ -1449,6 +1450,43 @@
   flex-direction: column;
   flex: 1;
   min-height: 0;
+}
+/* Schedule row cards (purple expenses theme) */
+.expense-sched-row {
+  background: #fff;
+  border: 1.5px solid #e6eef7;
+  border-radius: 14px;
+  padding: 14px 16px;
+  box-shadow: 0 4px 14px rgba(30, 60, 120, 0.04);
+  will-change: transform;
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s ease, border-color 0.22s ease, background 0.22s ease;
+  animation: modalPop 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.expense-sched-row:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(124, 58, 237, 0.1);
+  border-color: #c9b8f5;
+}
+.expense-sched-row.active {
+  border-color: #7c3aed;
+  background: linear-gradient(180deg, #fbfaff 0%, #f7f5ff 100%);
+  box-shadow: 0 8px 20px rgba(124, 58, 237, 0.12);
+}
+.expense-sched-select:focus {
+  outline: none;
+  border-color: #7c3aed;
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.14);
+}
+.expense-sched-preview {
+  border: 1px dashed #c9b8f5;
+}
+.expense-form-modal .expense-form-icon,
+.expense-sched-modal .expense-sched-icon {
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.expense-form-modal:hover .expense-form-icon,
+.expense-sched-modal:hover .expense-sched-icon {
+  transform: scale(1.06) rotate(-3deg);
 }
 .expense-sched-list {
   flex: 1;
@@ -1584,6 +1622,7 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  animation: modalPop 0.32s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 .expense-form-header {
   display: flex;

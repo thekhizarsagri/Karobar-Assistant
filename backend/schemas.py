@@ -96,6 +96,18 @@ class SaleDeleteRequest(BaseModel):
         self.quantity = cap(self.quantity)
 
 
+class ProductAddRequest(BaseModel):
+    name: str = ""
+    category: str = "Other"
+    sku: str = ""
+    sellingPrice: float | str = 0
+    costPrice: float | str = 0
+    stockAvailable: float | str = 0
+    reorderPoint: float | str = 10
+    unit: str = "pcs"
+    description: str = ""
+
+
 class NotificationRequest(BaseModel):
     type: str = "info"
     title: str

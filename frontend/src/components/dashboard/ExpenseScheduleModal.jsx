@@ -198,8 +198,8 @@ function ExpenseScheduleModal({ expenses, isOpen, onClose, onSuccess }) {
             </div>
 
             <div className="expense-sched-actions">
-              <button type="button" className="demo-back-btn" onClick={onClose}>Cancel</button>
-              <button type="submit" className="register-btn" disabled={saving}>
+              <button type="button" className="modal-btn modal-btn--ghost" onClick={onClose}>Cancel</button>
+              <button type="submit" className="modal-btn modal-btn--purple" disabled={saving}>
                 {saving ? "Saving..." : "Save Schedule"}
               </button>
             </div>
