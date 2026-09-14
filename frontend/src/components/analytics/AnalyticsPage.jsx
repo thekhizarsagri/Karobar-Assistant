@@ -102,8 +102,8 @@ function AnalyticsPage({ data }) {
       {/* ── Header (inventory / sales style) ── */}
       <div className="analytics-header">
         <div className="analytics-head-left">
-          <span className="analytics-head-icon" aria-hidden="true">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0d9d7a" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
+          <span className="analytics-head-icon analytics-head-icon--sales" aria-hidden="true">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2f80ed" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
               <path d="M3 21h18" />
               <path d="M6 21v-7" />
               <path d="M11 21V8" />

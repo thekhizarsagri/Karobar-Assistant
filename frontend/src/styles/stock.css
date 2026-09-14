@@ -409,14 +409,14 @@ body:has(.stock-modal-backdrop) {
   transform: scale(0.9);
 }
 
-/* ── Automation page chrome ── */
+/* ── Automation page chrome (unified: automation = #6d28d9 deep violet) ── */
 .analytics-head-icon--automation {
-  background: linear-gradient(135deg, #ede9fe, #f5f0ff);
-  border-color: #c9b8f5;
-  box-shadow: 0 6px 16px rgba(124, 58, 237, 0.14);
+  background: linear-gradient(135deg, #ede9fe, #f0ebff);
+  border-color: #c4b0f0;
+  box-shadow: 0 6px 16px rgba(109, 40, 217, 0.14);
 }
 .analytics-head-icon--automation:hover {
-  box-shadow: 0 10px 22px rgba(124, 58, 237, 0.22);
+  box-shadow: 0 10px 22px rgba(109, 40, 217, 0.22);
 }
 .automation-add-btn {
   display: inline-flex;
@@ -494,7 +494,7 @@ body:has(.stock-modal-backdrop) {
   background: rgba(220, 38, 38, 0.12);
 }
 [data-theme="dark"] .analytics-head-icon--automation {
-  background: rgba(139, 92, 246, 0.16);
+  background: rgba(109, 40, 217, 0.16);
   border-color: #3b2d5e;
 }
 

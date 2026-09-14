@@ -290,10 +290,40 @@
   flex-direction: column;
   box-shadow: 0 10px 26px rgba(15,23,42,0.1), 0 4px 12px rgba(15,23,42,0.06);
   min-width: 0;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease, border-color 0.3s ease;
+  will-change: transform;
+  transition: transform 0.28s cubic-bezier(0.16,1,0.3,1), box-shadow 0.28s cubic-bezier(0.16,1,0.3,1), background-color 0.3s ease, border-color 0.28s ease;
 }
 .kpi-card:hover { transform: translateY(-2px); box-shadow: 0 16px 34px rgba(15,23,42,0.14), 0 6px 16px rgba(15,23,42,0.08); border-color: #a9c2e8; }
 .kpi-card { animation: cardIn 0.35s cubic-bezier(0.16,1,0.3,1) both; }
+/* Clickable KPI cards (Total Stock + Monthly Expenses): smooth hover lift,
+   icon pop, chart glide, press feedback, keyboard focus ring. Transform-only
+   so there is no layout shift or jank. */
+.kpi-card--clickable { cursor: pointer; }
+.kpi-card--clickable:hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 20px 42px rgba(15,23,42,0.16), 0 8px 20px rgba(15,23,42,0.1);
+}
+.kpi-card--clickable:active { transform: translateY(-1px) scale(0.995); }
+.kpi-card--clickable:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 3px;
+}
+.kpi-card--clickable .kpi-icon,
+.kpi-card--clickable .kpi-chart {
+  transition: transform 0.28s cubic-bezier(0.16,1,0.3,1);
+  will-change: transform;
+}
+.kpi-card--clickable:hover .kpi-icon { transform: scale(1.08) rotate(-4deg); }
+.kpi-card--clickable:hover .kpi-chart { transform: translateY(-2px) scale(1.03); }
+.kpi-card--clickable:active .kpi-icon { transform: scale(1.02); }
+@media (prefers-reduced-motion: reduce) {
+  .kpi-card, .kpi-card--clickable,
+  .kpi-card--clickable .kpi-icon, .kpi-card--clickable .kpi-chart {
+    animation: none;
+    transition: none;
+    transform: none;
+  }
+}
 .kpi-grid .kpi-card:nth-child(1) { animation-delay: 0ms; }
 .kpi-grid .kpi-card:nth-child(2) { animation-delay: 70ms; }
 .kpi-grid .kpi-card:nth-child(3) { animation-delay: 140ms; }
@@ -1016,12 +1046,12 @@
   animation: dashFade 0.3s ease both;
 }
 .analytics-head-icon--expenses {
-  background: linear-gradient(135deg, #fef3d1, #fff8e6);
-  border-color: #ffdf9e;
-  box-shadow: 0 6px 16px rgba(217, 119, 6, 0.14);
+  background: linear-gradient(135deg, #ede9fe, #f5f0ff);
+  border-color: #c9b8f5;
+  box-shadow: 0 6px 16px rgba(124, 58, 237, 0.14);
 }
 .analytics-head-icon--expenses:hover {
-  box-shadow: 0 10px 22px rgba(217, 119, 6, 0.22);
+  box-shadow: 0 10px 22px rgba(124, 58, 237, 0.22);
 }
 .expenses-header-actions {
   display: flex;
@@ -1113,8 +1143,8 @@
   animation-delay: 0.24s;
 }
 .analytics-section-icon--expenses {
-  background: linear-gradient(135deg, #d97706, #b45309);
-  box-shadow: 0 6px 14px rgba(217, 119, 6, 0.3);
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+  box-shadow: 0 6px 14px rgba(124, 58, 237, 0.3);
 }
 .analytics-section-icon--check {
   background: linear-gradient(135deg, #0cc290, #0a9e78);
@@ -1190,7 +1220,7 @@
 .expenses-page-item:hover {
   transform: translateY(-2px);
   box-shadow: 0 10px 24px rgba(30, 60, 120, 0.08);
-  border-color: #ffdf9e;
+  border-color: #c9b8f5;
 }
 .expenses-page-item.disabled {
   opacity: 0.5;
@@ -1214,12 +1244,12 @@
   justify-content: center;
   font-size: 15px;
   font-weight: 800;
-  background: #fef3d1;
-  color: #b45309;
+  background: #ede9fe;
+  color: #7c3aed;
 }
 .expenses-item-avatar--amber {
-  background: #fef3d1;
-  color: #b45309;
+  background: #ede9fe;
+  color: #7c3aed;
 }
 .expenses-item-avatar--green {
   background: #e2f8ed;

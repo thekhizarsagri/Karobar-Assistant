@@ -448,7 +448,7 @@ function DashboardPage({ data, onEditForm, onLogout }) {
               {/* Top — 2x2 stats square + Add Sales + Alerts in one line (compact if needed) */}
               <div className="dash-top-grid">
                 <div className="dash-stats-square">
-                  <StatCards totalStock={totalStock} grossProfit={grossProfit} monthlyExpenses={monthlyExpenses} netProfit={netProfit} currency={currency} salesSummary={salesSummary} analytics={analytics} products={summary?.products || []} deductions={summary?.recent_deductions || []} onStockOverview={()=>setStockOverviewOpen(true)} onAddStock={()=>setStockModalOpen(true)} />
+                  <StatCards totalStock={totalStock} grossProfit={grossProfit} monthlyExpenses={monthlyExpenses} netProfit={netProfit} currency={currency} salesSummary={salesSummary} analytics={analytics} products={summary?.products || []} deductions={summary?.recent_deductions || []} onStockOverview={()=>setStockOverviewOpen(true)} onAddStock={()=>setStockModalOpen(true)} onExpenses={()=>handleNav("expenses")} />
                 </div>
                 <div className="dash-add-sales-side">
                   <RecordSalesTab products={summary?.products || []} submitSale={submitSale} />

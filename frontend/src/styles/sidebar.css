@@ -147,12 +147,17 @@
   overflow: hidden;
   letter-spacing: -0.01em;
   animation: sidebarItemIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
-  transition: background 0.2s ease, color 0.2s ease, transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s ease;
+  will-change: transform;
+  transition: background 0.22s cubic-bezier(0.16,1,0.3,1), color 0.22s ease, transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s cubic-bezier(0.16,1,0.3,1);
 }
 .sidebar-item:hover {
-  background: rgba(16, 185, 129, 0.09);
-  color: #0b6e53;
+  background: color-mix(in srgb, var(--nav-accent, #0d9d7a) 10%, transparent);
+  color: #0f172a;
   transform: translateX(3px);
+}
+.sidebar-item:focus-visible {
+  outline: 2px solid var(--nav-accent, #0d9d7a);
+  outline-offset: 2px;
 }
 .sidebar-item:active {
   transform: translateX(3px) scale(0.98);
@@ -179,9 +184,10 @@
   border-radius: 11px;
   color: var(--nav-accent, #0d9d7a);
   background: color-mix(in srgb, var(--nav-accent, #0d9d7a) 12%, transparent);
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s ease, color 0.2s ease;
+  will-change: transform;
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), background 0.22s ease, color 0.22s ease;
 }
-.sidebar-item:hover .sidebar-item-icon { transform: scale(1.08) rotate(-4deg); }
+.sidebar-item:hover .sidebar-item-icon { transform: scale(1.1) rotate(-4deg); }
 .sidebar-item.active .sidebar-item-icon {
   color: #fff;
   background: rgba(255, 255, 255, 0.22);

@@ -140,12 +140,12 @@ function AdjustSalesTab({ products, submitSale, removeSale }) {
       <div className="sales-page-head">
         <div className="sales-head-left">
           <span className="sales-head-icon" aria-hidden="true">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0d9d7a" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#d97706" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
               <path d="M3 9l1.7-5h14.6L21 9" />
               <path d="M3 9v11a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V9" />
               <path d="M3 9h18" />
-              <circle cx="9" cy="13.5" r="1.2" fill="#0d9d7a" stroke="none" />
-              <circle cx="15" cy="13.5" r="1.2" fill="#0d9d7a" stroke="none" />
+              <circle cx="9" cy="13.5" r="1.2" fill="#d97706" stroke="none" />
+              <circle cx="15" cy="13.5" r="1.2" fill="#d97706" stroke="none" />
             </svg>
           </span>
           <span className="sales-head-text">

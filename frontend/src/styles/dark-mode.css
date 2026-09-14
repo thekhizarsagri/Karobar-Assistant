@@ -419,19 +419,19 @@
   border-color: #243a5e;
 }
 
-/* ── Monthly Expenses Page ── */
+/* ── Monthly Expenses Page (unified: expenses = #7c3aed purple) ── */
 [data-theme="dark"] .analytics-head-icon--expenses {
-  background: rgba(217, 119, 6, 0.16);
-  border-color: #45300a;
+  background: rgba(124, 58, 237, 0.16);
+  border-color: #3b2d5e;
 }
 /* Section icon tiles: tone down bright gradients in dark mode */
 [data-theme="dark"] .analytics-section-icon--expenses {
-  background: rgba(217, 119, 6, 0.16);
-  border: 1px solid #45300a;
+  background: rgba(124, 58, 237, 0.16);
+  border: 1px solid #3b2d5e;
   box-shadow: none;
 }
 [data-theme="dark"] .analytics-section-icon--expenses svg {
-  stroke: #fbbf24;
+  stroke: #b79cff;
 }
 [data-theme="dark"] .analytics-section-icon--check {
   background: rgba(16, 185, 129, 0.16);
@@ -470,7 +470,7 @@
 }
 
 [data-theme="dark"] .expenses-page-item:hover {
-  border-color: #45300a;
+  border-color: #3b2d5e;
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3);
 }
 
@@ -479,12 +479,12 @@
 }
 
 [data-theme="dark"] .expenses-item-avatar {
-  background: rgba(217, 119, 6, 0.16);
-  color: #fbbf24;
+  background: rgba(124, 58, 237, 0.16);
+  color: #b79cff;
 }
 [data-theme="dark"] .expenses-item-avatar--amber {
-  background: rgba(217, 119, 6, 0.16);
-  color: #fbbf24;
+  background: rgba(124, 58, 237, 0.16);
+  color: #b79cff;
 }
 [data-theme="dark"] .expenses-item-avatar--green {
   background: rgba(16, 185, 129, 0.16);

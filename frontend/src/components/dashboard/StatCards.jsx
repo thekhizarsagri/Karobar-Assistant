@@ -1,5 +1,6 @@
 import { useTheme } from "../../ThemeContext";
 import { resolveCurrencySymbol } from "../../utils/currency";
+import { NAV_ACCENTS } from "./navTheme";
 
 function SolidHead({ color, tip, prev }) {
   // Perfect equilateral-style triangle head, aligned with the line's
@@ -256,6 +257,7 @@ export default function StatCards({
   deductions,
   onStockOverview,
   onAddStock,
+  onExpenses,
 }) {
   const grossNum = Number(grossProfit || 0);
   const netNum = Number(netProfit || 0);
@@ -265,6 +267,9 @@ export default function StatCards({
   const isNetPositive = !(netNum < 0);
 
   const { dark } = useTheme();
+
+  const STOCK_BLUE = NAV_ACCENTS.inventory; // #2563eb — unified with sidebar + inventory page
+  const EXPENSE_PURPLE = NAV_ACCENTS.expenses; // #7c3aed — unified with sidebar + expenses page
 
   // Themes sampled from cards.png — muted deep-tinted variants after dark.
   const MINT = dark
@@ -319,7 +324,7 @@ export default function StatCards({
         cardBg: "#f7f5ff",
         border: "#a78bfa",
         iconBg: "#e3dcfd",
-        iconColor: "#7c3aed",
+        iconColor: EXPENSE_PURPLE,
         chart: "#8b5cf6",
         value: "#0f172a",
         trend: "#10b981",
@@ -338,7 +343,7 @@ export default function StatCards({
         cardBg: "#f2f7ff",
         border: "#5b9cf6",
         iconBg: "#dbeafe",
-        iconColor: "#2563eb",
+        iconColor: STOCK_BLUE,
         chart: "#60a5fa",
         value: "#0f172a",
         trend: "#2563eb",
@@ -495,12 +500,32 @@ export default function StatCards({
 
   return (
     <div className="kpi-grid">
-      {cards.map((c) => (
+      {cards.map((c) => {
+        const isClickable = c.key === "stock" || c.key === "expenses";
+        const handleActivate = () => {
+          if (c.key === "stock") onStockOverview?.();
+          if (c.key === "expenses") onExpenses?.();
+        };
+        return (
         <div
           key={c.key}
-          className="kpi-card"
+          className={`kpi-card${isClickable ? " kpi-card--clickable" : ""}`}
           style={{ background: c.theme.cardBg, borderColor: c.theme.border }}
-          onClick={() => c.key === "stock" && onStockOverview?.()}
+          onClick={isClickable ? handleActivate : undefined}
+          onKeyDown={
+            isClickable
+              ? (e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    handleActivate();
+                  }
+                }
+              : undefined
+          }
+          role={isClickable ? "button" : undefined}
+          tabIndex={isClickable ? 0 : undefined}
+          title={c.key === "stock" ? "View stock overview" : c.key === "expenses" ? "Open monthly expenses" : undefined}
+          aria-label={isClickable ? `${c.label} — ${c.key === "stock" ? "view stock overview" : "open monthly expenses"}` : undefined}
         >
           <div className="kpi-head">
             <div className="kpi-icon" style={{ background: c.theme.iconBg, color: c.theme.iconColor }}>
@@ -525,6 +550,7 @@ export default function StatCards({
                     e.stopPropagation();
                     onAddStock?.();
                   }}
+                  onKeyDown={(e) => e.stopPropagation()}
                 >
                   <span className="kpi-add-plus">+</span> Add Stock
                 </button>
@@ -541,7 +567,8 @@ export default function StatCards({
             )}
           </div>
         </div>
-      ))}
+        );
+      })}
     </div>
   );
 }

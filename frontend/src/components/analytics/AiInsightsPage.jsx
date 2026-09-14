@@ -50,7 +50,7 @@ function AiInsightsPage({ data }) {
       <div className="analytics-header">
         <div className="analytics-head-left">
           <span className="analytics-head-icon analytics-head-icon--ai" aria-hidden="true">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
               <path d="M9 18h6" />
               <path d="M10 22h4" />
               <path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.4 1 2.3h6c0-.9.4-1.8 1-2.3A7 7 0 0 0 12 2z" />

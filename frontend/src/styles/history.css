@@ -29,18 +29,18 @@
   animation-delay: 0.3s;
 }
 
-/* ── Header icons ── */
+/* ── Header icons (unified: history = sky #0284c7) ── */
 .analytics-head-icon--history {
-  background: linear-gradient(135deg, #dbeafe, #eef4ff);
-  border-color: #b8d0f5;
-  box-shadow: 0 6px 16px rgba(47, 128, 237, 0.14);
+  background: linear-gradient(135deg, #e0f2fe, #f0f9ff);
+  border-color: #bae6fd;
+  box-shadow: 0 6px 16px rgba(2, 132, 199, 0.14);
 }
 .analytics-head-icon--history:hover {
-  box-shadow: 0 10px 22px rgba(47, 128, 237, 0.22);
+  box-shadow: 0 10px 22px rgba(2, 132, 199, 0.22);
 }
 .analytics-section-icon--history {
-  background: linear-gradient(135deg, #2f80ed, #1d5fc2);
-  box-shadow: 0 6px 14px rgba(47, 128, 237, 0.3);
+  background: linear-gradient(135deg, #0284c7, #0369a1);
+  box-shadow: 0 6px 14px rgba(2, 132, 199, 0.3);
 }
 .analytics-section-icon--sales {
   background: linear-gradient(135deg, #0cc290, #0a9e78);
@@ -346,8 +346,8 @@
 
 /* ── Dark mode ── */
 [data-theme="dark"] .analytics-head-icon--history {
-  background: rgba(47, 128, 237, 0.16);
-  border-color: #243a5e;
+  background: rgba(2, 132, 199, 0.16);
+  border-color: #16405e;
 }
 [data-theme="dark"] .history-product-card {
   background: #0f1728;
@@ -404,12 +404,12 @@
 }
 /* Section icon tiles: tone down bright gradients in dark mode */
 [data-theme="dark"] .analytics-section-icon--history {
-  background: rgba(47, 128, 237, 0.18);
-  border: 1px solid #243a5e;
+  background: rgba(2, 132, 199, 0.18);
+  border: 1px solid #16405e;
   box-shadow: none;
 }
 [data-theme="dark"] .analytics-section-icon--history svg {
-  stroke: #7aa7f5;
+  stroke: #38bdf8;
 }
 [data-theme="dark"] .analytics-section-icon--sales {
   background: rgba(16, 185, 129, 0.16);

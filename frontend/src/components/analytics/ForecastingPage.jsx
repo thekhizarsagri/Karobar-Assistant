@@ -46,7 +46,7 @@ function ForecastingPage({ data }) {
       <div className="analytics-header">
         <div className="analytics-head-left">
           <span className="analytics-head-icon analytics-head-icon--forecast" aria-hidden="true">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2f80ed" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0ea5e9" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
               <path d="M3 18l6-8 4 4 8-10" />
               <path d="M17 4h4v4" />
             </svg>

@@ -11,12 +11,12 @@
 }
 
 .analytics-head-icon--reports {
-  background: linear-gradient(135deg, #c9f3e3, #e9fbf3);
-  border-color: #b6e9d3;
-  box-shadow: 0 6px 16px rgba(13, 157, 122, 0.12);
+  background: linear-gradient(135deg, #ffe4e6, #fff1f2);
+  border-color: #fecdd3;
+  box-shadow: 0 6px 16px rgba(244, 63, 94, 0.12);
 }
 .analytics-head-icon--reports:hover {
-  box-shadow: 0 10px 22px rgba(13, 157, 122, 0.2);
+  box-shadow: 0 10px 22px rgba(244, 63, 94, 0.2);
 }
 
 .rep-download-btn {
@@ -638,8 +638,8 @@
 
 /* ── Dark mode ── */
 [data-theme="dark"] .analytics-head-icon--reports {
-  background: rgba(16, 185, 129, 0.14);
-  border-color: #1e3a2d;
+  background: rgba(244, 63, 94, 0.14);
+  border-color: #4c1d24;
 }
 [data-theme="dark"] .rep-download-btn {
   background: #0f1728;

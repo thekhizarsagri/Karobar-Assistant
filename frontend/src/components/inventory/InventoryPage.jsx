@@ -160,7 +160,7 @@ function InventoryPage({ products, currency, onSubmit }) {
       <div className="inv-page-head">
         <div className="inv-head-left">
           <span className="inv-head-icon" aria-hidden="true">
-            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#0d9d7a" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
               <path d="M21 8 12 3 3 8v8l9 5 9-5V8z" />
               <path d="M3 8l9 5 9-5" />
               <path d="M12 13v8" />

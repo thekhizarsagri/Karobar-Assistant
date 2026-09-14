@@ -15,14 +15,14 @@
   box-shadow: 0 10px 22px rgba(124, 58, 237, 0.22);
 }
 
-/* Forecast-tinted header icon */
+/* Forecast-tinted header icon (unified: forecast = #0ea5e9 light blue) */
 .analytics-head-icon--forecast {
-  background: linear-gradient(135deg, #dbeafe, #eef4ff);
-  border-color: #b8d0f5;
-  box-shadow: 0 6px 16px rgba(47, 128, 237, 0.14);
+  background: linear-gradient(135deg, #e0f2fe, #f0f9ff);
+  border-color: #bae6fd;
+  box-shadow: 0 6px 16px rgba(14, 165, 233, 0.14);
 }
 .analytics-head-icon--forecast:hover {
-  box-shadow: 0 10px 22px rgba(47, 128, 237, 0.22);
+  box-shadow: 0 10px 22px rgba(14, 165, 233, 0.22);
 }
 
 /* Forecast section + stats entrance */
@@ -33,10 +33,10 @@
 .forecast-stats .analytics-stat:nth-child(2) { animation-delay: 0.12s; }
 .forecast-stats .analytics-stat:nth-child(3) { animation-delay: 0.19s; }
 
-/* Forecast section icon */
+/* Forecast section icon (unified: forecast = #0ea5e9) */
 .analytics-section-icon--forecast {
-  background: linear-gradient(135deg, #2f80ed, #1d5fc2);
-  box-shadow: 0 6px 14px rgba(47, 128, 237, 0.3);
+  background: linear-gradient(135deg, #0ea5e9, #0284c7);
+  box-shadow: 0 6px 14px rgba(14, 165, 233, 0.3);
 }
 
 /* ── Actions (legacy compat) ── */
@@ -378,8 +378,8 @@
   border-color: #3b2d5e;
 }
 [data-theme="dark"] .analytics-head-icon--forecast {
-  background: rgba(47, 128, 237, 0.16);
-  border-color: #243a5e;
+  background: rgba(14, 165, 233, 0.16);
+  border-color: #16405e;
 }
 [data-theme="dark"] .export-menu {
   background: #141e33;

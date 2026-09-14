@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import titleImg from "../../assets/title-image.png";
 import titleImgDark from "../../assets/title-image-dark.png";
 import { useTheme } from "../../ThemeContext";
+import { NAV_ACCENTS } from "./navTheme";
 
 const NAV_GROUPS = [
   {
@@ -10,7 +11,7 @@ const NAV_GROUPS = [
       {
         id: "dashboard",
         label: "Dashboard",
-        accent: "#0d9d7a",
+        accent: NAV_ACCENTS.dashboard,
         icon: (
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <rect x="3" y="3" width="7" height="9" rx="1.5" />
@@ -28,7 +29,7 @@ const NAV_GROUPS = [
       {
         id: "inventory",
         label: "Inventory",
-        accent: "#0ea5a4",
+        accent: NAV_ACCENTS.inventory,
         icon: (
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M21 8l-9-5-9 5v8l9 5 9-5V8z" />
@@ -40,7 +41,7 @@ const NAV_GROUPS = [
       {
         id: "sales",
         label: "Sales",
-        accent: "#2f80ed",
+        accent: NAV_ACCENTS.sales,
         icon: (
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M3 22h18" />
@@ -54,7 +55,7 @@ const NAV_GROUPS = [
       {
         id: "editSales",
         label: "Edit Sales",
-        accent: "#d97706",
+        accent: NAV_ACCENTS.editSales,
         icon: (
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
@@ -65,7 +66,7 @@ const NAV_GROUPS = [
       {
         id: "history",
         label: "Product history",
-        accent: "#0284c7",
+        accent: NAV_ACCENTS.history,
         icon: (
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <circle cx="12" cy="12" r="9" />
@@ -76,7 +77,7 @@ const NAV_GROUPS = [
       {
         id: "automation",
         label: "Automation",
-        accent: "#7c3aed",
+        accent: NAV_ACCENTS.automation,
         icon: (
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
@@ -91,7 +92,7 @@ const NAV_GROUPS = [
       {
         id: "ai",
         label: "Analytics",
-        accent: "#8b5cf6",
+        accent: NAV_ACCENTS.ai,
         icon: (
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M9 18h6" />
@@ -103,7 +104,7 @@ const NAV_GROUPS = [
       {
         id: "forecast",
         label: "Demand Forecasting",
-        accent: "#0ea5e9",
+        accent: NAV_ACCENTS.forecast,
         icon: (
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M3 18l6-8 4 4 8-10" />
@@ -114,7 +115,7 @@ const NAV_GROUPS = [
       {
         id: "reports",
         label: "Reports",
-        accent: "#f43f5e",
+        accent: NAV_ACCENTS.reports,
         icon: (
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
@@ -133,18 +134,19 @@ const NAV_GROUPS = [
       {
         id: "expenses",
         label: "Monthly Expenses",
-        accent: "#b45309",
+        accent: NAV_ACCENTS.expenses,
         icon: (
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <line x1="12" y1="1" x2="12" y2="23" />
-            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+            <ellipse cx="12" cy="6.5" rx="7" ry="3" />
+            <path d="M5 6.5v6c0 1.66 3.13 3 7 3s7-1.34 7-3v-6" />
+            <path d="M5 12.5v6c0 1.66 3.13 3 7 3s7-1.34 7-3v-6" />
           </svg>
         ),
       },
       {
         id: "settings",
         label: "Settings",
-        accent: "#64748b",
+        accent: NAV_ACCENTS.settings,
         icon: (
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <circle cx="12" cy="12" r="3" />

@@ -42,7 +42,7 @@ function HistoryTab({ salesSummary, products, onOpenProduct }) {
       <div className="analytics-header">
         <div className="analytics-head-left">
           <span className="analytics-head-icon analytics-head-icon--history" aria-hidden="true">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2f80ed" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0284c7" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="12" cy="12" r="9" />
               <polyline points="12 7 12 12 15 14" />
             </svg>

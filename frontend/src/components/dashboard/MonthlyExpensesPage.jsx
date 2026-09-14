@@ -79,9 +79,10 @@ function MonthlyExpensesPage({ expenses, metrics, nextDeductions, recentDeductio
       <div className="analytics-header">
         <div className="analytics-head-left">
           <span className="analytics-head-icon analytics-head-icon--expenses" aria-hidden="true">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#b45309" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="12" y1="1" x2="12" y2="23" />
-              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
+              <ellipse cx="12" cy="6.5" rx="7" ry="3" />
+              <path d="M5 6.5v6c0 1.66 3.13 3 7 3s7-1.34 7-3v-6" />
+              <path d="M5 12.5v6c0 1.66 3.13 3 7 3s7-1.34 7-3v-6" />
             </svg>
           </span>
           <span className="analytics-head-text">
@@ -106,10 +107,11 @@ function MonthlyExpensesPage({ expenses, metrics, nextDeductions, recentDeductio
       {/* ── Stats strip ── */}
       <div className="analytics-stats expenses-page-stats">
         <div className="analytics-stat">
-          <span className="analytics-stat-icon analytics-stat-icon--amber" aria-hidden="true">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#b45309" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="12" y1="1" x2="12" y2="23" />
-              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+          <span className="analytics-stat-icon analytics-stat-icon--purple" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <ellipse cx="12" cy="6.5" rx="7" ry="3" />
+              <path d="M5 6.5v6c0 1.66 3.13 3 7 3s7-1.34 7-3v-6" />
+              <path d="M5 12.5v6c0 1.66 3.13 3 7 3s7-1.34 7-3v-6" />
             </svg>
           </span>
           <span className="analytics-stat-body">
@@ -167,8 +169,9 @@ function MonthlyExpensesPage({ expenses, metrics, nextDeductions, recentDeductio
         <div className="analytics-section-head">
           <span className="analytics-section-icon analytics-section-icon--expenses" aria-hidden="true">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="12" y1="1" x2="12" y2="23" />
-              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+              <ellipse cx="12" cy="6.5" rx="7" ry="3" />
+              <path d="M5 6.5v6c0 1.66 3.13 3 7 3s7-1.34 7-3v-6" />
+              <path d="M5 12.5v6c0 1.66 3.13 3 7 3s7-1.34 7-3v-6" />
             </svg>
           </span>
           <span className="analytics-section-titles">
@@ -182,9 +185,10 @@ function MonthlyExpensesPage({ expenses, metrics, nextDeductions, recentDeductio
           {activeExpenses.length === 0 && (
             <div className="analytics-empty">
               <span className="analytics-empty-icon" aria-hidden="true">
-                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="12" y1="1" x2="12" y2="23" />
-                  <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <ellipse cx="12" cy="6.5" rx="7" ry="3" />
+                  <path d="M5 6.5v6c0 1.66 3.13 3 7 3s7-1.34 7-3v-6" />
+                  <path d="M5 12.5v6c0 1.66 3.13 3 7 3s7-1.34 7-3v-6" />
                 </svg>
               </span>
               <p className="analytics-empty-title">No expenses configured yet</p>
