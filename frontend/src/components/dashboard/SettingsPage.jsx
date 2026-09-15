@@ -44,6 +44,9 @@ function SettingsPage() {
       setLoading(false);
     };
     fetchToggleState();
+    const handleExternalUpdate = () => fetchToggleState();
+    window.addEventListener("notifications:updated", handleExternalUpdate);
+    return () => window.removeEventListener("notifications:updated", handleExternalUpdate);
   }, []);
 
   const toggleSetting = async (id) => {

@@ -67,9 +67,7 @@ def _index_response(index_file: Path) -> FileResponse:
 
 def _index_file() -> Path | None:
     dist = _frontend_dist_dir()
-    if dist is None:
-        return None
-    return dist / "index.html"
+    return dist / "index.html" if dist is not None else None
 
 
 def _serve_index():

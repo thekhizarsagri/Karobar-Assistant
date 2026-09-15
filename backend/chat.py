@@ -15,10 +15,18 @@ import re
 from datetime import datetime
 from typing import Any, Dict, List, Tuple
 
+from backend.alerts import clear_all as clear_all_alerts
 from backend.alerts import get_active_alerts
 from backend.insights import get_latest_ai_insights
 from backend.metrics import calculate_profitability
 from backend.models import Expense
+from backend.notifications import (
+    are_notifications_enabled,
+    clear_notifications,
+    get_notifications,
+    mark_all_read,
+    toggle_notifications,
+)
 from backend.persistence import save_state
 from backend.sales import get_sales_summary, record_sale
 from backend.stock import add_stock, get_stock_for_product
@@ -254,8 +262,78 @@ def _try_calculate(text: str) -> str | None:
 
 # ── intent detection ────────────────────────────────────────────────
 
+def _theme_intent(t: str) -> str | None:
+    """Detect dark/light/toggle requests. Returns intent or None."""
+    has_dark = "dark" in t
+    has_light = "light" in t
+    has_theme = ("theme" in t or "mode" in t or "appearance" in t
+                 or has_dark or has_light)
+    if not has_theme:
+        return None
+    # Explicit toggle phrasing wins
+    if re.search(r"\btoggle\b.*\b(theme|mode|dark|light)\b|\b(theme|mode)\b.*\btoggle\b"
+                 r"|\bswitch\b.*\btheme\b|\bchange\b.*\btheme\b", t):
+        return "theme_toggle"
+    if re.search(r"\btoggle\b.*\bdark\b|\bdark\b.*\btoggle\b", t):
+        return "theme_toggle"
+    # OFF-dark == light
+    if has_dark and re.search(
+            r"\b(off|disable|disabled|turn off|switch off|remove|exit|quit|light)\b", t):
+        # "turn off dark mode" / "dark mode off" / "disable dark" -> light
+        if re.search(r"dark", t):
+            return "theme_light"
+    if has_light and not has_dark:
+        # Any mention of light mode/theme (on/off words optional):
+        # "light mode", "switch to light", "turn on light mode"
+        if re.search(r"light", t):
+            # Unless they say "turn off light mode" -> dark
+            if re.search(r"\b(turn off|switch off|disable|off)\b.*light|light.*\boff\b", t):
+                return "theme_dark"
+            return "theme_light"
+    if has_dark and not has_light:
+        return "theme_dark"
+    if has_dark and has_light:
+        # Both mentioned — last one wins ("switch from dark to light")
+        return "theme_light" if t.rfind("light") > t.rfind("dark") else "theme_dark"
+    return None
+
+
+def _notification_intent(t: str) -> str | None:
+    """Detect notification control requests. Returns intent or None."""
+    if "notif" not in t and "push" not in t and "bell" not in t and "notify" not in t:
+        return None
+    NOTIF = r"(notif\w*|push\w*|bells?|notify)"
+    # Clear / mark-read
+    if re.search(r"\b(clear|delete|remove|dismiss|clean|wipe|empty|mark).{0,25}" + NOTIF
+                 + r"|" + NOTIF + r".{0,25}\b(clear|delete|remove|dismiss|clean|wipe|empty)\b"
+                 r"|\bmark\b.{0,20}\bread\b", t):
+        return "notifications_clear"
+    # OFF — check before ON so "don't" / "off" wins
+    if re.search(r"\b(off|disable|disabled|muted?|pause|paused|block|blocked|silent|silence)\b"
+                 r"|don't|dont|do not|no more|\bno\b.{0,15}notif"
+                 r"|\bturn\b.{0,10}\boff\b|\bswitch\b.{0,10}\boff\b"
+                 r"|\bstop\b|\bshut ?up\b", t):
+        return "notifications_off"
+    # ON — note: "show" alone means status, not enable
+    if re.search(r"\b(on|enable|enabled|unmute|resume|allow|allowed|start|send)\b"
+                 r"|\bturn\b.{0,10}\bon\b|\bswitch\b.{0,10}\bon\b", t):
+        return "notifications_on"
+    return "notifications_status"
+
+
 def _intent(text: str) -> str:
     t = text.lower()
+    # Global UI controls win over everything (except in-progress data tasks
+    # which are handled as interrupts in handle_chat_message).
+    notif = _notification_intent(t)
+    if notif:
+        return notif
+    theme = _theme_intent(t)
+    if theme:
+        return theme
+    if re.search(r"\b(clear|dismiss|remove|delete|hide|empty)\b.{0,25}\balerts?\b"
+                 r"|\balerts?\b.{0,25}\b(clear|dismiss|remove|delete|hide|empty)\b", t):
+        return "alerts_clear"
     if re.search(r"\b(add|increase|plus|restock|top ?up|refill)\b.*\b(stock|inventory|units?|pcs)\b|\b(add|restock)\b.*\b\d+\b.*\b(units?|pcs)\b", t):
         return "add_stock"
     if re.search(r"\b(sell|sold|sale|record).{0,30}\b(sale|sell|sold)\b|\b(sell|sold)\b", t) and not re.search(r"best ?sell|selling|sales (analytics|report|overview|recap|summary|total)", t):
@@ -438,6 +516,106 @@ def _query_history(profile) -> Dict[str, Any]:
         lines.append(f"• {name}: {_fmt_int(h['total_quantity'])} sold in {len(h['entries'])} entries")
     lines.append("Open Product History for the full timeline.")
     return {"reply": "\n".join(lines), "suggestions": ["Sales recap", "Product History"]}
+
+
+# ── device / preference controls (notifications, theme, alerts) ──────
+
+def _set_notifications_enabled(enabled: bool) -> Dict[str, Any]:
+    already = are_notifications_enabled()
+    if already == enabled:
+        state = "ON" if enabled else "OFF"
+        return {
+            "reply": f"Notifications are already {state} — nothing to change.",
+            "suggestions": ["Notification status", "Clear notifications", "Dark mode"],
+            "notifications_updated": True,
+        }
+    toggle_notifications(enabled)
+    if enabled:
+        return {
+            "reply": "Done — notifications are now ON. You'll get popups and badge counts again.",
+            "suggestions": ["Notification status", "Clear notifications", "Light mode"],
+            "notifications_updated": True,
+        }
+    return {
+        "reply": "Done — notifications are now OFF. I won't send popups or badge counts. Say 'turn notifications on' anytime to re-enable.",
+        "suggestions": ["Turn notifications on", "Notification status", "Dark mode"],
+        "notifications_updated": True,
+    }
+
+
+def _clear_notifications_chat() -> Dict[str, Any]:
+    if not are_notifications_enabled():
+        return {
+            "reply": "Notifications are currently OFF, so there's nothing in your inbox. Say 'turn notifications on' first if you want them back.",
+            "suggestions": ["Turn notifications on", "Notification status"],
+            "notifications_updated": True,
+        }
+    mark_all_read()
+    clear_notifications()
+    return {
+        "reply": "Done — cleared all notifications. Your inbox is empty.",
+        "suggestions": ["Notification status", "Turn notifications off", "Any alerts?"],
+        "notifications_updated": True,
+    }
+
+
+def _query_notifications_status() -> Dict[str, Any]:
+    enabled = are_notifications_enabled()
+    feed = get_notifications()
+    unread = feed.get("unread_count", 0)
+    total = len(feed.get("items", []))
+    state = "ON" if enabled else "OFF"
+    if not enabled:
+        return {
+            "reply": "Notifications are OFF — your inbox is paused. Say 'turn notifications on' to resume.",
+            "suggestions": ["Turn notifications on", "Dark mode", "Settings"],
+            "notifications_updated": True,
+        }
+    if total == 0:
+        return {
+            "reply": "Notifications are ON and your inbox is empty — no unread items.",
+            "suggestions": ["Turn notifications off", "Any alerts?", "Dark mode"],
+            "notifications_updated": True,
+        }
+    return {
+        "reply": f"Notifications are {state} — {unread} unread out of {total}. Say 'clear notifications' to empty the inbox or 'turn notifications off' to mute them.",
+        "suggestions": ["Clear notifications", "Turn notifications off", "Any alerts?"],
+        "notifications_updated": True,
+    }
+
+
+def _theme_response(mode: str) -> Dict[str, Any]:
+    """Backend can't touch localStorage — frontend applies `theme` key."""
+    if mode == "dark":
+        return {
+            "reply": "Done — switched to dark mode. Easy on the eyes.",
+            "suggestions": ["Light mode", "Turn notifications off", "Settings"],
+            "theme": "dark",
+        }
+    if mode == "light":
+        return {
+            "reply": "Done — switched to light mode. Bright and clear.",
+            "suggestions": ["Dark mode", "Turn notifications off", "Settings"],
+            "theme": "light",
+        }
+    return {
+        "reply": "Toggling your theme now.",
+        "suggestions": ["Dark mode", "Light mode", "Settings"],
+        "theme": "toggle",
+    }
+
+
+def _clear_alerts_chat(profile) -> Dict[str, Any]:
+    try:
+        remaining = clear_all_alerts(get_latest_ai_insights())
+    except Exception:
+        remaining = []
+    return {
+        "reply": "Done — cleared all alerts. I'll flag new issues if anything comes up.",
+        "suggestions": ["Any alerts?", "Stock status", "Clear notifications"],
+        "alerts_updated": True,
+        "refresh": True,
+    }
 
 
 # ── action flows ────────────────────────────────────────────────────
@@ -891,12 +1069,41 @@ HELP_TEXT = (
     "Here's what I can do, boss:\n"
     "• Answer anything about stock, sales, profit, expenses, alerts, reports and forecasts\n"
     "• Do tasks: 'add stock', 'record sale', 'add product', 'add expense', 'schedule deductions'\n"
-    "• Open pages: 'open inventory', 'show reports', 'go to expenses'\n"
+    "• Controls: 'turn notifications off/on', 'clear notifications', 'clear alerts'\n"
+    "• Appearance: 'dark mode', 'light mode', 'toggle theme'\n"
+    "• Open pages: 'open inventory', 'show reports', 'go to expenses', 'open settings'\n"
     "• Quick math: 'what is 15% of 20000'\n"
     "Just say the word."
 )
 HELP_SUGGESTIONS = ["Stock status", "Add stock", "Record a sale", "Profit summary",
                     "Add expense", "Business Reports"]
+
+# Intents that must interrupt an in-progress slot-filling flow immediately.
+_INTERRUPT_INTENTS = {
+    "notifications_off", "notifications_on", "notifications_clear",
+    "notifications_status", "theme_dark", "theme_light", "theme_toggle",
+    "alerts_clear",
+}
+
+
+def _handle_control_intent(intent: str, profile) -> Dict[str, Any] | None:
+    if intent == "notifications_off":
+        return _set_notifications_enabled(False)
+    if intent == "notifications_on":
+        return _set_notifications_enabled(True)
+    if intent == "notifications_clear":
+        return _clear_notifications_chat()
+    if intent == "notifications_status":
+        return _query_notifications_status()
+    if intent == "theme_dark":
+        return _theme_response("dark")
+    if intent == "theme_light":
+        return _theme_response("light")
+    if intent == "theme_toggle":
+        return _theme_response("toggle")
+    if intent == "alerts_clear":
+        return _clear_alerts_chat(profile)
+    return None
 
 
 def handle_chat_message(session_id: str, message: str) -> Dict[str, Any]:
@@ -912,11 +1119,20 @@ def handle_chat_message(session_id: str, message: str) -> Dict[str, Any]:
         text = text[:500]
     sess = _session(session_id or "default")
 
+    # Global controls (notifications / theme / alerts) interrupt any
+    # in-progress flow so "turn notifications off" always works instantly.
+    early_intent = _intent(text)
+    if early_intent in _INTERRUPT_INTENTS:
+        sess["pending"] = None
+        handled = _handle_control_intent(early_intent, profile)
+        if handled is not None:
+            return handled
+
     continued = _continue_pending(profile, text, sess)
     if continued is not None:
         return continued
 
-    intent = _intent(text)
+    intent = early_intent
 
     if intent == "cancel":
         return {"reply": "Nothing pending — what can I do for you?",
@@ -975,6 +1191,10 @@ def handle_chat_message(session_id: str, message: str) -> Dict[str, Any]:
         return _query_forecast(profile)
     if intent == "query_history":
         return _query_history(profile)
+
+    controlled = _handle_control_intent(intent, profile)
+    if controlled is not None:
+        return controlled
 
     calc = _try_calculate(text)
     if calc:

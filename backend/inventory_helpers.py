@@ -1,8 +1,9 @@
-import math
+import statistics
 from datetime import datetime
 from typing import Any, Dict, List
 
 from backend.store import sales_log, stock_log
+from backend.utils import parse_date
 
 LEAD_TIME_DAYS = 3
 REVIEW_PERIOD_DAYS = 7
@@ -21,22 +22,16 @@ def _status(stock: int, threshold: int) -> str:
 def _product_sales(product_name: str) -> Dict[str, Any]:
     dates: List[Any] = []
     quantities: List[int] = []
-    total = 0
     for entry in sales_log:
         if entry.product_name != product_name:
             continue
-        try:
-            day = datetime.strptime(entry.entry_date, "%Y-%m-%d").date()
-        except (ValueError, TypeError):
-            try:
-                day = datetime.strptime(entry.entry_date, "%Y-%m").date()
-            except (ValueError, TypeError):
-                continue
-        dates.append(day)
+        parsed = parse_date(entry.entry_date)
+        if parsed is None:
+            continue
+        dates.append(parsed.date())
         quantities.append(entry.quantity)
-        total += entry.quantity
     return {
-        "total": total,
+        "total": sum(quantities),
         "first_date": min(dates) if dates else None,
         "last_date": max(dates) if dates else None,
         "dates": dates,
@@ -55,9 +50,7 @@ def _demand_stats(sales: Dict[str, Any]) -> tuple:
     for day, qty in zip(sales["dates"], sales["quantities"]):
         daily_by_day[day] = daily_by_day.get(day, 0) + qty
     daily_values = list(daily_by_day.values())
-    mean = sum(daily_values) / len(daily_values)
-    variance = sum((v - mean) ** 2 for v in daily_values) / len(daily_values)
-    return avg, math.sqrt(variance)
+    return avg, statistics.pstdev(daily_values) if len(daily_values) > 1 else 0.0
 
 
 def _days_since(date) -> int:

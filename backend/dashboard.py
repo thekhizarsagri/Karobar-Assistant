@@ -1,7 +1,7 @@
 """Wire the profile, metrics, sales, and insights into one dashboard payload."""
 from typing import Any, Dict
 
-from backend.metrics import get_dashboard_summary
+from backend.metrics import expense_to_dict, get_dashboard_summary
 from backend.profile import build_profile_from_form
 from backend.sales import get_sales_summary
 from backend.store import get_profile, products_snapshot
@@ -11,18 +11,7 @@ def _dashboard_payload(profile) -> Dict[str, Any]:
     summary = get_dashboard_summary(profile)
     # Include full product data (with stockAvailable) for the frontend
     summary["products"] = products_snapshot()
-    summary["expenses"] = [
-        {
-            "key": expense.key,
-            "label": expense.label,
-            "amount": expense.amount,
-            "enabled": expense.enabled,
-            "deduction_day": expense.deduction_day,
-            "deduction_time": expense.deduction_time,
-            "last_deducted": expense.last_deducted,
-        }
-        for expense in profile.expenses
-    ]
+    summary["expenses"] = [expense_to_dict(expense) for expense in profile.expenses]
     summary["sales_summary"] = get_sales_summary()
     return summary
 

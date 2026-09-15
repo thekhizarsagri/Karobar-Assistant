@@ -87,19 +87,8 @@ def _forecast_series(prod: pd.DataFrame, product_name: str) -> Dict[str, Any]:
     upper = max(lower, round(next_val + margin))
 
     last_actual = int(window[-1])
-    if next_val > last_actual:
-        trend = "upward"
-    elif next_val < last_actual:
-        trend = "downward"
-    else:
-        trend = "steady"
-
-    if len(window) >= 10:
-        confidence = "high"
-    elif len(window) >= 5:
-        confidence = "medium"
-    else:
-        confidence = "low"
+    trend = "upward" if next_val > last_actual else "steady" if next_val == last_actual else "downward"
+    confidence = "high" if len(window) >= 10 else "medium" if len(window) >= 5 else "low"
 
     base.update(
         {
@@ -126,29 +115,10 @@ def export_dataset(dataset: str) -> str:
     if dataset == "abc":
         frame = pd.DataFrame(data["abc"])
     elif dataset == "forecasts":
-        frame = pd.DataFrame(
-            [
-                {
-                    "product": f["product"],
-                    "next_period_units": f["next_period_units"],
-                    "lower": f["lower"],
-                    "upper": f["upper"],
-                    "trend": f["trend"],
-                    "confidence": f["confidence"],
-                    "mape": f["mape"],
-                }
-                for f in data["forecasts"]
-            ]
-        )
+        frame = pd.DataFrame([{k: f[k] for k in ("product", "next_period_units", "lower", "upper", "trend", "confidence", "mape")} for f in data["forecasts"]])
     elif dataset == "velocity":
-        rows = [
-            {**m, "group": "top_mover"}
-            for m in data["velocity"]["top_movers"]
-        ] + [
-            {**m, "group": "slow_mover"}
-            for m in data["velocity"]["slow_movers"]
-        ]
-        frame = pd.DataFrame(rows)
+        movers = [("top_mover", data["velocity"]["top_movers"]), ("slow_mover", data["velocity"]["slow_movers"])]
+        frame = pd.DataFrame([{**m, "group": group} for group, items in movers for m in items])
     else:
         frame = pd.DataFrame()
 

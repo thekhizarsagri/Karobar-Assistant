@@ -18,10 +18,10 @@ def abc_analysis(df: pd.DataFrame, profile) -> List[Dict[str, Any]]:
     revenue: Dict[str, float] = {product.name: 0.0 for product in profile.products}
     units: Dict[str, int] = {product.name: 0 for product in profile.products}
     if not df.empty:
-        for name, rev in df.groupby("product_name")["revenue"].sum().items():
-            revenue[name] = float(rev)
-        for name, qty in df.groupby("product_name")["quantity"].sum().items():
-            units[name] = int(qty)
+        grouped = df.groupby("product_name").agg({"revenue": "sum", "quantity": "sum"})
+        for name, row in grouped.iterrows():
+            revenue[name] = float(row["revenue"])
+            units[name] = int(row["quantity"])
 
     ordered = sorted(revenue.items(), key=lambda kv: kv[1], reverse=True)
     total = sum(revenue.values())

@@ -68,12 +68,12 @@ def _break_even(profile, total_expenses: float, revenue: float, gross_profit: fl
 
 
 def _product_demand(product_name: str, sales: List[Dict[str, Any]]) -> float:
-    dates = [row["day"] for row in sales if row["product"] == product_name]
-    if not dates:
+    rows = [row for row in sales if row["product"] == product_name]
+    if not rows:
         return 0.0
-    span = max(1, (max(dates) - min(dates)).days + 1)
-    total = sum(row["quantity"] for row in sales if row["product"] == product_name)
-    return total / span
+    days = [row["day"] for row in rows]
+    span = max(1, (max(days) - min(days)).days + 1)
+    return sum(row["quantity"] for row in rows) / span
 
 
 def _eoq(profile, sales: List[Dict[str, Any]]) -> List[Dict[str, Any]]:

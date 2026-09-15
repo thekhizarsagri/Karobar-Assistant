@@ -12,6 +12,25 @@ from backend.stock import get_stock_for_product, update_stock_quantity
 from backend.store import get_profile, product_order, products_snapshot, sales_log, stock_log
 
 
+def _adjust_balance(product_name: str, quantity: int, sign: int = 1) -> None:
+    """Add (sign=1, sale) or remove (sign=-1, refund) revenue from the balance."""
+    profile = get_profile()
+    if profile is None:
+        return
+    price = next((p.selling_price for p in profile.products if p.name == product_name), 0)
+    profile.available_balance += sign * quantity * price
+
+
+def _sale_response(message: str) -> Dict[str, Any]:
+    profile = get_profile()
+    return {
+        "message": message,
+        "sales_summary": get_sales_summary(),
+        "products": products_snapshot(),
+        "metrics": calculate_profitability(profile) if profile else {},
+    }
+
+
 def get_sales_summary() -> Dict[str, Any]:
     product_history: Dict[str, Dict[str, Any]] = {}
     stock_history: Dict[str, list] = {}
@@ -25,14 +44,7 @@ def get_sales_summary() -> Dict[str, Any]:
         history["entries"].append(_entry_payload(entry))
 
     for entry in stock_log:
-        stock_history.setdefault(entry.product_name, []).append(
-            {
-                "quantity": entry.quantity,
-                "source": entry.source,
-                "note": entry.note,
-                "created_at": entry.created_at,
-            }
-        )
+        stock_history.setdefault(entry.product_name, []).append(_stock_payload(entry))
 
     return {
         "total_entries": len(sales_log),
@@ -86,22 +98,9 @@ def record_sale(sale_data: Dict[str, Any]) -> Dict[str, Any]:
     )
     sales_log.append(entry)
     update_stock_quantity(product_name, -quantity)
-
-    profile = get_profile()
-    if profile:
-        price_map = {p.name: p.selling_price for p in profile.products}
-        sale_revenue = quantity * price_map.get(product_name, 0)
-        profile.available_balance += sale_revenue
-
+    _adjust_balance(product_name, quantity, sign=1)
     save_state()
-
-    profile = get_profile()
-    return {
-        "message": "Sales recorded",
-        "sales_summary": get_sales_summary(),
-        "products": products_snapshot(),
-        "metrics": calculate_profitability(profile) if profile else {},
-    }
+    return _sale_response("Sales recorded")
 
 
 def remove_sale(sale_data: Dict[str, Any]) -> Dict[str, Any]:
@@ -139,20 +138,10 @@ def remove_sale(sale_data: Dict[str, Any]) -> Dict[str, Any]:
     restored = quantity - remaining
     if restored > 0:
         update_stock_quantity(product_name, restored)
-        profile = get_profile()
-        if profile:
-            price_map = {p.name: p.selling_price for p in profile.products}
-            refund_revenue = restored * price_map.get(product_name, 0)
-            profile.available_balance -= refund_revenue
+        _adjust_balance(product_name, restored, sign=-1)
 
     save_state()
-    profile = get_profile()
-    return {
-        "message": f"Removed {restored} sale(s) for {product_name}",
-        "sales_summary": get_sales_summary(),
-        "products": products_snapshot(),
-        "metrics": calculate_profitability(profile) if profile else {},
-    }
+    return _sale_response(f"Removed {restored} sale(s) for {product_name}")
 
 
 def clear_product_history(product_name: str) -> Dict[str, Any]:
@@ -179,34 +168,24 @@ def _entry_payload(entry: SaleEntry) -> Dict[str, Any]:
     }
 
 
+def _stock_payload(entry) -> Dict[str, Any]:
+    return {
+        "product_name": entry.product_name,
+        "quantity": entry.quantity,
+        "source": entry.source,
+        "note": entry.note,
+        "created_at": entry.created_at,
+    }
+
+
 def export_history(dataset: str = "sales", product_name: str | None = None) -> str:
     """Return a CSV string of the sales or stock history log.
 
     When `product_name` is given, only entries for that product are exported.
     """
-    if dataset == "stock":
-        entries = [
-            entry
-            for entry in stock_log
-            if product_name is None or entry.product_name == product_name
-        ]
-        rows = [
-            {
-                "product_name": entry.product_name,
-                "quantity": entry.quantity,
-                "source": entry.source,
-                "note": entry.note,
-                "created_at": entry.created_at,
-            }
-            for entry in entries
-        ]
-    else:
-        entries = [
-            entry
-            for entry in sales_log
-            if product_name is None or entry.product_name == product_name
-        ]
-        rows = [_entry_payload(entry) for entry in entries]
+    log = stock_log if dataset == "stock" else sales_log
+    to_row = _stock_payload if dataset == "stock" else _entry_payload
+    rows = [to_row(e) for e in log if product_name is None or e.product_name == product_name]
 
     buffer = io.StringIO()
     if rows:

@@ -71,6 +71,7 @@ def generate_ai_insights(profile: BusinessProfile, sales_entries: Optional[List[
 
 
 def get_latest_ai_insights() -> Dict[str, Any]:
-    if get_profile() is None:
+    profile = get_profile()
+    if profile is None:
         return empty_insights()
-    return generate_ai_insights(get_profile(), sales_entries_for_ai())
+    return generate_ai_insights(profile, sales_entries_for_ai())

@@ -4,7 +4,7 @@ from typing import Any, Dict, List, Optional
 
 from backend.alerts import reset_alerts
 from backend.models import BusinessProfile, Product, SaleEntry, StockEntry
-from backend.notifications import clear_notifications
+from backend.notifications import reset_notifications_state
 from backend.persistence import save_state
 from backend.utils import cap
 
@@ -18,7 +18,7 @@ def set_profile(profile: BusinessProfile) -> None:
     global _current_profile
     sales_log.clear()
     stock_log.clear()
-    clear_notifications()
+    reset_notifications_state()
     reset_alerts()
     _current_profile = profile
     for product in profile.products:
@@ -69,7 +69,7 @@ def reset() -> None:
     global _current_profile
     sales_log.clear()
     stock_log.clear()
-    clear_notifications()
+    reset_notifications_state()
     reset_alerts()
     _current_profile = None
     save_state()

@@ -15,25 +15,18 @@ from backend.persistence import save_state
 def _parse_time(time_str: str) -> tuple[int, int]:
     """Parse 'HH:MM' into (hour, minute)."""
     try:
-        parts = time_str.split(":")
-        return int(parts[0]), int(parts[1])
-    except (ValueError, IndexError):
+        hour, minute = time_str.split(":")[:2]
+        return int(hour), int(minute)
+    except (ValueError, AttributeError):
         return 0, 0
 
 
 def _is_expense_due(expense, now: datetime) -> bool:
     """Check if an expense should be deducted at the current time."""
-    if not expense.enabled:
+    if not expense.enabled or expense.amount <= 0:
         return False
-    if expense.amount <= 0:
-        return False
-
     hour, minute = _parse_time(expense.deduction_time)
-    return (
-        now.day == expense.deduction_day
-        and now.hour == hour
-        and now.minute == minute
-    )
+    return now.day == expense.deduction_day and now.hour == hour and now.minute == minute
 
 
 def _already_deducted_this_month(expense, now: datetime) -> bool:
@@ -62,13 +55,14 @@ def process_due_expenses():
         if _is_expense_due(expense, now) and not _already_deducted_this_month(expense, now):
             balance_before = profile.available_balance
             profile.available_balance -= expense.amount
-            expense.last_deducted = now.isoformat(timespec="seconds")
+            stamped = now.isoformat(timespec="seconds")
+            expense.last_deducted = stamped
 
             deduction = ExpenseDeduction(
                 expense_key=expense.key,
                 expense_label=expense.label,
                 amount=expense.amount,
-                deducted_at=now.isoformat(timespec="seconds"),
+                deducted_at=stamped,
                 balance_before=round(balance_before, 2),
                 balance_after=round(profile.available_balance, 2),
             )

@@ -40,7 +40,7 @@ def _sales_frame(profile) -> pd.DataFrame:
     return pd.DataFrame(rows, columns=["product_name", "quantity", "entry_date", "revenue"])
 
 
-def _summary_stats(df: pd.DataFrame, profile) -> Dict[str, Any]:
+def _summary_stats(df: pd.DataFrame) -> Dict[str, Any]:
     if df.empty:
         return {"total_units": 0, "total_revenue": 0.0, "active_products": 0, "days_with_data": 0}
     return {
@@ -58,7 +58,7 @@ def get_advanced_analytics() -> Dict[str, Any]:
     df = _sales_frame(profile)
     return {
         "generated_at": datetime.now().isoformat(timespec="seconds"),
-        "summary": _summary_stats(df, profile),
+        "summary": _summary_stats(df),
         "abc": abc_analysis(df, profile),
         "velocity": product_velocity(df, profile),
         "forecasts": forecast_products(df, profile),

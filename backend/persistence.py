@@ -55,7 +55,7 @@ def save_state() -> None:
     if not _ACTIVE:
         return
     from backend.alerts import dismissed_alerts, transient_alerts
-    from backend.notifications import _next_id, notifications
+    from backend.notifications import _next_id, _notifications_enabled, notifications
     from backend.store import _current_profile, sales_log, stock_log
 
     state = {
@@ -63,7 +63,7 @@ def save_state() -> None:
         "profile": _profile_to_dict(_current_profile),
         "sales": [_sale_to_dict(e) for e in sales_log],
         "stock": [_stock_to_dict(e) for e in stock_log],
-        "notifications": {"items": notifications, "next_id": _next_id},
+        "notifications": {"items": notifications, "next_id": _next_id, "enabled": _notifications_enabled},
         "dismissed_alerts": list(dismissed_alerts),
         "transient_alerts": [dict(alert) for alert in transient_alerts],
     }
@@ -104,6 +104,8 @@ def _load_from_disk() -> None:
     notifications_module.notifications.clear()
     notifications_module.notifications.extend(notif.get("items", []))
     notifications_module._next_id = int(notif.get("next_id", 1) or 1)
+    if "enabled" in notif:
+        notifications_module._notifications_enabled = bool(notif.get("enabled", True))
 
     alerts_module.dismissed_alerts.clear()
     alerts_module.dismissed_alerts.extend(state.get("dismissed_alerts", []))

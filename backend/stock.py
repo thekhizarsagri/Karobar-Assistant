@@ -7,23 +7,23 @@ from backend.persistence import save_state
 from backend.store import get_profile, products_snapshot, stock_log
 
 
-def get_profile_products():
+def _products():
     """Products of the active profile, or an empty list."""
     profile = get_profile()
     return [] if profile is None else profile.products
 
 
+get_profile_products = _products  # backwards-compatible alias
+
+
 def get_stock_for_product(product_name: str) -> int:
     """Return current stock for a product, or 0 if not found."""
-    for product in get_profile_products():
-        if product.name == product_name:
-            return product.stock_quantity
-    return 0
+    return next((p.stock_quantity for p in _products() if p.name == product_name), 0)
 
 
 def update_stock_quantity(product_name: str, delta: int) -> int:
     """Add `delta` units (negative = sale) clamped to >= 0. Returns new level, -1 if not found."""
-    for product in get_profile_products():
+    for product in _products():
         if product.name == product_name:
             product.stock_quantity = max(0, product.stock_quantity + delta)
             return product.stock_quantity

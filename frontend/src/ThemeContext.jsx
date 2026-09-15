@@ -81,8 +81,40 @@ export function ThemeProvider({ children }) {
     });
   }, []);
 
+  const setDarkMode = useCallback((enabled) => {
+    const next = !!enabled;
+    setDark((prev) => {
+      if (prev === next) return prev;
+      try {
+        localStorage.setItem("karobar-theme", next ? "dark" : "light");
+        const mq = window.matchMedia?.("(prefers-color-scheme: dark)");
+        const osIsDark = mq?.matches ?? false;
+        const matchesOs = (next && osIsDark) || (!next && !osIsDark);
+        if (matchesOs) {
+          localStorage.removeItem("karobar-theme-explicit");
+        } else {
+          localStorage.setItem("karobar-theme-explicit", "true");
+        }
+      } catch {
+        /* ignore */
+      }
+      return next;
+    });
+  }, []);
+
+  const setTheme = useCallback(
+    (mode) => {
+      if (mode === "toggle") {
+        toggle();
+      } else if (mode === "dark" || mode === "light") {
+        setDarkMode(mode === "dark");
+      }
+    },
+    [toggle, setDarkMode]
+  );
+
   return (
-    <ThemeContext.Provider value={{ dark, toggle }}>
+    <ThemeContext.Provider value={{ dark, toggle, setDark: setDarkMode, setTheme }}>
       {children}
     </ThemeContext.Provider>
   );

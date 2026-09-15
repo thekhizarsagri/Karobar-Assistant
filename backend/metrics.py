@@ -31,32 +31,35 @@ def calculate_profitability(profile: BusinessProfile) -> Dict[str, float]:
     }
 
 
+def expense_to_dict(expense) -> Dict[str, object]:
+    return {
+        "key": expense.key,
+        "label": expense.label,
+        "amount": expense.amount,
+        "enabled": expense.enabled,
+        "deduction_day": expense.deduction_day,
+        "deduction_time": expense.deduction_time,
+        "last_deducted": expense.last_deducted,
+    }
+
+
+def deduction_to_dict(deduction) -> Dict[str, object]:
+    return {
+        "expense_key": deduction.expense_key,
+        "expense_label": deduction.expense_label,
+        "amount": deduction.amount,
+        "deducted_at": deduction.deducted_at,
+        "balance_before": deduction.balance_before,
+        "balance_after": deduction.balance_after,
+    }
+
+
 def get_dashboard_summary(profile: BusinessProfile) -> Dict[str, object]:
     metrics = calculate_profitability(profile)
 
-    total_monthly = sum(e.amount for e in profile.expenses if e.enabled)
-    next_deductions = []
-    for e in profile.expenses:
-        if e.enabled and e.amount > 0:
-            next_deductions.append({
-                "key": e.key,
-                "label": e.label,
-                "amount": e.amount,
-                "deduction_day": e.deduction_day,
-                "deduction_time": e.deduction_time,
-                "last_deducted": e.last_deducted,
-            })
-
-    recent_deductions = []
-    for d in profile.expense_deductions[-10:]:
-        recent_deductions.append({
-            "expense_key": d.expense_key,
-            "expense_label": d.expense_label,
-            "amount": d.amount,
-            "deducted_at": d.deducted_at,
-            "balance_before": d.balance_before,
-            "balance_after": d.balance_after,
-        })
+    total_monthly = metrics["total_expenses"]
+    next_deductions = [expense_to_dict(e) for e in profile.expenses if e.enabled and e.amount > 0]
+    recent_deductions = [deduction_to_dict(d) for d in profile.expense_deductions[-10:]]
 
     return {
         "business_name": profile.business_name,

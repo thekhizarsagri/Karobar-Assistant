@@ -23,9 +23,5 @@ def parse_date(date_str: str) -> Optional[datetime]:
 
 
 def parse_ts(date_str: str) -> pd.Timestamp:
-    for fmt in DATE_FORMATS:
-        try:
-            return pd.Timestamp(datetime.strptime(date_str, fmt))
-        except (ValueError, TypeError):
-            continue
-    return pd.NaT
+    parsed = parse_date(date_str)
+    return pd.Timestamp(parsed) if parsed else pd.NaT

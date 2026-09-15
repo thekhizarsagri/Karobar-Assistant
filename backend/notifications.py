@@ -45,7 +45,7 @@ def are_notifications_enabled() -> bool:
 
 def toggle_notifications(enabled: bool) -> Dict[str, Any]:
     """Enable or disable notifications. Clears old notifications when re-enabling."""
-    global _notifications_enabled
+    global _notifications_enabled, _next_id
     _notifications_enabled = enabled
     if enabled:
         notifications.clear()
@@ -72,4 +72,13 @@ def mark_read(notification_id: int) -> Dict[str, Any]:
 
 def clear_notifications() -> None:
     notifications.clear()
+    save_state()
+
+
+def reset_notifications_state() -> None:
+    """Full reset for fresh setup: empty inbox and re-enable delivery."""
+    global _notifications_enabled, _next_id
+    notifications.clear()
+    _next_id = 1
+    _notifications_enabled = True
     save_state()

@@ -5,7 +5,8 @@ from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 
 from backend.models import Expense
-from backend.store import get_profile, save_state
+from backend.persistence import save_state
+from backend.store import get_profile
 
 expense_router = APIRouter()
 
@@ -21,10 +22,7 @@ def update_expense_schedule(request: Dict[str, Any]) -> Dict[str, Any]:
         return _error("no_profile", "No business profile found.", 404)
 
     schedules = request.get("schedules", [])
-    schedule_map = {}
-    for s in schedules:
-        if isinstance(s, dict) and s.get("key"):
-            schedule_map[s["key"]] = s
+    schedule_map = {s["key"]: s for s in schedules if isinstance(s, dict) and s.get("key")}
 
     for expense in profile.expenses:
         if expense.key in schedule_map:

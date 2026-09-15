@@ -48,30 +48,22 @@ def _enabled_expenses(profile) -> float:
 
 
 def _avg_inventory_cost(profile) -> float:
-    initial: Dict[str, int] = {}
-    for entry in stock_log:
-        if entry.source == "form":
-            initial[entry.product_name] = entry.quantity
-    current = 0.0
-    initial_value = 0.0
-    for product in profile.products:
-        current += product.stock_quantity * product.cost_price
-        initial_value += initial.get(product.name, 0) * product.cost_price
-    if initial_value > 0:
-        return (initial_value + current) / 2
-    return current
+    initial = {e.product_name: e.quantity for e in stock_log if e.source == "form"}
+    current = sum(p.stock_quantity * p.cost_price for p in profile.products)
+    initial_value = sum(initial.get(p.name, 0) * p.cost_price for p in profile.products)
+    return (initial_value + current) / 2 if initial_value > 0 else current
 
 
 def _stock_health(profile) -> Dict[str, int]:
-    ok = reorder = out = 0
+    health = {"ok": 0, "reorder": 0, "out": 0}
     for product in profile.products:
         if product.stock_quantity <= 0:
-            out += 1
+            health["out"] += 1
         elif product.stock_quantity <= product.reorder_point:
-            reorder += 1
+            health["reorder"] += 1
         else:
-            ok += 1
-    return {"ok": ok, "reorder": reorder, "out": out}
+            health["ok"] += 1
+    return health
 
 
 def _clamp(value: float, low: float, high: float) -> float:

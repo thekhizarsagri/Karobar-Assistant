@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useTheme } from "../../ThemeContext";
 import { postChat } from "./api";
 
 /**
@@ -24,6 +25,7 @@ function getSessionId() {
 
 function AiChatBox({ context, onNavigate, onRefresh }) {
   const ctx = context || {};
+  const { setTheme } = useTheme();
   const [sessionId] = useState(getSessionId);
   const [messages, setMessages] = useState([
     {
@@ -56,7 +58,20 @@ function AiChatBox({ context, onNavigate, onRefresh }) {
       if (Array.isArray(data.suggestions) && data.suggestions.length) {
         setSuggestions(data.suggestions.slice(0, 6));
       }
+      if (data.theme && (data.theme === "dark" || data.theme === "light" || data.theme === "toggle")) {
+        try {
+          setTheme?.(data.theme);
+        } catch {
+          /* ignore */
+        }
+      }
       if (data.navigate) onNavigate?.(data.navigate);
+      if (data.notifications_updated) {
+        window.dispatchEvent(new CustomEvent("notifications:updated"));
+      }
+      if (data.alerts_updated) {
+        window.dispatchEvent(new CustomEvent("alerts:updated"));
+      }
       if (data.refresh) {
         onRefresh?.();
         window.dispatchEvent(new CustomEvent("alerts:updated"));
