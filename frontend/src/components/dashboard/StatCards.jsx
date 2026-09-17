@@ -1,5 +1,5 @@
 import { useTheme } from "../../ThemeContext";
-import { resolveCurrencySymbol } from "../../utils/currency";
+import { formatMoney } from "../../utils/currency";
 import { NAV_ACCENTS } from "./navTheme";
 
 function SolidHead({ color, tip, prev }) {
@@ -95,15 +95,6 @@ function TrendArrow({ up, color }) {
       <polyline points="19 12 12 19 5 12" />
     </svg>
   );
-}
-
-function formatMoney(currency, value) {
-  // Exactly like cards.png: 200.00 / 1,000.00 / -800.00 (2 decimals, commas),
-  // prefixed with the selected currency symbol.
-  const symbol = resolveCurrencySymbol(currency);
-  const num = Number(value || 0);
-  if (Number.isNaN(num)) return `${symbol}0.00`;
-  return `${symbol}${num.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 }
 
 function formatInt(value) {

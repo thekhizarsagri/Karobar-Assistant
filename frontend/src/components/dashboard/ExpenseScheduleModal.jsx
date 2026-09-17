@@ -73,7 +73,7 @@ function ExpenseScheduleModal({ expenses, isOpen, onClose, onSuccess }) {
       }
       onSuccess?.();
       onClose();
-    } catch (err) {
+    } catch {
       setError("Could not save schedule. Please try again.");
     } finally {
       setSaving(false);

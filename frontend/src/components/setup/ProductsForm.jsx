@@ -4,13 +4,7 @@ import ProductDraftForm from "./ProductDraftForm";
 import ProductCatalogList from "./ProductCatalogList";
 import { calculateMargin } from "../../utils/formatNumber";
 
-function ProductsForm({
-  products,
-  onChange,
-  onAdd,
-  onRemove,
-  currency = "₹",
-}) {
+function ProductsForm({ products, onAdd, onRemove, currency = "₹" }) {
   const [draftProduct, setDraftProduct] = useState({
     name: "",
     category: productCategories[0],
@@ -48,16 +42,6 @@ function ProductsForm({
     });
     setFormError("");
   };
-
-  const totalStockUnits = products.reduce(
-    (acc, p) => acc + (Number(p.stockAvailable) || 0),
-    0
-  );
-
-  const totalCatalogValue = products.reduce(
-    (acc, p) => acc + (Number(p.sellingPrice) || 0) * (Number(p.stockAvailable) || 0),
-    0
-  );
 
   const filteredProducts = products.filter((p) => {
     if (!filterQuery) return true;

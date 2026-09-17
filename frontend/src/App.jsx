@@ -24,6 +24,8 @@ function DashboardLoading() {
   );
 }
 
+const PAGE_PATHS = { welcome: "/welcome", setup: "/setup", dashboard: "/dashboard" };
+
 function AppRoutes() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -32,11 +34,8 @@ function AppRoutes() {
   const fetchIdRef = useRef(0);
 
   useEffect(() => {
-    if (location.pathname !== "/dashboard") {
-      return undefined;
-    }
-    if (dashboardData) {
-      setRestoring(false);
+    if (location.pathname !== "/dashboard" || dashboardData) {
+      if (dashboardData) setRestoring(false);
       return undefined;
     }
     const id = (fetchIdRef.current += 1);
@@ -46,11 +45,8 @@ function AppRoutes() {
       .then((res) => res.json())
       .then((data) => {
         if (cancelled) return;
-        if (data && data.business_name) {
-          setDashboardData(data);
-        } else {
-          navigate("/welcome", { replace: true });
-        }
+        if (data?.business_name) setDashboardData(data);
+        else navigate("/welcome", { replace: true });
       })
       .catch(() => {
         if (!cancelled) navigate("/welcome", { replace: true });
@@ -67,12 +63,7 @@ function AppRoutes() {
     window.scrollTo(0, 0);
   }, [location.pathname]);
 
-  const handleFinish = useCallback(
-    (data) => {
-      setDashboardData(data);
-    },
-    []
-  );
+  const handleFinish = useCallback((data) => setDashboardData(data), []);
 
   const handleLogout = useCallback(async () => {
     try {
@@ -83,46 +74,23 @@ function AppRoutes() {
     setDashboardData(null);
   }, []);
 
+  const renderPage = useCallback(
+    (page) => (
+      <SwipePages initialPage={page} dashboardData={dashboardData} onFinish={handleFinish} onLogout={handleLogout} />
+    ),
+    [dashboardData, handleFinish, handleLogout]
+  );
+
   return (
     <Routes>
       <Route path="/" element={<Navigate to="/welcome" replace />} />
-      <Route
-        path="/welcome"
-        element={
-          <SwipePages
-            initialPage="welcome"
-            dashboardData={dashboardData}
-            onFinish={handleFinish}
-            onLogout={handleLogout}
-          />
-        }
-      />
-      <Route
-        path="/setup"
-        element={
-          <SwipePages
-            initialPage="setup"
-            dashboardData={dashboardData}
-            onFinish={handleFinish}
-            onLogout={handleLogout}
-          />
-        }
-      />
-      <Route
-        path="/dashboard"
-        element={
-          restoring ? (
-            <DashboardLoading />
-          ) : (
-            <SwipePages
-              initialPage="dashboard"
-              dashboardData={dashboardData}
-              onFinish={handleFinish}
-              onLogout={handleLogout}
-            />
-          )
-        }
-      />
+      {Object.keys(PAGE_PATHS).map((page) => (
+        <Route
+          key={page}
+          path={PAGE_PATHS[page]}
+          element={page === "dashboard" && restoring ? <DashboardLoading /> : renderPage(page)}
+        />
+      ))}
       <Route path="*" element={<Navigate to="/welcome" replace />} />
     </Routes>
   );

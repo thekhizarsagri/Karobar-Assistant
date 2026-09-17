@@ -63,11 +63,6 @@ function SetupPage({ initialData, onBack, onFinish }) {
   const setBusiness = (name, value) =>
     setBusinessInfo((prev) => ({ ...prev, [name]: value }));
 
-  const setProduct = (index, field, value) =>
-    setProducts((prev) =>
-      prev.map((p, i) => (i === index ? { ...p, [field]: value } : p))
-    );
-
   const addProduct = (newProduct) => {
     setProducts((prev) => [
       ...prev,
@@ -92,37 +87,20 @@ function SetupPage({ initialData, onBack, onFinish }) {
 
   const handleFinishSetup = async () => {
     setSubmitAttempted(true);
-    if (!businessInfo.businessName?.trim()) {
-      setSubmissionFeedback("Please provide a Business Name in the company profile section.");
-      return;
-    }
+    const failWith = (msg) => setSubmissionFeedback(msg);
+    if (!businessInfo.businessName?.trim()) return failWith("Please provide a Business Name in the company profile section.");
 
     const emailCheck = validateEmail(businessInfo.email);
-    if (!emailCheck.valid) {
-      setSubmissionFeedback(
-        `Business Email is invalid: ${emailCheck.error}`
-      );
-      return;
-    }
+    if (!emailCheck.valid) return failWith(`Business Email is invalid: ${emailCheck.error}`);
 
     const usernameCheck = validateUsername(businessInfo.username);
-    if (!usernameCheck.valid) {
-      setSubmissionFeedback(`Username is invalid: ${usernameCheck.error}`);
-      return;
-    }
+    if (!usernameCheck.valid) return failWith(`Username is invalid: ${usernameCheck.error}`);
 
     const passwordCheck = validatePassword(businessInfo.password);
-    if (!passwordCheck.valid) {
-      setSubmissionFeedback(
-        `Setup Password is too weak: ${passwordCheck.error} Password must reach at least Medium strength.`
-      );
-      return;
-    }
+    if (!passwordCheck.valid)
+      return failWith(`Setup Password is too weak: ${passwordCheck.error} Password must reach at least Medium strength.`);
 
-    if (products.length === 0) {
-      setSubmissionFeedback("Please add at least one product in the product catalog section.");
-      return;
-    }
+    if (products.length === 0) return failWith("Please add at least one product in the product catalog section.");
 
     setIsSubmitting(true);
     setSubmissionFeedback("");
@@ -172,15 +150,15 @@ function SetupPage({ initialData, onBack, onFinish }) {
     }
   };
 
-  // Live overview statistics
-  const totalStockCount = products.reduce(
-    (acc, p) => acc + (Number(p.stockAvailable) || 0),
-    0
-  );
-
-  const totalCatalogValue = products.reduce(
-    (acc, p) => acc + (Number(p.sellingPrice) || 0) * (Number(p.stockAvailable) || 0),
-    0
+  // Live overview statistics (single pass)
+  const { totalStockCount, totalCatalogValue } = products.reduce(
+    (acc, p) => {
+      const stock = Number(p.stockAvailable) || 0;
+      acc.totalStockCount += stock;
+      acc.totalCatalogValue += (Number(p.sellingPrice) || 0) * stock;
+      return acc;
+    },
+    { totalStockCount: 0, totalCatalogValue: 0 }
   );
 
   return (
@@ -296,7 +274,6 @@ function SetupPage({ initialData, onBack, onFinish }) {
           {/* Right Column: Products & Inventory Catalog */}
           <ProductsForm
             products={products}
-            onChange={setProduct}
             onAdd={addProduct}
             onRemove={removeProduct}
             currency={businessInfo.currency}

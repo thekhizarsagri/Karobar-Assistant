@@ -90,7 +90,7 @@ function ExpenseFormModal({ expense, isOpen, onClose, onSuccess, existingKeys = 
 
       onSuccess?.();
       onClose();
-    } catch (err) {
+    } catch {
       setError("Failed to save expense.");
     } finally {
       setSaving(false);

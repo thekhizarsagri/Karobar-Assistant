@@ -8,6 +8,37 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <title>Karobar Assistant</title>
+    <script>
+      // Apply the theme before first paint so a fresh launch matches the
+      // OS (Windows) color scheme with no light-mode flash. Mirrors
+      // src/ThemeContext.jsx: an explicit user choice (flag + value) wins,
+      // otherwise follow prefers-color-scheme. Read-only: no writes here.
+      (function () {
+        try {
+          var stored = localStorage.getItem("karobar-theme");
+          var explicit = localStorage.getItem("karobar-theme-explicit");
+          var osDark = window.matchMedia
+            ? window.matchMedia("(prefers-color-scheme: dark)").matches
+            : false;
+          var dark = osDark;
+          if (
+            explicit === "true" &&
+            (stored === "dark" || stored === "light")
+          ) {
+            dark = stored === "dark";
+          }
+          var root = document.documentElement;
+          if (dark) {
+            root.setAttribute("data-theme", "dark");
+          } else {
+            root.removeAttribute("data-theme");
+          }
+          root.style.colorScheme = dark ? "dark" : "light";
+        } catch (e) {
+          /* ignore — React will apply the theme on mount */
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

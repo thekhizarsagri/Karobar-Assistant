@@ -1,41 +1,28 @@
 const jsonHeaders = { "Content-Type": "application/json" };
 
-export async function postSale(productName, quantity, period, entryDate, entryType) {
-  const res = await fetch("/api/sales", {
-    method: "POST",
-    headers: jsonHeaders,
-    body: JSON.stringify({ productName, quantity, period, entryDate, entryType }),
-  });
-  if (!res.ok) throw new Error("Unable to save sales entry");
+async function req(url, options = {}, message) {
+  const res = await fetch(url, options);
+  if (!res.ok) throw new Error(message);
   return res.json();
 }
 
-export async function deleteSale(productName, quantity, period, entryDate) {
-  const res = await fetch("/api/sales/delete", {
-    method: "POST",
-    headers: jsonHeaders,
-    body: JSON.stringify({ productName, quantity, period, entryDate }),
-  });
-  if (!res.ok) throw new Error("Unable to delete sales entry");
-  return res.json();
-}
+const postJson = (url, body, message) =>
+  req(url, { method: "POST", headers: jsonHeaders, body: JSON.stringify(body) }, message);
 
-export async function postStock(productName, quantity, date) {
-  const res = await fetch("/api/stock", {
-    method: "POST",
-    headers: jsonHeaders,
-    body: JSON.stringify({ productName, quantity, mode: "oneTime", date }),
-  });
-  if (!res.ok) throw new Error("Unable to update stock");
-  return res.json();
-}
+const postEmpty = (url, message) => req(url, { method: "POST" }, message);
+const get = (url, message) => req(url, {}, message);
+
+export const postSale = (productName, quantity, period, entryDate, entryType) =>
+  postJson("/api/sales", { productName, quantity, period, entryDate, entryType }, "Unable to save sales entry");
+
+export const deleteSale = (productName, quantity, period, entryDate) =>
+  postJson("/api/sales/delete", { productName, quantity, period, entryDate }, "Unable to delete sales entry");
+
+export const postStock = (productName, quantity, date) =>
+  postJson("/api/stock", { productName, quantity, mode: "oneTime", date }, "Unable to update stock");
 
 export async function postProduct(product) {
-  const res = await fetch("/api/products", {
-    method: "POST",
-    headers: jsonHeaders,
-    body: JSON.stringify(product),
-  });
+  const res = await fetch("/api/products", { method: "POST", headers: jsonHeaders, body: JSON.stringify(product) });
   const data = await res.json().catch(() => ({}));
   if (!res.ok || data.error) {
     const err = new Error(data.message || "Unable to add product");
@@ -45,74 +32,19 @@ export async function postProduct(product) {
   return data;
 }
 
-export async function getNotifications() {
-  const res = await fetch("/api/notifications");
-  if (!res.ok) throw new Error("Unable to load notifications");
-  return res.json();
-}
+export const getNotifications = () => get("/api/notifications", "Unable to load notifications");
+export const getNotificationToggle = () => get("/api/notifications/toggle", "Unable to load notification toggle");
+export const toggleNotificationSwitch = (enabled) =>
+  postJson("/api/notifications/toggle", { enabled }, "Unable to toggle notifications");
+export const addNotification = ({ type = "info", title, message }) =>
+  postJson("/api/notifications", { type, title, message }, "Unable to save notification");
+export const markAllNotificationsRead = () => postEmpty("/api/notifications/read", "Unable to update notifications");
+export const clearNotifications = () => postEmpty("/api/notifications/clear", "Unable to clear notifications");
+export const getAlerts = () => get("/api/alerts", "Unable to load alerts");
+export const clearAlerts = () => postEmpty("/api/alerts/clear", "Unable to clear alerts");
 
-export async function getNotificationToggle() {
-  const res = await fetch("/api/notifications/toggle");
-  if (!res.ok) throw new Error("Unable to load notification toggle");
-  return res.json();
-}
+export const clearProductHistory = (productName) =>
+  postEmpty(`/api/history/clear/${encodeURIComponent(productName)}`, "Unable to clear product history");
 
-export async function toggleNotificationSwitch(enabled) {
-  const res = await fetch("/api/notifications/toggle", {
-    method: "POST",
-    headers: jsonHeaders,
-    body: JSON.stringify({ enabled }),
-  });
-  if (!res.ok) throw new Error("Unable to toggle notifications");
-  return res.json();
-}
-
-export async function addNotification({ type = "info", title, message }) {
-  const res = await fetch("/api/notifications", {
-    method: "POST",
-    headers: jsonHeaders,
-    body: JSON.stringify({ type, title, message }),
-  });
-  if (!res.ok) throw new Error("Unable to save notification");
-  return res.json();
-}
-
-export async function markAllNotificationsRead() {
-  const res = await fetch("/api/notifications/read", { method: "POST" });
-  if (!res.ok) throw new Error("Unable to update notifications");
-  return res.json();
-}
-
-export async function clearNotifications() {
-  const res = await fetch("/api/notifications/clear", { method: "POST" });
-  if (!res.ok) throw new Error("Unable to clear notifications");
-  return res.json();
-}
-
-export async function getAlerts() {
-  const res = await fetch("/api/alerts");
-  if (!res.ok) throw new Error("Unable to load alerts");
-  return res.json();
-}
-
-export async function clearAlerts() {
-  const res = await fetch("/api/alerts/clear", { method: "POST" });
-  if (!res.ok) throw new Error("Unable to clear alerts");
-  return res.json();
-}
-
-export async function clearProductHistory(productName) {
-  const res = await fetch(`/api/history/clear/${encodeURIComponent(productName)}`, { method: "POST" });
-  if (!res.ok) throw new Error("Unable to clear product history");
-  return res.json();
-}
-
-export async function postChat(sessionId, message) {
-  const res = await fetch("/api/chat", {
-    method: "POST",
-    headers: jsonHeaders,
-    body: JSON.stringify({ session_id: sessionId, message }),
-  });
-  if (!res.ok) throw new Error("Unable to reach the assistant");
-  return res.json();
-}
+export const postChat = (sessionId, message) =>
+  postJson("/api/chat", { session_id: sessionId, message }, "Unable to reach the assistant");

@@ -3,106 +3,78 @@ import Welcome from "./Welcome";
 import SetupPage from "./SetupPage";
 import DashboardPage from "./DashboardPage";
 
+const PAGE_PATH = { welcome: "/welcome", setup: "/setup", dashboard: "/dashboard" };
+const SLIDE_TARGET = { "to-setup": "setup", "to-welcome": "welcome", "to-dashboard": "dashboard" };
+const SLIDE_MS = 570;
+
 export default function SwipePages({ initialPage, dashboardData, onFinish, onLogout }) {
   const [currentPage, setCurrentPage] = useState(initialPage);
-  const [sliding, setSliding] = useState(false);
   const [slideDir, setSlideDir] = useState(null);
   const [ready, setReady] = useState(false);
   const [setupKey, setSetupKey] = useState(0);
-  const slideRefs = { welcome: useRef(null), setup: useRef(null), dashboard: useRef(null) };
+  const welcomeRef = useRef(null);
+  const setupRef = useRef(null);
+  const dashboardRef = useRef(null);
+  const refs = { welcome: welcomeRef, setup: setupRef, dashboard: dashboardRef };
+  const sliding = slideDir !== null;
 
   useEffect(() => {
-    const path = initialPage === "welcome" ? "/welcome" : initialPage === "setup" ? "/setup" : "/dashboard";
-    if (window.location.pathname !== path) {
-      window.history.replaceState({}, "", path);
-    }
+    const path = PAGE_PATH[initialPage] || "/welcome";
+    if (window.location.pathname !== path) window.history.replaceState({}, "", path);
     requestAnimationFrame(() => setReady(true));
   }, [initialPage]);
 
-  const startSlide = useCallback((dir) => {
-    if (sliding) return;
-    setSlideDir(dir);
-    setSliding(true);
-  }, [sliding]);
-
-  const goToSetup = useCallback(() => startSlide("to-setup"), [startSlide]);
-  const goToWelcome = useCallback(() => startSlide("to-welcome"), [startSlide]);
-  const goToDashboard = useCallback(() => startSlide("to-dashboard"), [startSlide]);
-
-  useEffect(() => {
-    if (!sliding || !slideDir) return;
-    const targetPage = { "to-setup": "setup", "to-welcome": "welcome", "to-dashboard": "dashboard" }[slideDir];
-    const el = slideRefs[targetPage]?.current;
-    if (el) el.scrollTop = 0;
-    const timer = setTimeout(() => {
-      setCurrentPage(targetPage);
-      setSlideDir(null);
-      setSliding(false);
-      const path = targetPage === "welcome" ? "/welcome" : targetPage === "setup" ? "/setup" : "/dashboard";
-      window.history.pushState({}, "", path);
-    }, 570);
-    return () => clearTimeout(timer);
-  }, [sliding, slideDir]);
-
-  const slideToWelcome = useCallback((afterSlide) => {
-    setSlideDir("to-welcome");
-    setSliding(true);
-    setTimeout(() => {
-      setSetupKey((k) => k + 1);
-      setCurrentPage("welcome");
-      setSlideDir(null);
-      setSliding(false);
-      window.history.pushState({}, "", "/welcome");
-      const el = slideRefs.welcome?.current;
-      if (el) el.scrollTop = 0;
-      afterSlide?.();
-    }, 570);
-  }, []);
-
-  const handleFinishWithSlide = useCallback(
-    (data) => {
-      onFinish(data);
-      goToDashboard();
+  const goTo = useCallback(
+    (dir, after) => {
+      if (sliding && dir !== "to-welcome") return;
+      const target = SLIDE_TARGET[dir];
+      if (!target) return;
+      setSlideDir(dir);
+      setTimeout(() => {
+        if (target === "welcome") setSetupKey((k) => k + 1);
+        const el = refs[target]?.current;
+        if (el) el.scrollTop = 0;
+        setCurrentPage(target);
+        setSlideDir(null);
+        window.history.pushState({}, "", PAGE_PATH[target]);
+        after?.();
+      }, SLIDE_MS);
     },
-    [onFinish, goToDashboard]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [sliding]
   );
 
-  const getTrackClass = () => {
-    if (slideDir) return slideDir;
-    if (currentPage === "setup") return "to-setup";
-    if (currentPage === "dashboard") return "to-dashboard";
-    return "";
-  };
-
-  const getSlideClass = (page) => {
-    const isCurrent = currentPage === page;
-    const isTarget = slideDir === `to-${page}`;
-    if (!isCurrent && !isTarget) return "page-transition-slide slide-hidden";
-    if (isCurrent && slideDir) return "page-transition-slide slide-fade-out";
-    return "page-transition-slide";
+  const trackClass = slideDir || (currentPage === "welcome" ? "" : `to-${currentPage}`);
+  const slideClass = (page) => {
+    const active = currentPage === page || slideDir === `to-${page}`;
+    if (!active) return "page-transition-slide slide-hidden";
+    return sliding && currentPage === page ? "page-transition-slide slide-fade-out" : "page-transition-slide";
   };
 
   return (
     <div className="page-transition-wrapper">
-      <div className={`page-transition-track ${getTrackClass()} ${ready ? "ready" : ""}`}>
-        <div ref={slideRefs.welcome} className={getSlideClass("welcome")}>
-          <Welcome onDemoClick={goToSetup} />
+      <div className={`page-transition-track ${trackClass} ${ready ? "ready" : ""}`}>
+        <div ref={welcomeRef} className={slideClass("welcome")}>
+          <Welcome onDemoClick={() => goTo("to-setup")} />
         </div>
-        <div ref={slideRefs.setup} className={getSlideClass("setup")}>
+        <div ref={setupRef} className={slideClass("setup")}>
           <SetupPage
             key={setupKey}
             initialData={dashboardData}
-            onBack={goToWelcome}
-            onFinish={handleFinishWithSlide}
+            onBack={() => goTo("to-welcome")}
+            onFinish={(data) => {
+              onFinish(data);
+              goTo("to-dashboard");
+            }}
           />
         </div>
-        <div ref={slideRefs.dashboard} className={getSlideClass("dashboard")}>
+        <div ref={dashboardRef} className={slideClass("dashboard")}>
           <DashboardPage
             data={dashboardData}
-            onEditForm={goToSetup}
+            onEditForm={() => goTo("to-setup")}
             onLogout={() => {
               onLogout();
-              slideToWelcome();
+              goTo("to-welcome");
             }}
           />
         </div>

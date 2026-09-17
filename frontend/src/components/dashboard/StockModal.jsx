@@ -3,7 +3,7 @@ import ModalPortal from "./ModalPortal";
 
 const MAX_QUANTITY = 1_000_000_000_000;
 
-function makeFormState(products, initialProduct, initialMode) {
+function makeFormState(products, initialProduct) {
   return {
     productName: initialProduct || products[0]?.name || "",
     quantity: 1,
@@ -17,14 +17,14 @@ function makeFormState(products, initialProduct, initialMode) {
 
 function StockModal({ products, isOpen, onClose, onSubmit, initialMode = "oneTime", initialProduct }) {
   const [mode, setMode] = useState(initialMode);
-  const [form, setForm] = useState(() => makeFormState(products, initialProduct, initialMode));
+  const [form, setForm] = useState(() => makeFormState(products, initialProduct));
 
   useEffect(() => {
     if (isOpen) {
       setMode(initialMode);
-      setForm(makeFormState(products, initialProduct, initialMode));
+      setForm(makeFormState(products, initialProduct));
     }
-  }, [isOpen]);
+  }, [isOpen, products, initialProduct, initialMode]);
 
   if (!isOpen) return null;
 

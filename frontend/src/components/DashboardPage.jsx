@@ -32,13 +32,18 @@ function getGreeting() {
   return "Hello";
 }
 
-function useNow() {
-  const [now, setNow] = useState(new Date());
-  useEffect(() => {
-    const t = setInterval(() => setNow(new Date()), 60000);
-    return () => clearInterval(t);
-  }, []);
-  return now;
+const getInitials = (name, fallback = "AH") =>
+  (name || fallback).trim().split(/\s+/).map((w) => w[0]).join("").slice(0, 2).toUpperCase() || fallback;
+
+async function fetchDashboard() {
+  try {
+    const res = await fetch("/api/dashboard");
+    if (!res.ok) return null;
+    return await res.json();
+  } catch (err) {
+    console.error(err);
+    return null;
+  }
 }
 
 function DateTimeChip() {
@@ -58,65 +63,6 @@ function DateTimeChip() {
     </div>
   );
 }
-
-function TopBar({ onEditForm, onEditProfile, onLogout, ownerName }) {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [showEditConfirm, setShowEditConfirm] = useState(false);
-  const menuAnchorRef = useRef(null);
-
-  const initials = (ownerName || "AH").trim().split(/\s+/).map(w=>w[0]).join("").slice(0,2).toUpperCase() || "AH";
-
-  useEffect(() => {
-    if (!menuOpen) return undefined;
-    const onDown = (e) => {
-      if (menuAnchorRef.current && !menuAnchorRef.current.contains(e.target)) setMenuOpen(false);
-    };
-    document.addEventListener("mousedown", onDown);
-    return () => document.removeEventListener("mousedown", onDown);
-  }, [menuOpen]);
-
-  return (
-    <div className="topbar">
-      <div className="topbar-right">
-        <NotificationBell />
-        <div className="profile-menu" ref={menuAnchorRef} style={{ position: 'relative' }}>
-          <div className="topbar-user topbar-user--avatar-only" onClick={()=>setMenuOpen(v=>!v)} style={{ cursor: 'pointer' }}>
-            <div className="topbar-avatar">{initials}</div>
-          </div>
-          {menuOpen && (
-            <div className="profile-dropdown" style={{ right: 0, top: 'calc(100% + 10px)', position: 'absolute' }}>
-              <button type="button" className="profile-menu-item" onClick={()=>{setMenuOpen(false); onEditProfile?.();}}>Edit profile</button>
-              <button type="button" className="profile-menu-item" onClick={()=>{setMenuOpen(false); setShowEditConfirm(true);}}>Edit form</button>
-              <button type="button" className="profile-menu-item" onClick={()=>{setMenuOpen(false); onLogout?.();}}>Logout</button>
-            </div>
-          )}
-        </div>
-      </div>
-      {showEditConfirm && (
-        <ModalPortal>
-          <div className="stock-modal-backdrop">
-            <div className="stock-modal confirm-modal">
-              <div className="stock-modal-header">
-                <div><h2>Edit Form</h2><p className="stock-modal-subtitle">This action cannot be undone.</p></div>
-                <button type="button" className="stock-modal-close" onClick={()=>setShowEditConfirm(false)}>×</button>
-              </div>
-              <div className="confirm-modal-body">
-                <p>Editing the form will <strong>reset all your data</strong> including sales history, stock, analytics, and expenses. You will start fresh with a new setup form.</p>
-                <p>Are you sure you want to continue?</p>
-              </div>
-              <div className="stock-modal-actions">
-                <button type="button" className="confirm-cancel-btn" onClick={()=>setShowEditConfirm(false)}>Cancel</button>
-                <button type="button" className="confirm-delete-btn" onClick={()=>{setShowEditConfirm(false); onEditForm?.();}}>Yes, Edit Form</button>
-              </div>
-            </div>
-          </div>
-        </ModalPortal>
-      )}
-    </div>
-  );
-}
-
-
 
 function SalesOverviewCard({ analytics, currency }) {
   // Jan - Dec only, like sales analytics graphs
@@ -326,7 +272,19 @@ function DashboardPage({ data, onEditForm, onLogout }) {
     window.scrollTo(0, 0);
   };
 
-  const initialsDash = (summary?.owner_name || "AH").trim().split(/\s+/).map(w=>w[0]).join("").slice(0,2).toUpperCase() || "AH";
+  const initialsDash = getInitials(summary?.owner_name);
+
+  const refreshDashboard = async (patchMetricsOnly = false) => {
+    const updated = await fetchDashboard();
+    if (!updated) return;
+    if (patchMetricsOnly) {
+      if (updated.sales_summary) setSalesSummary(updated.sales_summary);
+      if (updated.metrics) setSummary((prev) => ({ ...prev, metrics: updated.metrics }));
+    } else {
+      setSummary(updated);
+      if (updated.sales_summary) setSalesSummary(updated.sales_summary);
+    }
+  };
 
   useEffect(() => {
     if (!dashMenuOpen) return undefined;
@@ -380,7 +338,7 @@ function DashboardPage({ data, onEditForm, onLogout }) {
         />
       );
     }
-    if (activeNav === "inventory") return <InventoryPage products={summary?.products || []} currency={currency} onSubmit={handleStockSubmit} onProductAdded={async (result, name) => { try { const res = await fetch("/api/dashboard"); if (res.ok) { const updated = await res.json(); setSummary(updated); if (updated.sales_summary) setSalesSummary(updated.sales_summary); } } catch (err) { console.error(err); } notify(`Added ${name} to your product catalog.`, "success"); }} />;
+    if (activeNav === "inventory") return <InventoryPage products={summary?.products || []} currency={currency} onSubmit={handleStockSubmit} onProductAdded={async (result, name) => { await refreshDashboard(); notify(`Added ${name} to your product catalog.`, "success"); }} />;
     if (activeNav === "sales") return <AnalyticsPage data={summary} onBack={() => setActiveNav("dashboard")} />;
     if (activeNav === "editSales") return <AdjustSalesTab products={summary?.products || []} submitSale={submitSale} removeSale={removeSaleHandler} />;
     if (activeNav === "ai") return <AiInsightsPage data={summary} onBack={() => setActiveNav("dashboard")} />;
@@ -393,23 +351,14 @@ function DashboardPage({ data, onEditForm, onLogout }) {
             salesSummary={salesSummary}
             products={summary?.products || []}
             onBack={() => setHistoryDetailProduct(null)}
-            onClearHistory={async () => {
-              try {
-                const res = await fetch("/api/dashboard");
-                if (res.ok) {
-                  const updated = await res.json();
-                  if (updated.sales_summary) setSalesSummary(updated.sales_summary);
-                  if (updated.metrics) setSummary((prev) => ({ ...prev, metrics: updated.metrics }));
-                }
-              } catch (err) { console.error(err); }
-            }}
+            onClearHistory={() => refreshDashboard(true)}
           />
         );
       }
       return <HistoryTab salesSummary={salesSummary} products={summary?.products || []} onOpenProduct={setHistoryDetailProduct} />;
     }
     if (activeNav === "automation") return <AutomationPage products={summary?.products || []} rules={rules} onRun={fireRule} onRemove={handleRemoveRule} onSubmit={handleStockSubmit} />;
-    if (activeNav === "expenses") return <MonthlyExpensesPage expenses={summary?.expenses || []} metrics={summary?.metrics || {}} nextDeductions={summary?.next_deductions || []} recentDeductions={summary?.recent_deductions || []} currency={currency} onRefresh={async ()=>{ try{ const res=await fetch("/api/dashboard"); if(res.ok){const u=await res.json(); setSummary(u); if(u.sales_summary) setSalesSummary(u.sales_summary);} }catch{}}} />;
+    if (activeNav === "expenses") return <MonthlyExpensesPage expenses={summary?.expenses || []} metrics={summary?.metrics || {}} nextDeductions={summary?.next_deductions || []} recentDeductions={summary?.recent_deductions || []} currency={currency} onRefresh={() => refreshDashboard()} />;
     if (activeNav === "reports") return <ReportsPage />;
     if (activeNav === "settings") return <SettingsPage />;
     return null;
@@ -484,7 +433,7 @@ function DashboardPage({ data, onEditForm, onLogout }) {
               {/* Bottom — Sales Overview + AI chat side by side */}
               <div className="dash-bottom-row">
                 <SalesOverviewCard analytics={analytics} currency={currency} />
-                <AiChatBox context={aiContext} onNavigate={handleNav} onRefresh={async () => { try { const res = await fetch("/api/dashboard"); if (res.ok) { const updated = await res.json(); setSummary(updated); if (updated.sales_summary) setSalesSummary(updated.sales_summary); } } catch (err) { console.error(err); } }} />
+                <AiChatBox context={aiContext} onNavigate={handleNav} onRefresh={() => refreshDashboard()} />
               </div>
             </div>
           ) : (
