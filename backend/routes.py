@@ -5,6 +5,8 @@ from fastapi import APIRouter
 from fastapi.responses import PlainTextResponse
 
 from backend.aggregation import get_analytics_data
+from backend.activity import clear_activity, get_activity
+from backend.backup import export_backup, restore_backup
 from backend.chat import handle_chat_message, reset_chat
 from backend.data_analytics import export_dataset, get_advanced_analytics
 from backend.inventory import get_inventory_data
@@ -51,6 +53,34 @@ def reset() -> Dict[str, str]:
     reset_store()
     reset_chat()
     return {"message": "All data cleared"}
+
+
+@router.get("/api/activity")
+def activity(limit: int = 50, type: str | None = None) -> Dict[str, Any]:
+    return get_activity(limit=limit, action_filter=type)
+
+
+@router.post("/api/activity/clear")
+def clear_activity_endpoint() -> Dict[str, Any]:
+    clear_activity()
+    return get_activity()
+
+
+@router.get("/api/backup/export")
+def backup_export() -> Dict[str, Any]:
+    return export_backup()
+
+
+@router.post("/api/backup/restore")
+def backup_restore(payload: Dict[str, Any]) -> Dict[str, Any]:
+    result = restore_backup(payload or {})
+    if result.get("error"):
+        from fastapi.responses import JSONResponse
+
+        return JSONResponse(status_code=400, content=result)
+    result["dashboard"] = build_current_dashboard_payload()
+    result["refresh"] = True
+    return result
 
 
 @router.put("/api/profile")

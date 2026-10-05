@@ -4,6 +4,7 @@ from typing import Any, Dict
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 
+from backend.activity import log_action
 from backend.models import Expense
 from backend.persistence import save_state
 from backend.store import get_profile
@@ -33,6 +34,12 @@ def update_expense_schedule(request: Dict[str, Any]) -> Dict[str, Any]:
             expense.deduction_day = 1
             expense.deduction_time = "00:00"
 
+    log_action(
+        "expense.schedule_updated",
+        "",
+        f"Updated schedules for {len(schedule_map)} expense(s)",
+        {"count": len(schedule_map)},
+    )
     save_state()
     return {"message": "Expense schedules updated"}
 
@@ -62,6 +69,12 @@ def add_expense(request: Dict[str, Any]) -> Dict[str, Any]:
         deduction_time=request.get("deductionTime", "00:00") or "00:00",
     )
     profile.expenses.append(expense)
+    log_action(
+        "expense.added",
+        label,
+        f"Added expense '{label}' (Rs {expense.amount:,.0f}/month)",
+        {"key": key, "amount": expense.amount},
+    )
     save_state()
     return {"message": f"Expense '{label}' added"}
 
@@ -87,6 +100,12 @@ def update_expense(key: str, request: Dict[str, Any]) -> Dict[str, Any]:
     if "deductionTime" in request:
         expense.deduction_time = request["deductionTime"] or "00:00"
 
+    log_action(
+        "expense.updated",
+        expense.label,
+        f"Updated expense '{expense.label}'",
+        {"key": key, "fields": sorted(request.keys())},
+    )
     save_state()
     return {"message": f"Expense '{expense.label}' updated"}
 
@@ -102,5 +121,6 @@ def delete_expense(key: str) -> Dict[str, Any]:
     if len(profile.expenses) == before:
         return _error("not_found", f"Expense '{key}' not found.", 404)
 
+    log_action("expense.deleted", key, f"Deleted expense '{key}'", {"key": key})
     save_state()
     return {"message": "Expense deleted"}

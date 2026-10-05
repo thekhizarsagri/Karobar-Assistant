@@ -48,3 +48,13 @@ export const clearProductHistory = (productName) =>
 
 export const postChat = (sessionId, message) =>
   postJson("/api/chat", { session_id: sessionId, message }, "Unable to reach the assistant");
+
+export const getActivity = (limit = 50, type = "") => {
+  const params = new URLSearchParams({ limit: String(limit) });
+  if (type) params.set("type", type);
+  return get(`/api/activity?${params.toString()}`, "Unable to load activity");
+};
+export const clearActivity = () => postEmpty("/api/activity/clear", "Unable to clear activity");
+export const exportBackup = () => get("/api/backup/export", "Unable to export backup");
+export const restoreBackup = (payload) =>
+  postJson("/api/backup/restore", payload, "Unable to restore backup");

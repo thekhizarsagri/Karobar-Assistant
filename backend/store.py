@@ -2,6 +2,7 @@
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 
+from backend.activity import clear_activity, log_action
 from backend.alerts import reset_alerts
 from backend.models import BusinessProfile, Product, SaleEntry, StockEntry
 from backend.notifications import reset_notifications_state
@@ -20,6 +21,7 @@ def set_profile(profile: BusinessProfile) -> None:
     stock_log.clear()
     reset_notifications_state()
     reset_alerts()
+    clear_activity()
     _current_profile = profile
     for product in profile.products:
         stock_log.append(
@@ -31,6 +33,12 @@ def set_profile(profile: BusinessProfile) -> None:
                 created_at=_now_iso(),
             )
         )
+    log_action(
+        "business.setup",
+        profile.business_name,
+        f"Business '{profile.business_name}' set up with {len(profile.products)} products",
+        {"business": profile.business_name, "products": len(profile.products)},
+    )
     save_state()
 
 
@@ -60,6 +68,12 @@ def update_profile(fields: Dict[str, Any]) -> Optional[BusinessProfile]:
     for key, attr in field_map.items():
         if key in fields:
             setattr(_current_profile, attr, fields[key])
+    log_action(
+        "profile.updated",
+        _current_profile.business_name,
+        "Business profile updated",
+        {"fields": sorted(fields.keys())},
+    )
     save_state()
     return _current_profile
 
@@ -71,6 +85,7 @@ def reset() -> None:
     stock_log.clear()
     reset_notifications_state()
     reset_alerts()
+    clear_activity()
     _current_profile = None
     save_state()
 
@@ -129,6 +144,12 @@ def add_product(fields: Dict[str, Any]) -> Dict[str, Any]:
             note="Product added from inventory",
             created_at=_now_iso(),
         )
+    )
+    log_action(
+        "product.added",
+        name,
+        f"Added product '{name}' with {stock_quantity} units",
+        {"product": name, "stock": stock_quantity},
     )
     save_state()
     return {"product": name}

@@ -2,6 +2,7 @@
 from datetime import datetime
 from typing import Any, Dict
 
+from backend.activity import log_action
 from backend.models import StockEntry
 from backend.persistence import save_state
 from backend.store import get_profile, products_snapshot, stock_log
@@ -44,6 +45,12 @@ def add_stock(product_name: str, quantity: int, mode: str = "oneTime", date: str
             note="Stock added via add-stock feature",
             created_at=created_at,
         )
+    )
+    log_action(
+        "stock.added",
+        product_name,
+        f"Added {quantity} units to {product_name} (now {new_level})",
+        {"product": product_name, "quantity": quantity, "new_level": new_level},
     )
     save_state()
     return {

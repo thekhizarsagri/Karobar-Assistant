@@ -54,6 +54,7 @@ def init() -> None:
 def save_state() -> None:
     if not _ACTIVE:
         return
+    from backend.activity import snapshot as activity_snapshot
     from backend.alerts import dismissed_alerts, transient_alerts
     from backend.notifications import _next_id, _notifications_enabled, notifications
     from backend.store import _current_profile, sales_log, stock_log
@@ -66,6 +67,7 @@ def save_state() -> None:
         "notifications": {"items": notifications, "next_id": _next_id, "enabled": _notifications_enabled},
         "dismissed_alerts": list(dismissed_alerts),
         "transient_alerts": [dict(alert) for alert in transient_alerts],
+        "activity": activity_snapshot(),
     }
     file_path = _data_file()
     try:
@@ -78,6 +80,7 @@ def save_state() -> None:
 
 
 def _load_from_disk() -> None:
+    import backend.activity as activity_module
     import backend.alerts as alerts_module
     import backend.notifications as notifications_module
     import backend.store as store_module
@@ -112,3 +115,5 @@ def _load_from_disk() -> None:
 
     alerts_module.transient_alerts.clear()
     alerts_module.transient_alerts.extend(state.get("transient_alerts", []))
+
+    activity_module.restore(state.get("activity", []))

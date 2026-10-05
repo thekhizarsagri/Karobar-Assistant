@@ -5,6 +5,7 @@ from datetime import datetime
 from typing import Any, Dict
 
 from backend.alerts import add_transient_alert
+from backend.activity import log_action
 from backend.metrics import calculate_profitability
 from backend.models import SaleEntry
 from backend.persistence import save_state
@@ -99,6 +100,15 @@ def record_sale(sale_data: Dict[str, Any]) -> Dict[str, Any]:
     sales_log.append(entry)
     update_stock_quantity(product_name, -quantity)
     _adjust_balance(product_name, quantity, sign=1)
+    profile = get_profile()
+    price = next((p.selling_price for p in profile.products if p.name == product_name), 0) if profile else 0
+    total = quantity * (price or 0)
+    log_action(
+        "sale.recorded",
+        product_name,
+        f"Sold {quantity}x {product_name}" + (f" (+Rs {total:,.0f})" if total else ""),
+        {"product": product_name, "quantity": quantity},
+    )
     save_state()
     return _sale_response("Sales recorded")
 
@@ -139,6 +149,12 @@ def remove_sale(sale_data: Dict[str, Any]) -> Dict[str, Any]:
     if restored > 0:
         update_stock_quantity(product_name, restored)
         _adjust_balance(product_name, restored, sign=-1)
+        log_action(
+            "sale.removed",
+            product_name,
+            f"Removed sale of {restored}x {product_name} ({entry_date})",
+            {"product": product_name, "quantity": restored},
+        )
 
     save_state()
     return _sale_response(f"Removed {restored} sale(s) for {product_name}")
@@ -148,6 +164,12 @@ def clear_product_history(product_name: str) -> Dict[str, Any]:
     """Remove all sales and stock log entries for a specific product."""
     sales_log[:] = [e for e in sales_log if e.product_name != product_name]
     stock_log[:] = [e for e in stock_log if e.product_name != product_name]
+    log_action(
+        "history.cleared",
+        product_name,
+        f"Cleared history for {product_name}",
+        {"product": product_name},
+    )
     save_state()
     profile = get_profile()
     return {
